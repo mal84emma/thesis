@@ -1,0 +1,49 @@
+\documentclass[crop,tikz]{standalone}
+
+\usepackage{xcolor}
+% ***************** Tikz settings *****************
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes}
+\usetikzlibrary{fit,backgrounds}
+\usetikzlibrary{decorations.pathreplacing,calligraphy}
+\usetikzlibrary{patterns}
+
+\newcommand{\capColor}{blue!50!black}
+
+\begin{document}
+    \newcommand*{\housesX}{4cm}
+    \newcommand*{\housesY}{3cm}
+    \newcommand*{\kitY}{1.5cm}
+    \begin{tikzpicture}[node distance=3cm, line width=1.5mm]
+
+        %\node[circle, minimum width=0.75cm, fill=gray] (connection) at (0,0) {};
+        \node (house) at (0,0) {\includegraphics[width=2cm]{icons/house.png}};
+        \node (load) at (house) [below of=house, yshift=0.5cm] {};
+
+        \node (grid) at (-6cm,0) {\includegraphics[width=2.5cm]{icons/grid.png}};
+        \node (gridlabel) at (grid) [yshift=-1.8cm] {\Large $p^e[t]$};
+        \node (gridcaplabel) at (grid) [yshift=1.7cm] {\Large $C$\textsuperscript{grid}};
+
+        \node (battery) [right of=house, xshift=0.5cm] {\includegraphics[height=1.5cm]{icons/battery.png}};
+        \node (batterylabel1) at (battery) [xshift=1.25cm, yshift=-0.1cm] {\large \color{black!75!white} $\textrm{SoC}[t]$};
+        \node (batterylabel2) at (battery) [yshift=1.2cm] {\color{\capColor} \Large $C^s$};
+
+        \node (solar) [above of=house] {\includegraphics[height=1.5cm]{icons/pv.png}};
+        \node (solarlabel) at (solar) [xshift=1.4cm] {\color{\capColor} \Large $C$\textsuperscript{pv}};
+
+
+        \begin{scope}[line width=1.5mm, arrows = {Stealth[inset=0pt, angle=60:14pt]-Stealth[inset=0pt, angle=60:14pt]}]
+            \draw[shorten <= 0mm, shorten >= -2mm] (house) -- node [above, xshift=-0.1cm, yshift=0.1cm] {\Large \color{black!75!white} $E$\textsuperscript{grid}$[t]$} (grid);
+        \end{scope}
+        \begin{scope}[arrows = {Stealth[inset=0pt, angle=60:10pt]-Stealth[inset=0pt, angle=60:10pt]}]
+            \draw[shorten >= -2mm] (battery) -- node[above, xshift=-0.1cm, yshift=0.1cm] {\Large \color{\capColor} $E[t]$} (house);
+        \end{scope}
+        \begin{scope}[arrows = {-Stealth[inset=0pt, angle=60:10pt]}]
+            \draw[shorten <= 0mm, shorten >= -0.5mm, color=green!50!black!50] (solar) -- node[left, xshift=-0.15cm, yshift=0.1cm, color=black] {\large {\color{\capColor}$C$\textsuperscript{pv}}$g[t]$} (house);
+            \draw[shorten <= 0mm, shorten >= -2mm, color=red!50!black!50] (house) -- node [left, xshift=-0.15cm, yshift=0.1cm, color=black] {\Large $L[t]$} (load);
+        \end{scope}
+
+    \end{tikzpicture}
+\end{document}

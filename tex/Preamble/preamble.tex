@@ -1,0 +1,467 @@
+% ******************************************************************************
+% ****************************** Custom Margin *********************************
+
+% Add `custommargin' in the document class options to use this section
+% Set {innerside margin / outerside margin / topmargin / bottom margin}  and
+% other page dimensions
+\ifsetCustomMargin
+  %\RequirePackage[left=37mm,right=30mm,top=35mm,bottom=30mm]{geometry}
+  \usepackage{geometry}
+  \geometry{
+    a4paper,
+    left=25mm,right=20mm,
+    top=35mm,bottom=25mm,
+    head=20mm,foot=20mm,
+    ignorefoot
+  }
+  \setFancyHdr % To apply fancy header after geometry package is loaded
+\fi
+
+% Add spaces between paragraphs
+%\setlength{\parskip}{0.5em}
+% Ragged bottom avoids extra whitespaces between paragraphs
+\raggedbottom
+% To remove the excess top spacing for enumeration, list and description
+%\usepackage{enumitem}
+%\setlist[enumerate,itemize,description]{topsep=0em}
+
+% *****************************************************************************
+% ******************* Fonts (like different typewriter fonts etc.)*************
+
+% Add `customfont' in the document class option to use this section
+
+\ifsetCustomFont
+  % Set your custom font here and use `customfont' in options. Leave empty to
+  % load computer modern font (default LaTeX font).
+  %\RequirePackage{helvet}
+
+  % Set a nice friendly font for readability
+  \usepackage[T1]{fontenc}
+  \usepackage{tgheros} % set font, for alternatives see https://www.overleaf.com/learn/latex/Font_typefaces
+  \renewcommand*\familydefault{\sfdefault}
+
+  % For use with XeLaTeX
+  %  \setmainfont[
+  %    Path              = ./libertine/opentype/,
+  %    Extension         = .otf,
+  %    UprightFont = LinLibertine_R,
+  %    BoldFont = LinLibertine_RZ, % Linux Libertine O Regular Semibold
+  %    ItalicFont = LinLibertine_RI,
+  %    BoldItalicFont = LinLibertine_RZI, % Linux Libertine O Regular Semibold Italic
+  %  ]
+  %  {libertine}
+  %  % load font from system font
+  %  \newfontfamily\libertinesystemfont{Linux Libertine O}
+\fi
+
+\usepackage{eurosym} % euro symbol
+
+% *****************************************************************************
+% **************************** Custom Packages ********************************
+
+% ************************* Algorithms and Pseudocode **************************
+
+%\usepackage{algpseudocode}
+
+% ************************* Math **************************
+
+\usepackage{amsmath,amssymb,amsfonts} % for subsequations
+\usepackage{relsize} % for mathlarger
+% symbols
+\usepackage{gensymb}
+\usepackage{commath}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{pifont}
+\usepackage{siunitx}
+%\usepackage{array}
+
+% Define even bigger font sizes for eqns
+\makeatletter
+\newcommand{\vast}{\bBigg@{3}}
+\newcommand{\Vast}{\bBigg@{4}}
+\makeatother
+
+% spacing in equations
+\newcommand{\eqnskip}{1em}
+\newcommand{\smalleqnskip}{0ex}
+
+% ************************* Colours **********************************
+\usepackage[dvipsnames]{xcolor}
+% see https://www.overleaf.com/learn/latex/Using_colors_in_LaTeX#Accessing_additional_named_colors
+\definecolor{linkcolor}{HTML}{505050}
+\definecolor{citecolor}{HTML}{000075}
+\definecolor{urlcolor}{HTML}{CE0058}
+
+% User defined colors
+\newcommand{\ph}[1]{{\color{red} #1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+% Colouring command for revision edits
+\newcommand{\edit}[1]{\textcolor{black}{#1}}
+\newcommand{\edittwo}[1]{\textcolor{black}{#1}}
+
+\usepackage[hooks]{tcolorbox} % docs, https://anorien.csc.warwick.ac.uk/mirrors/CTAN/macros/latex/contrib/tcolorbox/tcolorbox.pdf
+\tcbuselibrary{skins,breakable}
+\newtcolorbox{cbox}[2][]{ % custom box style
+  breakable,
+  parbox=false,
+  boxrule=0mm,
+  boxsep=2mm,
+  top=3mm,
+  bottom=3mm,
+  arc=3mm,
+  outer arc=3mm,
+  left skip=5mm,
+  right skip=5mm,
+  title={#2},
+  colback=RubineRed!5!white,
+  fonttitle=\bfseries,
+  #1
+}
+\newtcolorbox[auto counter, number within=chapter,
+number freestyle={\noexpand\thechapter.E.\noexpand\arabic{\tcbcounter}}]{ebox}[2][]{ % custom box style
+  breakable,
+  parbox=false,
+  boxrule=0mm,
+  boxsep=2mm,
+  top=2mm,
+  bottom=2mm,
+  left=2mm,
+  right=2mm,
+  arc=3mm,
+  outer arc=3mm,
+  left skip=.5mm,
+  right skip=.5mm,
+  title={\thetcbcounter \: #2},
+  colback=black!5!white,
+  fonttitle=\bfseries,
+  colbacktitle=black!50!white,
+  toptitle=1mm,
+  #1
+}
+
+% ********************Captions and Hyperreferencing / URL **********************
+
+% Captions: This makes captions of figures use a boldfaced small font.
+%\RequirePackage[small,bf]{caption}
+
+\RequirePackage[labelsep=space,tableposition=top]{caption}
+\renewcommand{\figurename}{Fig.} %to support older versions of captions.sty
+
+\usepackage{cleveref} % Referencing without need to explicitly state fig /table
+\usepackage{nameref} % for referencing sections by name
+\usepackage{hyperref}
+\hypersetup{
+  unicode=true,
+  colorlinks=true,
+  linkcolor=citecolor,
+  citecolor=citecolor,
+  urlcolor=urlcolor,
+  linktoc=page
+}
+\urlstyle{same} % same styling for url as surrounding text
+
+% fancy underlining
+%https://tex.stackexchange.com/questions/36894/underline-omitting-the-descenders
+\usepackage{soul}
+\makeatletter
+\newcommand*{\whiten}[1]{\llap{\textcolor{white}{{\the\SOUL@token}}\hspace{#1pt}}}
+\DeclareRobustCommand*\myuline{%
+    \def\SOUL@everyspace{\underline{\space}\kern\z@}%
+    \def\SOUL@everytoken{%
+     \setbox0=\hbox{\the\SOUL@token}%
+     \ifdim\dp0>\z@
+        \raisebox{\dp0}{\underline{\phantom{\the\SOUL@token}}}%
+        \whiten{1}\whiten{0}%
+        \whiten{-1}\whiten{-2}%
+        \llap{\the\SOUL@token}%
+     \else
+        \underline{\the\SOUL@token}%
+     \fi}%
+\SOUL@}
+
+% *************************** Graphics and figures *****************************
+
+%\usepackage{rotating}
+%\usepackage{wrapfig}
+
+% Uncomment the following two lines to force Latex to place the figure.
+% Use [H] when including graphics. Note 'H' instead of 'h'
+%\usepackage{float}
+%\restylefloat{figure}
+
+% Subcaption package is also available in the sty folder you can use that by
+% uncommenting the following line
+% This is for people stuck with older versions of texlive
+%\usepackage{sty/caption/subcaption}
+\usepackage{subcaption}
+
+% ********************************** Tables ************************************
+\usepackage{booktabs} % For professional looking tables
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage[skip=10pt]{caption} % increase space between caption and table
+
+%\usepackage{longtable}
+
+% centered adaptive column for tabularx
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+% ********************************** Tikz & plotting ************************************
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes}
+\usetikzlibrary{fit,backgrounds}
+\usetikzlibrary{decorations.pathreplacing,calligraphy}
+\usetikzlibrary{patterns}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+% define gaussian pdf and cdf
+\pgfmathdeclarefunction{sig}{2}{%
+  \pgfmathparse{1/(1+exp(#2-#1))}%
+}
+
+% *********************************** SI Units *********************************
+\usepackage{siunitx} % use this package module for SI units
+
+
+% ******************************* Line Spacing *********************************
+
+% Choose linespacing as appropriate. Default is one-half line spacing as per the
+% University guidelines
+
+% \doublespacing
+\onehalfspacing
+% \singlespacing
+
+% ************************ Formatting / Footnote *******************************
+
+% Don't break enumeration (etc.) across pages in an ugly manner (default 10000)
+%\clubpenalty=500
+%\widowpenalty=500
+
+\usepackage[bottom]{footmisc} % Range of footnote options
+\counterwithout{footnote}{chapter} % continuous footnote numbering across chapters
+
+\newcommand\fnsep{\textsuperscript{,}} % footnote separator
+
+% fn to refer back to footnotes
+\makeatletter
+\newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
+\makeatother
+
+% reduce footnote font size: font size, line size
+\renewcommand{\footnotesize}{\fontsize{9pt}{10pt}\selectfont}
+
+% add space between footnote number and text
+\let\oldfootnote\footnote
+\renewcommand\footnote[1]{%
+\oldfootnote{\hspace{1mm}#1}}
+
+% Add support for custom footnote markers
+\newcommand{\customfootnotetext}[2]{{% Group to localize change to footnote
+  \renewcommand{\thefootnote}{#1}% Update footnote counter representation
+  \footnotetext[0]{#2}}}% Print footnote text
+
+
+% ************************ Glossaries *******************************
+\usepackage[acronym,toc,automake,nogroupskip]{glossaries-extra} % package for making glossaries
+\makeglossaries
+% usage is explained here, https://gb.mirrors.cicku.me/ctan/macros/latex/contrib/glossaries-extra/glossaries-extra-manual.pdf
+% commands are: \gls{}, \glsxtrfull{}, \glsxtrlong{}, or \glsxtrshort{}
+
+% align glossary long entries
+\setglossarystyle{long}
+\renewcommand{\glsnamefont}[1]{\textbf{#1}}
+
+% load in abbreviation definitions
+\input{Abbreviations/abbreviations}
+
+
+% ************************ Titling *******************************
+\usepackage[explicit]{titlesec}
+
+% *****************************************************************************
+% *************************** Bibliography  and References ********************
+
+%\usepackage{cleveref} %Referencing without need to explicitly state fig /table
+
+% Add `custombib' in the document class option to use this section
+\ifuseCustomBib
+  % \RequirePackage[round, sort&compress, authoryear]{natbib} % CustomBib
+
+  % % make citations a single link, https://tex.stackexchange.com/a/27235
+  % \makeatletter
+  % \renewcommand\hyper@natlinkbreak[2]{#1}
+  % \makeatother
+
+  % If you would like to use biblatex for your reference management, as opposed to the default `natbibpackage` pass the option `custombib` in the document class. Comment out the previous line to make sure you don't load the natbib package. Uncomment the following lines and specify the location of references.bib file
+
+  \RequirePackage[%
+    backend=biber,
+    style=authoryear-icomp,
+    citestyle=authoryear-comp,
+    minnames=1,
+    maxnames=5,
+    mincitenames=1,
+    maxcitenames=2,
+    minbibnames=3,
+    sorting=nty,
+    natbib=true%
+    ]{biblatex}
+  \addbibresource{References/references.bib} % Location of references.bib only for biblatex, Do not omit the .bib extension from the filename.
+  % for options see:
+  % https://mirrors.ibiblio.org/CTAN/macros/latex/contrib/biblatex/doc/biblatex.pdf
+  % (styles) https://www.overleaf.com/learn/latex/Biblatex_bibliography_styles
+
+
+  % command to allow use of fullcite with different maxnames
+  \newcommand{\printpublication}[1]{\AtNextCite{\defcounter{maxnames}{99}}\fullcite{#1}}
+
+  % remove url visited dates
+  \AtEveryBibitem{% for bibliography
+    \clearfield{urlyear}%
+    \clearfield{urlmonth}%
+  }
+  \AtEveryCitekey{% for fullcite
+    \clearfield{urlyear}%
+    \clearfield{urlmonth}%
+  }
+
+  % make author name bold, solution from https://tex.stackexchange.com/a/327046
+  \newcommand*{\boldname}[3]{%
+    \def\lastname{#1}%
+    \def\firstname{#2}%
+    \def\firstinit{#3}}
+  \boldname{}{}{}
+
+  \renewcommand{\mkbibnamegiven}[1]{%
+    \ifboolexpr{ ( test {\ifdefequal{\firstname}{\namepartgiven}} or test {\ifdefequal{\firstinit}{\namepartgiven}} ) and test {\ifdefequal{\lastname}{\namepartfamily}} }
+    {\mkbibbold{#1}}{#1}%
+  }
+
+  \renewcommand{\mkbibnamefamily}[1]{%
+    \ifboolexpr{ ( test {\ifdefequal{\firstname}{\namepartgiven}} or test {\ifdefequal{\firstinit}{\namepartgiven}} ) and test {\ifdefequal{\lastname}{\namepartfamily}} }
+    {\mkbibbold{#1}}{#1}%
+  }
+
+  \boldname{Langtry}{Max}{M.}
+
+\fi
+
+% changes the default name `Bibliography` -> `References'
+\renewcommand{\bibname}{References}
+
+
+% *****************************************************************************
+% *************************** Position dependent loads ************************
+
+\usepackage{xurl} % load after biblatex to allow url breaks in bibliography
+\usepackage{lipsum}
+
+
+% ******************************************************************************
+% ************************* User Defined Commands ******************************
+% ******************************************************************************
+
+% *********** To change the name of Table of Contents / LOF and LOT ************
+
+%\renewcommand{\contentsname}{My Table of Contents}
+%\renewcommand{\listfigurename}{My List of Figures}
+%\renewcommand{\listtablename}{My List of Tables}
+
+
+% ********************** TOC depth and numbering depth *************************
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+
+% ******************************* Nomenclature *********************************
+
+% To change the name of the Nomenclature section, uncomment the following line
+
+%\renewcommand{\nomname}{Symbols}
+
+
+% ********************************* Appendix ***********************************
+
+% The default value of both \appendixtocname and \appendixpagename is `Appendices'. These names can all be changed via:
+
+%\renewcommand{\appendixtocname}{List of appendices}
+%\renewcommand{\appendixname}{Appndx}
+
+% *********************** Configure Draft Mode **********************************
+
+% Uncomment to disable figures in `draft'
+%\setkeys{Gin}{draft=true}  % set draft to false to enable figures in `draft'
+
+% These options are active only during the draft mode
+% Default text is "Draft"
+%\SetDraftText{DRAFT}
+
+% Default Watermark location is top. Location (top/bottom)
+%\SetDraftWMPosition{bottom}
+
+% Draft Version - default is v1.0
+%\SetDraftVersion{v1.1}
+
+% Draft Text grayscale value (should be between 0-black and 1-white)
+% Default value is 0.75
+%\SetDraftGrayScale{0.8}
+
+
+% ******************************** Fonts **********************************
+\makeatletter
+\newcommand\HUGE{\@setfontsize\Huge{40}{45}}
+\makeatother
+
+\makeatletter
+\newcommand\VERYHUGE{\@setfontsize\Huge{95}{100}}
+\makeatother
+
+\usepackage{fontawesome}
+
+
+% ********************************* Bullet point styles *********************************
+\renewcommand\labelitemi{\raisebox{0.25ex}{$\bullet$}}
+\renewcommand\labelitemii{\raisebox{0.2ex}{\textbf{--}}}
+\renewcommand\labelitemiii{\raisebox{0.25ex}{\small$\bullet$}}
+
+
+% ******************************** Todo Notes **********************************
+%% Uncomment the following lines to have todonotes.
+
+%\ifsetDraft
+%	\usepackage[colorinlistoftodos]{todonotes}
+%	\newcommand{\mynote}[1]{\todo[author=kks32,size=\small,inline,color=green!40]{#1}}
+%\else
+%	\newcommand{\mynote}[1]{}
+%	\newcommand{\listoftodos}{}
+%\fi
+
+% Example todo: \mynote{Hey! I have a note}
+
+% ******************************** Highlighting Changes **********************************
+%% Uncomment the following lines to be able to highlight text/modifications.
+%\ifsetDraft
+%  \usepackage{color, soul}
+%  \newcommand{\hlc}[2][yellow]{{\sethlcolor{#1} \hl{#2}}}
+%  \newcommand{\hlfix}[2]{\texthl{#1}\todo{#2}}
+%\else
+%  \newcommand{\hlc}[2]{}
+%  \newcommand{\hlfix}[2]{}
+%\fi
+
+% Example highlight 1: \hlc{Text to be highlighted}
+% Example highlight 2: \hlc[green]{Text to be highlighted in green colour}
+% Example highlight 3: \hlfix{Original Text}{Fixed Text}
+
+% *****************************************************************************
+% ******************* Better enumeration my MB*************
+\usepackage{enumitem}

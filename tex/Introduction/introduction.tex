@@ -1,0 +1,471 @@
+%!TEX root = ../thesis.tex
+%*******************************************************************************
+%*********************************** Introduction ******************************
+%*******************************************************************************
+
+\chapter{Introduction} \label{chap:introduction}
+
+%********************************** Background section **************************************
+%\section{Background}
+
+% Set the context of decarbonisation goals, the need to decarbonise building energy usage and electricity supply (and interaction between them), need to deploy new energy systems \& controllers to achieve this, and the role of retrofitting existing buildings in this process.
+
+\begin{cbox}[colback=black!5!white]{}
+Few things have changed the world more than the harnessing of electricity to improve the lives of humans. However the harnessing of data over recent decades has begun to rival that impact. We are currently attempting to fundamentally redesign our electricity systems to remove the carbon-intensive infrastructure they were originally built around. To help achieve this, we are looking to data to improve our understanding of these complex energy systems, and to guide us to make better decisions. But data is itself a resource. It's costly. To use it effectively we need to understand what information it can give us, how it can improve our decision making, and ultimately when and where it's worthwhile collecting.
+\end{cbox}
+
+\hfill \\[-1em]
+
+\customfootnotetext{}{{\normalsize\faVolumeUp} {\small\, This introduction is quite long and wordy. You can listen to it instead at \url{...}}}
+
+\noindent
+Decarbonisation is a truly enormous challenge \citer{mackay2016SustainableEnergyHot}. The UK and EU have committed to getting to net zero carbon emissions by 2050 \citer{committeeonclimatechange2020SixthCarbonBudget,europeanunion2021RegulationEU2021}.
+%\footnotetext{Barring a miraculous breakthrough in the science of CO$_2$, carbon capture (\gls{ccus}) will not be available in any helpful quantity by 2050 \citer{find}. So, achieving net zero targets requires getting close to zero total emissions. Banking on the \gls{ccus} silver bullet does not make for very sensible policy. Unfortunately, this is currently the preferred option of many national decarbonisation strategies.}
+There are lots of ways of slicing up the carbon pie. But from a scientific perspective, there are three broad areas to decarbonise: \textit{industrial processes}, where chemists must figure out how to make the materials we need without producing CO$_2$ along the way; \textit{agriculture}, where biologists need to find ways to grow enough food without releasing CO$_2$ and methane; and \textit{energy}, where physicists and engineers have to produce the electricity and heat that support modern life without using fossil fuels. This all needs to be done at a cost that is low enough that society is willing to make the transition, and without ever interrupting supply. Imagine rebuilding your tennis racket out of new materials while making sure you stay in the rally.\\
+
+Within energy, many sectors such as heating and transportation plan to decarbonise by electrification (potentially using hydrogen to store and transport the energy). A key example of this is the shift towards using heat pumps for space heating \citer{houseofcommons2022DecarbonisingHeatHomes,
+iea2021NetZero2050}.
+% See beginning of EP-VOI intro
+As a result, electricity demand is expected to increase by a factor of 3 to 4 by 2050 \citer{nationalgrideso2023FutureEnergyScenarios}. Decarbonising this electricity will require vast amounts of renewable power generation to be integrated into the grid. It's estimated that around 100 GW of wind and 60 GW of solar generation will need to be constructed in the UK by 2050 \citer{nationalgrideso2023FutureEnergyScenarios}. To support the new generation mix with mostly renewables, the grid will need to be redesigned to manage the variability of these new energy sources, and make sure electricity is available when it's needed. Adapting the electricity system to overcome this challenge of security of supply \citer{papadis2020ChallengesDecarbonizationEnergy} will be costly, on top of the already hefty cost of building the renewables. It will require building new supporting infrastructure, primarily transmission lines \citer{nationalgrideso20242030NationalBlueprint} and bulk energy storage \citer{sepulveda2021DesignSpaceLongdurationa}, at scales rivalling the original construction of the power grids, and new methods for operating the grid to balance the system far more quickly and plan over horizons of months rather than days.
+
+This redesign of the electricity system to match renewable supply to consumer demand provides a traditional, top-down view of energy provision. However, in recent years, a new perspective has emerged. This perspective considers a bottom-up approach, where consumers play an active role in the energy system. By shifting when they use energy, consumers can help match their demand to the available renewable supply on the grid, reducing the need for supporting infrastructure. This demand flexibility can help both reduce the cost of decarbonisation and speed up the process.
+
+As buildings in the EU currently use around 40\% of energy, and are responsible for about 35\% of carbon emissions \citer{eea2023DecarbonisingHeatingCooling,iea2023TrackingCleanEnergy}, redesigning building energy systems could make a large contribution towards decarbonisation targets. There are many ways to reduce the carbon emissions of buildings, such as improving their energy efficiency through fabric and equipment upgrades, and incentivising adaptations in user behaviour to unlock demand flexibility. One of the most effective and cost efficient approaches is to install local renewable generation and energy storage \citer{aminitoosi2022BuildingDecarbonizationAssessing,oshaughnessey2021DemandSideOpportunityRoles,leibowicz2018OptimalDecarbonizationPathways}. Combining this with smart control of the building energy system can further reduce operational costs and carbon emissions \citer{nweye2023CityLearnChallenge2022,kathirgamanathan2021DatadrivenPredictiveControl}. The benefits can be increased again if the operation and/or design of multiple nearby building energy systems are coordinated, forming a ``district energy system'' \citer{pickering2019PracticalOptimisationDistrict,vazquez-canteli2020MARLISAMultiAgentReinforcement}. This allows much of the energy demand to be provided locally, and can significantly reduce the impact those buildings have on the grid, for example decreasing peak load and so the need for transmission infrastructure \citer{niveditha2022OptimalSizingHybrid}.
+
+There are roughly 25 million homes \citer{li2022NetZero2050,desnz2024NationalEnergyEfficiency} and 1.5 million commercial buildings \citer{desnz2024NonDomesticNationalEnergy} in the UK that need to be retrofitted. On top of this, several million more buildings will be constructed before 2050. Designing energy systems for these buildings presents both an enormous challenge and opportunity.
+
+
+\section{Decarbonising an uncertain future}
+
+% Set out position of inherent uncertainty associated with these tasks, exacerbation of level and importance of uncertainties due to shift to renewables, and the need to manage this uncertainty to achieve cost-effective decarbonisation (which is socially tenable).
+% Some of these uncertainties are fixed and need to be planned for, but others are reducible through either improved monitoring/measurement or waiting to see how they resolve.
+% Data collection is a hot topic, and there is quite a bit happening. But smart buildings are not the norm currently (e.g. 50\% smart meter rollout). So, data collection to support decision making is still costly in both money and time.
+% Do we need to push towards fully smart buildings? Or can we make good decisions with the data we already have? Cost vs benefit trade-off must be studied to improve planning.
+
+So, to reach net zero we need to design, build, and effectively operate new energy systems across scales from the individual building to the national level grid. When planning these systems, we must confront the inherent uncertainty of the task. The systems will operate in a future which we can only imperfectly predict. When designing, the weather patterns determining renewable generation and heat demand, the cost of materials needed to build the infrastructure, the efficiencies different technologies will achieve, and the energy demand that needs to be provided are all uncertain.
+When operating, the price and availability of power, when consumers will want to use energy, how much energy they will need to heat their homes that day, how those consumers will respond to price signals, the condition of equipment in the system, and the current state of the system are all uncertain.
+% add references for each uncertainty?
+
+Many of these uncertainties are exacerbated by the system adaptations needed to decarbonise. For example, the more renewables are used for power generation, the greater the dependence of electricity price on uncertain weather conditions. Similarly, as more heat pumps are installed for space heating, electricity demand will become increasingly dependent on those same uncertain weather conditions.
+
+From a planning perspective, uncertainty is problematic because it introduces the risk of high cost outcomes which occur when conditions end up being unfavourable. Mitigating this risk requires making decisions that hedge against the uncertainties, but doing so increases the costs in favourable scenarios. So uncertainties induce costs. Managing the uncertainties in energy systems is therefore crucial to reducing the cost of decarbonising energy, and making the transition affordable for society.\\
+
+% ? add aleatoric and epistemic to list of definitions? (see Rebecca's thesis)
+Some uncertainties are intrinsic and are a result of inherent randomness in a system. These cannot be reduced. For example, how much energy the solar panels in the UK will produce next year will always remain uncertain. We call these aleatoric uncertainties \citer{pelz2021TypesUncertainty}. In some cases, other uncertainties \textit{can} be reduced by gathering data and improving our knowledge about the system. For instance, by monitoring how many people use a building and gathering their temperature preferences, we can reduce uncertainty in how much electricity will be needed to heat the building tomorrow. We call these epistemic uncertainties \citer{pelz2021TypesUncertainty}. Most often uncertainties are a mix of both types\footnote{If you think hard enough about most aleatoric uncertainties you will probably come to the conclusion that better modeling might be able to reduce uncertainty. Whether this modeling is practically achievable, and how much it would actually reduce uncertainty is another matter. \textit{With a complete physics model of the solar system, weather could be perfectly predicted. But in practice we are much more likely to accept weather as inherently uncertain.}}, meaning we can gather data to improve our knowledge, but that there is a limit to how much uncertainty can be reduced.
+
+Aleatoric uncertainties can only be addressed by improving planning methods to better handle the uncertainty. Epistemic uncertainties however can also be addressed by collecting data. This leads us to a data-driven paradigm for energy system planning, and raises a host of important questions about the data we want to collect:
+\begin{itemize}[label=--]
+    \item How much does collecting data reduce the uncertainties?
+    \item Which data points lead to greater uncertainty reduction than others?
+    \item Do some data points actually contain the same information and so have redundancy?
+    \item How much will reducing uncertainty actually improve planning?
+    \item How much will it cost to collect different data?
+    \item Which data is best to collect?
+    \item And how much of it do we need?
+    \item Is it actually worth collecting any new data at all?\\
+\end{itemize}
+
+Data-driven methods are becoming ubiquitous in both research \citer{girolami2020IntroducingDataCentricEngineering,sun2020ReviewThestateoftheartDatadrivena} and engineering practice \citer{ashrae2024EnergyCalculationsASHRAE}. They are a key part of developing functional smart energy systems \citer{zhang2021DatadrivenModelPredictive}, and achieving the potential benefits of Digital Twinning \citer{wagg2025PhilosophicalFoundationsDigital}.
+
+However, whilst smart buildings and Digital Twins have been researched and discussed with great emphasis for many years, there is still limited consensus on what the scope of these systems should be \citer{bortolini2022DigitalTwinsApplications,semeraro2021DigitalTwinParadigm}. For instance, what data they should collect. While smart energy systems are continuing to gain traction, and regulation has aimed to accelerate their adoption \citer{clements2020ImpactSubmeteringRequirements}, they are still far from the norm. In the UK, only 51\% of electricity and gas meters are currently `smart' (able to collect hourly energy usage data), despite rollout beginning in 2012, and expected to cost £19.4bn in total \citer{desnz2023UpdateRolloutSmart}. Little information is available on the extent of adoption of other smart building technologies. Only recently was a standard for measuring the `smartness' of buildings analogous to the EPC rating proposed by the Centre for Net Zero \citer{cnz2025NetZeroBuilding}.\\
+
+Smartness, and the data it provides to support planning, will be crucial for effectively managing the uncertainty of decarbonised energy systems. %, and so for lowering their cost by improving decision making during both design and operation.
+However, designing, deploying, and maintaining smart systems is both highly complex and costly. % Therefore, it's important to understand the benefits that smartness provides, and so when, where, and to what extent it's needed.
+
+Data usage and data requirements have been studied for several decades in other fields, such as medicine, chemistry, and information theory. % add references?
+This has led to the development of several methods for quantifying when and where data should be collected, such as Bayesian optimization \citer{shahriari2016TakingHumanOut}, Bayesian experimental design \citer{rainforth2024ModernBayesianExperimental}, and Value of Information analysis (\gls{voi}) \citer{keisler2014ValueInformationAnalysis}, the main method studied in this thesis.
+However in the context of energy systems, data requirements and the importance of uncertainty reduction to support decision making have so far received limited attention. On top of this, while smart energy systems are widely discussed, the costs of building and maintaining this smart infrastructure, and how the data they collect should be used, often go unmentioned.
+
+To make effective decisions about the use of data collection to manage the uncertainties of decarbonised energy systems, and support planning during design and operation, we need to understand the benefits that data provides for improving decision making. To be able to justify, rationalise, and prioritise expenditure on data collection, the value of data for supporting decision making must be quantified. With this, we can determine which data is most beneficial to collect, how much data should be collected and where, and ultimately whether the benefits of collecting more data are worth its cost.
+
+
+
+\newpage
+%********************************** Lit Review section  **************************************
+%*********************************************************************************************
+\section{Existing literature}
+
+% Build up argument through literature review. Uncertainties are important. Their effects need to be understood and they need to be accounted for during design. Further we need to understand how important they are for design (and how important reducing them is), and consequently how important data collection is for supporting decision making.
+% Where required discuss use of relevant methods in other fields.
+% Literature gap is study of impact on decision making and use of that to inform data collection requirements.
+
+\subsection{Uncertainty in energy systems} \label{sec:uncertainties-lit}
+
+% What uncertainties need to be accounted for in energy systems and why?
+% Discuss uncertainties in energy systems across scales (but focus on districts, system level) - be really clear that demand is treated as exogenous as there's lots of uncertainties contributing to demand that we don't study, e.g. component level (define scope of thesis)
+
+Uncertainties are everywhere in energy systems. They affect almost every aspect of an energy system, and appear in a diverse range of forms across the different system scales. The planning horizon being considered also influences the way in which uncertainties affect the energy system. For example, when controlling a domestic solar-battery system, uncertainty in temperature over the next few days leads to uncertainty in the heat demand of the building, and so the operating cost of the system over that short planning horizon. But, when sizing that same system, uncertainty in the minimum and maximum temperatures over the year becomes important, as the system should be designed to be able to meet the peak heating and cooling demands of the building.
+\textbf{List common uncertainties with references somewhere? maybe a table?}
+
+Properly modelling the uncertainties affecting an energy system is crucial to being able to correctly determine the impacts they have on the system. However, as the appropriate model of uncertainty depends highly on the subtleties of the energy system being modelled (such as the scale of the system studied, the scope of the research question, or the specifics of the energy model used), it is very difficult to provide firm guidelines for the form that probabilistic models of uncertainties should take, or even the broader methodology of modelling uncertainties \citer{janefennell2019ReviewStatusUncertainty,tian2013ReviewSensitivityAnalysis,chong2015UncertaintyAnalysisBuilding}. As such, in the literature uncertainty modelling is done on a case-by-case basis \citer{chong2015UncertaintyAnalysisBuilding,prataviera2022EvaluationImpactInput}, often with limited information provided about how the uncertainties are modelled and the choices made during modelling \citer{wang2016RobustSchedulingBuilding}.\\
+% uncertainty analysis built on potentially shaky foundations
+
+As there are numerous uncertainties in any energy system, most studies select just a few to consider during their analysis \citer{tian2018ReviewUncertaintyAnalysis,yue2018ReviewApproachesUncertainty,gabrielli2019RobustOptimalDesign}. In some cases pre-screening methods are used to identify the most influential uncertainties, which are then studied in a more detailed uncertainty analysis \citer{mavromatidis2018UncertaintyGlobalSensitivity}. Exhaustively studying all uncertainties is impractical, and in most cases the uncertainties considered are in fact the result of a larger set of uncertainties interacting with some physics in an underlying, higher resolution energy model.
+
+For example, in this thesis energy demand and the resulting uncertainty are treated as exogenous, i.e. it's assumed that the energy systems studied are required to meet a given demand that is unknown/uncertain but not influenced by how the energy systems are designed or operated. However, in reality energy demand in buildings is predominantly caused by human behaviours, which are both inherently uncertain, and is influenced by uncertain environmental conditions such as weather, and uncertain macro-scale energy system conditions such as electricity price. Detailed modelling of the way occupants interact with buildings and use energy, for example to maintain their thermal comfort, and how this interaction can be managed to assist decarbonisation, are active areas of research \citer{ward2021DatacentricStochasticModel,hu2020QuantifyingUncertaintyAggregate,trondle2017occupancy,oneill2017UncertaintySensitivityAnalysis}. However they're beyond the scope of this thesis. 
+% could mention increasing importance as EVs become part of building energy systems, but that's not really the focus here
+
+Selecting which uncertainties to consider when modelling energy systems is a crucial step. Missing an influential contribution to uncertainty can lead to underestimation, and because when looking at uncertainty reduction, the interaction of uncertainties can have a significant effect on results, as is seen in \Cref{chap:districts}.
+
+Some uncertainties are common to energy systems across all scales, for example outdoor temperature and energy demand. But the impacts they have on the energy systems depend highly on the scale and purpose of the system. This has led to the development of standard datasets which can be used for uncertainty analysis by integrating the data with the specific energy model being studied. A notable example of this is the range of \glsxtrlong{tmy} (\glsxtrshort{tmy}) datasets \citer{wu2023GlobalTypicalMeteorological,crawley2015RethinkingTMYTypical} created for building energy simulation, including extensions to consider future climate uncertainties \citer{bravodias2020ComparisonMethodologiesGeneration}. However, by nature of their generality, they are not well suited to every use case \citer{rady2025EvolvingTypicalMeteorological}.
+Another challenge where uncertainties are common is ensuring that the representations of uncertainty are consistent across system scales. For example, bottom-up models of uncertain energy usage are calibrated to match the variability of known aggregate demand patterns \citer{chong2018GuidelinesBayesianCalibration}. Similarly, consistency of uncertainty representations across temporal scales is important. For example, ensuring models of hourly energy demand are consistent with distributions of daily and annual values \citer{ward2021DatacentricStochasticModel}.
+
+Some uncertainties can be well represented by simple statistical models. For example, the energy storage technology performance metrics considered in \Cref{chap:parks} are modelled using independent Gaussian distributions.
+% if modelling time evolution, correlations important and more complex model needed
+However, many uncertainties in energy systems have complex underlying patterns, and require more sophisticated statistical models. A key example of this is the complexity of patterns over varying time scales that occur in energy and weather time series. In this case, substantial modelling effort is needed to properly represent the statistics of this functional data \citer{ward2021DatacentricStochasticModel}.
+The complexity of uncertainties also affects how they need to be represented in energy system models, and analysed, to correctly determine the impact they have on the system.
+% e.g. if modelling districts, just representing mean load uncertainty by scaling typical day profile probably isn't good enough
+
+Ultimately, some data is needed to develop probabilistic models, and data availability determines the complexity of model that can be created. Gathering more data from an energy system allows for a more detailed and precise probabilistic model to be developed.
+
+
+
+%\newpage
+\subsection{Understanding and accounting for the impact of uncertainty} \label{sec:uncertainty-methods-lit}
+
+% Methods for accounting for uncertainties during energy system design - see FYR
+% Quantification of impact of uncertainties on energy systems (i.e. traditional sensitivity analysis approaches)
+% Quantification of impact of uncertainties on energy system design and control (i.e. robust optimization, stochastic optimization, etc.) - see FYR \& MRes
+
+The importance of understanding the impact that uncertainties have on the behaviour of energy systems, and how energy systems should be designed and operated to manage this uncertainty, has been widely discussed in the literature \citer{rysanek2013OptimumBuildingEnergy,decarolis2017FormalizingBestPractice,pfenninger2014EnergySystemsModeling,prataviera2022EvaluationImpactInput,li2014ReviewBuildingEnergy,khezri2022OptimalPlanningSolar}. The study of uncertainty is now commonplace in the energy systems field. Many review papers have covered the different techniques proposed for assessing uncertainties and their impacts \citer{tian2018ReviewUncertaintyAnalysis,yue2018ReviewApproachesUncertainty,alonso-travesset2022OptimizationModelsUncertainty,liu2020EnergySystemOptimization,mavromatidis2018ReviewUncertaintyCharacterisation,majidi2019ApplicationInformationGap,macdonald2001PracticalApplicationUncertainty,rivalin2018ComparisonMethodsUncertainty,fennell2025UrbanBuildingEnergy}. And these methods have been applied to the design and control of energy systems across all scales, from individual buildings with local generation and storage \citer{coppitters2021RobustDesignOptimization}, to national scale power grids \citer{neumann2021NearoptimalFeasibleSpace}.
+However, despite the widespread use of uncertainty analysis, and the demonstration of its importance for properly understanding the performance of energy systems, some studies still don't include uncertainties in their modelling \citer{yue2018ReviewApproachesUncertainty,fiorentini2023DesignOptimizationDistrict,wang2022MultiobjectiveCapacityProgramming}.\\
+% ... so work still to do it seems, maybe comment on stats skills/knowledge shortage in energy researchers? need more guidance, or evidence to show need for stats consideration; or maybe part of it is computational, and their aren't good tools for out-the-box uncertainty analysis ...
+
+Broadly speaking, there are two main approaches\footnote{This thesis focuses on techniques for studying the impact that uncertainties have on energy system performance, rather than methods for characterising and modelling uncertainties, which is a separate but dependent area of study.} to studying the impact uncertainties have on energy system models: evaluation based methods, where uncertainties are treated as inputs to a given model, and representation based methods, where uncertainties are represented within the model itself.
+
+
+\subsubsection{Evaluation based methods}
+
+Evaluation based methods start with a given energy system model that is to be studied. Uncertainties in the energy system are considered to be external to the model, and are treated as model inputs. The effect of these uncertainties is studied by repeatedly sampling values of the uncertain parameters, and evaluating the model with this input data. This builds up a picture of how the model responds over the distribution of the uncertainties, and various metrics can be computed to quantify the impact of the uncertainties on the model.
+
+The key benefit of this approach is that it is very simple, and provides clear, interpretable results. As a result, it can be applied to complex energy system models\footnote{In fact they can be used with any arbitrary simulator.}, and work with complex statistical representations of uncertainties. Because the statistical sampling, model evaluation, and analysis of results are separated, these techniques can be used in a plug-and-play fashion\footnote{This feature also makes evaluation based techniques well suited to acceleration by compute parallelisation.}, making them very flexible, easy to work with, and approachable to non-expert users.
+
+The main limitation of evaluation based methods is that, in separating the statistics and energy model, they can only study one instance of the energy system (e.g. a configuration or design) at once. So, while they can investigate how uncertainties affect the performance of that energy system design, they cannot answer questions about how the uncertainties impact decision making in the system, as those decisions are wrapped up in the simulator model being tested. In order to test how different decisions impact performance, the method must be repeated for each decision considered (using the corresponding simulator). This is highly computationally expensive. Though these stochastic simulations can be easily parallelised, this approach quickly becomes computationally infeasible for practical energy system models, or can only be used for very simple studies comparing a few different design choices.\\
+
+Many different evaluation based methods have been used to investigate how uncertainties affect energy system models, including:
+
+\begin{itemize}
+    \setstretch{1}
+    \item Scenario analysis \& possibilistic methods
+    \item \glsxtrlong{sa} (\glsxtrshort{sa}) techniques
+        \begin{itemize}
+            \item Local sensitivity analysis
+                \begin{itemize}
+                    \item One-at-a-Time (OAT)
+                    \item Derivative based methods
+                \end{itemize}
+            \item \glsxtrlong{gsa} (\glsxtrshort{gsa})
+                \begin{itemize}
+                    \item Morris method
+                    \item Sobol indices
+                    \item Random forest feature selection
+                \end{itemize}
+        \end{itemize}
+    \item Interval analysis
+    \item Probabilistic methods
+        \begin{itemize}
+            \item \glsxtrlong{ua} (\glsxtrshort{ua})
+            \item \glsxtrlong{mc} (\glsxtrshort{mc}) simulation
+            \item Statistical scenario analysis (e.g. scenario trees)
+        \end{itemize}
+    \item \glsxtrlong{mga} (\glsxtrshort{mga})
+\end{itemize}
+
+Review papers \citei{yue2018ReviewApproachesUncertainty,fennell2025UrbanBuildingEnergy,tian2018ReviewUncertaintyAnalysis,decarolis2017FormalizingBestPractice,majidi2019ApplicationInformationGap} provide detail on how the different methods work, and how they have been applied to the study of energy systems.
+
+% \citer{gang2015ImpactsCoolingLoad} (uncertainty analysis for building, BD-VOI), \citer{mavromatidis2018UncertaintyGlobalSensitivity} (GSA, sobol indices for district system, BD-VOI), \citer{brown2018SynergiesSectorCoupling} (scenario analysis, large-scale power system, MRes), \citer{pedersen2021ModelingAllAlternative} or \citer{neumann2021NearoptimalFeasibleSpace} (MGA, large-scale power system, FYR)
+These methods have been used to study the impact of uncertainties across the full range of energy system scales, from individual buildings to inter-national power grids.
+
+\citei{gang2015ImpactsCoolingLoad} performs an \glsxtrlong{ua} to investigate how a set of nine operational uncertainties in a high-rise building, including outdoor temperature and indoor set-points, affect the energy usage performance of a set of cooling system designs. For each chiller configuration considered, the input uncertainties are propagated through the energy model to produce distributions of peak cooling load and annual energy consumption. These distributions are then used to compare the designs, and select the best performing configuration, trading-off the risk of not being able to satisfy cooling load against the expected energy consumption in a holistic manner. Producing distributions of cooling performance provides a more complete picture of how the cooling systems will perform during actual operation, and so this study provides an improvement on the conventional, deterministic performance calculations used for \glsxtrshort{hvac} sizing. However, as the uncertainties are not treated within the energy model, the uncertainty analysis can only be applied to the system designs initially chosen by the designer, and the method is unable to determine the true optimised design which provides the best trade-off between average cost and risk of not satisfying cooling load, as would be possible with a representation based method.
+
+In \citei{mavromatidis2018UncertaintyGlobalSensitivity}, \glsxtrlong{gsa} is used to identify the uncertainties which have the greatest contribution to the variability of operating cost for a hypothetical urban district energy system located in Zurich, Switzerland. Deterministic design optimisations are performed for a set manually selected design scenarios, and a basic scenario analysis is performed comparing the cases. The uncertainty in the cost of operating the district system in each design case is then investigated, considering over 30 uncertainties, in energy carrier prices, emissions factors, investment costs, equipment efficiencies and losses, energy demand and generation profiles. Both the Morris method and Sobol indices are used to determine which of these uncertainties are responsible for the greatest portion of the operating cost variability. Uncertainty in energy carrier prices and the ratio of building energy demand to local solar generation are found to be responsible for the majority of the output variability. However, due to the limitations of these \glsxtrshort{gsa} methods, the analysis ends here. A large number of uncertainties are considered, and it is possible to identify a subset of those which do not make a significant contribution to the output variability, and so can be treated as deterministic without affecting the accuracy of the output distribution\footnote{Though given that for evaluation based methods including more uncertainties does not increase computational cost, it's not clear why this would be beneficial if the designer already has access to the probabilistic models of these uncertainties, as is required to screen them out initially.}. However, for the uncertainties which are identified as having large contributions to output variability, the results cannot inform the designer about whether these uncertainties are actionable, if trying to reduce them is worthwhile, or whether the system design could be adjusted to better manage them. It can only indicate that modelling these uncertainties is important to properly capture the distribution of operating costs for the specific system design investigated.
+
+In the context of large-scale power system design, \citei{brown2018SynergiesSectorCoupling} uses scenario analysis to investigate the effect that different outcomes of uncertain future sectoral energy demands, energy infrastructure costs, and the availability of energy technologies such as long-duration storage have on the minimal cost design of the future European grid. A range of scenarios representing hypothesised future energy landscape conditions in Europe are proposed, with parameter values for each uncertainty suggested holistically based on the type change represented by the scenario. The energy planning model PyPSA-EUR model \citer{horsch2018PyPSAEurOpenOptimisation} is then run for each scenario, and the resulting energy system designs and their corresponding costs are compared. The study highlights the effect of particular parameter value changes on how decarbonised energy should be best provided, and the cost of doing so, by comparing pairs of scenarios, for instance allowing \glsxtrshort{bev}s to participate in energy trading for grid balancing . It also attempts to pick out broader trends in the system designs across the scenarios to make recommendations on power system adaptations that are likely to be required and so should be planned for. Scenario analysis is the traditional method for handling uncertainties in energy system planning, and is still widely used in the academic literature, and even more so in industrial practice. The type of study performed in \citei{brown2018SynergiesSectorCoupling} is a typical use of the scenario analysis methodology. It also clearly highlights its limitations for studying uncertainties. Scenario analysis is not (in its usual form) a statistical methodology. Specifying the parameter values used in the scenarios relies on expert judgement and is difficult to justify. Further, as there is no probability associated with each scenario, it is not clear how the results should be interpreted, and whether the recommendations from a particular scenario are likely to be relevant. Scenario analysis can be a useful tool to identify the design space that should be considered, but it is not suited to providing specific guidance on how to design energy systems. Nonetheless, it can be useful in situations where designers wish to look in detail at particular scenarios to observe and compare the mechanisms in the energy system model, and when limited statistical information is available, and so guesses at broad scenarios is the best available option. Future energy scenarios are a good example of this, for example those published by National Grid \citer{nationalgrideso2023FutureEnergyScenarios}.
+
+\glsxtrlong{mga} provides a different approach to exploring the design space of energy systems. It does so by performing an initial deterministic design, and then exploring the space of designs which have model output (e.g. cost and carbon emissions) close to those of the initial design. This exploration can be done by sampling from the uncertainties and repeating the design process with an updated objective function, or by considering search directions that correspond to particular scenarios of interest, e.g. the design with the smallest transmission expansion. \citei{pedersen2021ModelingAllAlternative} and \citei{neumann2021NearoptimalFeasibleSpace} apply this methodology to the same model of the European power system \citer{horsch2018PyPSAEurOpenOptimisation}. The advantage of \glsxtrshort{mga} is that it is able to demonstrate the impact that uncertainties have on the optimal design of an energy system, rather than just the cost/performance of a given design. However it suffers from a similar limitation to scenario analysis in that, while it shows the designer how the uncertainties affect the optimal system design, it doesn't provide any guidance on how the design should be adjusted to best manage those uncertainties.
+
+
+\subsubsection{Representation based methods}
+
+Representation based methods build energy system models which include representations of the uncertainties in the system. As the uncertainties are incorporated into the model, when the model is evaluated it provides results which account for those uncertainties, e.g. by returning the mean system performance and some measure of the uncertainty in that performance.
+
+The advantage of this approach is that it allows the impact of uncertainties to be included in the decision making processes of the model. For example, an evaluation based approach would apply an optimization model to design energy systems that minimise operating costs for a number of scenarios sampled from the distribution of future operating conditions, and then use the average of those designs, claiming some `robustness' against the uncertainties. Whereas, if those uncertainties are accounted for within the optimization model, the representation based approach can determine the system design that minimises the average operating cost of the system, or whichever aspect of the operating cost distribution the system operator is interested in. In this way, representation based methods are able to account for uncertainties during decision making, and so address more complex questions about the impact uncertainties have on energy systems.
+
+However, achieving this more detailed insight requires more complex models. There are two aspects to this. Firstly, developing energy system models which include uncertainty representations is a more complicated task, requiring greater modelling effort, and understanding of both the physics of the energy system and the statistics of the uncertainties. Further, the models are often required to adhere to a particular mathematical structure (e.g. convexity) to enable the handling of uncertainty representations, which is both challenging and usually requires simplifying assumptions to be made, which limits the flexibility of the energy model and reduces its accuracy compared to a simulation based approach. As a result, these models are less approachable for non-expert users, and must be developed for each energy system application. The second complexity is that these models are typically far more computationally expensive than simulations (for a given level of model detail). Further, they often have super-linear scaling, making large-scale systems intractable without substantial simplifications, limiting the applicability of these models.
+
+Therefore, while representation based methods are necessary to properly understand how uncertainties affect decision making in energy systems, they can only be used to study small or simplified models.\\
+
+The representation based methods used in the energy systems literature include:
+
+\begin{itemize}
+    \setstretch{1}
+    \item \glsxtrlong{sp} (\glsxtrshort{sp})
+    \item Chance/risk constrained optimisation
+    \item Interval programming
+    \item \glsxtrlong{ro} (\glsxtrshort{ro})
+    \item Fuzzy optimisation
+    \item Information gap decision theory
+\end{itemize}
+
+The following review papers provide detail on how these methods incorporate representations of uncertainty their models, and how they have been used to study the effect of those uncertainties on decision making in energy systems; \citer{yue2018ReviewApproachesUncertainty,liu2020EnergySystemOptimization,decarolis2017FormalizingBestPractice,majidi2019ApplicationInformationGap}.\\
+
+% \citer{coppitters2021RobustDesignOptimization} (robust optimization for single building EP-VOI), \citer{yamamoto2024MPCbasedRobustOptimization} (robust MPC for apartment building, new), \citer{pickering2019DistrictEnergySystem} (SP for district system, BD-VOI), \citer{mohammadi2022EffectMultiUncertainties} (stochastic global op. for district system, EP-VOI), \citer{min2018LongtermCapacityExpansion} (chance-constrained programming for large-scale power system, FYR)
+Representation based methods have also been applied to energy systems across all scales.
+For example, \citei{coppitters2021RobustDesignOptimization} studies the design of a domestic building energy system which contains solar generation, an air-source heat pump, and both battery and thermal storage. Surrogate-assisted robust optimisation is used to find the pareto-front of designs that minimise the mean and standard deviation of the \glsxtrlong{lcox} (\glsxtrshort{lcox}) provided by the system under a set of 30 uncertainties including solar generation, energy prices, energy demands, and technical characteristics of the storage units. The purpose of this analysis is to inform the system designer about how the specification of the energy system can be adjusted to manage the uncertainties, and inform them about the trade-off between the mean cost and the risk of high costs. The results show that roughly doubling the asset capacities in the energy system can reduce the variability in exergy costs by around a third, at the expense of increasing the mean cost by around 20-25\%. So, designing buildings to have greater energy independence can significantly reduce the uncertainty in the cost of running the energy system by reducing its reliance on uncertain electricity prices, but comes at a somewhat higher average cost.
+% robustness is important, but people define it very differently; this analysis allows designers to decide if additional robustness is worth the cost, and select their desired trade-off between robustness and average cost
+
+\citei{yamamoto2024MPCbasedRobustOptimization} investigates the use of robust optimisation in the context of building operation. It uses a robust \glsxtrlong{mpc} (\glsxtrshort{mpc}) approach to schedule batteries and heat pumps in an apartment building with local solar generation. The controller aims to minimise the cost of supplying the building's energy demands, while ensuring that these energy demands can always be met, given that both the energy demand and solar generation in the building are uncertain over the planning horizon. Achieving this kind of security of supply robustness is relatively straightforward for a building controller, so this study considers how the operational cost achieved by the controller can be reduced while maintaining this robustness.
+
+As these two papers show, managing the uncertainty in a building energy system comes at a cost. District energy systems have received a large amount of research interest as they present an opportunity to reduce the impacts of building level issues, such as building load variability/uncertainty, by aggregating multiple building systems to enable cooperation and resource sharing. This can provide substantial benefits for both the design and operation of the buildings. \citei{pickering2019DistrictEnergySystem} and \citei{mohammadi2022EffectMultiUncertainties} investigate similar district energy system design tasks, but take different modelling approaches. Both studies consider the sizing of solar PV and energy storage for buildings within a district energy system, and aim to minimise the average total cost of the system, including both capital and operational costs. \citei{pickering2019DistrictEnergySystem} models the energy system via a \glsxtrlong{lp}, and uses \glsxtrlong{sp} for design, accounting for uncertainty in the building loads. Whereas \citei{mohammadi2022EffectMultiUncertainties} takes a simulation based approach, using a genetic algorithm for the design optimisation, and considers uncertainty in solar generation, and the price and availability of grid electricity. Both approaches are able to account for the effects of the uncertainties on the operation of the district and determine designs that reduce the average cost of supplying the buildings' energy needs. The genetic algorithm approach provides greater flexibility in the behaviours of the district energy system that can be modelled and requires fewer simplifying assumptions, whereas the \glsxtrshort{lp} approach provides guarantees that the best possible design has been found.
+% computational efficiency depends on the exact setup
+
+\citei{min2018LongtermCapacityExpansion} considers a similar issue of ensuring security of supply to \citei{yamamoto2024MPCbasedRobustOptimization}, but in the context of long-term planning for a large-scale power system. In this case the focus is on how the uncertainty in renewable generation must be managed to ensure that sufficient energy is available to meet demands when decarbonising the Korean electricity system. Chance-constrained programming is used to determine the supply mix that minimises the total cost of providing electricity whilst having sufficiently low probability of being unable to meet demand, called the loss-of-load probability. The results show that, due to the uncertainty in renewable generation, increasing the strictness of the security of supply requirements requires more renewable generation capacity to ensure system reliability, and so increases the cost of the electricity system. Therefore setting the loss-of-load probability requirement allows the system designer to trade-off the risks caused by generation uncertainty with the cost of mitigating them.\\
+
+% stochastic optimisation (scenario programming - both convex and global) and robust optimisation are the most common techniques used \citer{find}
+
+The importance of representation based methods is that they allow the management of uncertainty to be incorporated into the decision making process. This allows energy system designs or control strategies that best mitigate uncertainty in a particular desired way to be identified, rather than simply guessing at good designs and observing how uncertainty affects their performance ex-post using an evaluation based method. Adjusting the tolerance to the impacts of uncertainties allows designers to investigate how energy systems should be adapted to mitigate those impacts, and the costs of doing so. For example, installing more battery capacity in a building energy system can reduce the risk of very high energy costs at the expense of increasing the average cost of the system.
+
+The differences between representation based methods are in how they model the energy system, how they represent uncertainties within that model, and how they are able to manage the effects of those uncertainties in the decision making process. As a result, the most appropriate method for a given application depends on the characteristics/behaviours of the energy system and its uncertainties that are most important for properly modelling it. For instance, in a hospital energy system where security of supply is critical, the ability to observe the full distribution of outcomes caused by the uncertainties and ensure worst-case scenarios can be managed is extremely important, and so a detailed simulation based approach is likely required even if it is not capable of much cost optimisation.
+
+% we really should make decisions accounting for uncertainties, the question is whether it is feasible and necessary for the particular context - necessary?
+
+
+\subsubsection{Combining both approaches}
+
+Evaluation and representation based methods are able to answer important questions about how uncertainties affect the performance of an energy system, and how those uncertainties should be managed during decision making, respectively. The two types of methods are compatible and could be used together to provide a more complete investigation of how uncertainties impact an energy system. An example of this would be the use of an evaluation based method to perform an initial screening of uncertainties to identify which do not have a significant influence on the energy system, followed by the use of a representation based method to perform an optimisation based design for the system considering the reduced set of uncertainties, then finally a more detailed uncertainty analysis of that design using an evaluation based method to investigate the uncertainty in its performance.
+% can I find an example of this in the literature?
+The first half of this combined methodology is suggested during discussion in \citei{mavromatidis2018UncertaintyGlobalSensitivity}.
+% but this is the closest I can find
+
+
+
+\subsection{Uncertainty reduction to improve decision making} \label{sec:uncertainty-reduction-lit}
+
+% Quantification of impact of uncertainty \textit{reduction} on energy system performance/design/decision making (including VoI)
+% Discuss available methods, and how they relate to the uncertainty methods from the previous section (often just re-evaluating with lower uncertainty prob model)
+% Discuss applications from other fields and how they are lacking from energy planning
+% Discuss usage of these methods to study energy systems (or lack thereof)
+
+The purpose of collecting data is to reduce uncertainty\footnotemark. So, to understand how data collection improves decision making, we need to understand the effect that reducing uncertainty has on the decision making process.
+All of the methods for studying uncertainty and their applications to energy systems discussed in the previous section consider only one particular state of uncertainty, and inform us of the effects that uncertainty has on the energy system, and how it should be managed during decision making.\\
+\footnotetext{This might seem odd and slightly simplistic to some. After all there are lots of complicated issues we may need to address by collecting data, such as ensuring adequate data coverage and representivity for training prediction models, measuring important states in real time monitoring systems, and so on. But these issues \textit{can} all be viewed from the perspective of uncertainty reduction. Whenever we have the ability to estimate/predict something, data collection can be seen as a way of reducing the uncertainty in that estimate. However, doing the probabilistic modelling is not always possible or especially informative.}
+
+% Discuss methods that have been used in energy system literature to investigate uncertainty reduction/measurement in context of decision making very broadly - what is the closest analysis people have done, how is it aligned with the question? and where is it deficient? none of the studies were really aiming to analyse uncertainty reduction, but they provide a step towards it
+% \citer{sun2015SensitivityAnalysisMacroparameters} (BD-VOI, NZEB influence of uncertainties on optimal capacities) \citer{sanajaobasingh2018ModelingSizeOptimization} (BD-VOI, similar thing) \citer{mavromatidis2018UncertaintyGlobalSensitivity} (BD-VOI) \citer{pickering2019DistrictEnergySystem} (BD-VOI) - see 2nd half of Sec 1.2 of BD-VOI
+
+A few existing studies have performed analysis that provides a step towards investigating the impact of uncertainty reduction on energy systems decision making.
+
+\citei{sun2015SensitivityAnalysisMacroparameters} studies the optimal sizing of HVAC, solar and wind generation, and battery storage capacities in a simulated \glsxtrlong{nzeb} (\glsxtrshort{nzeb}). A set of 10 uncertain parameters are considered, related to the properties of the building, its thermal performance, and the efficiency of generation. These include the building's wall thickness and infiltration rate, the indoor temperature set-point, the \glsxtrshort{cop} of the \glsxtrshort{hvac} system, and the solar PV efficiency. A local sensitivity analysis is performed to determine how changes in these parameters affect the optimal capacity sizings of the energy system, as well as the overall system cost. Influence coefficients for the effect each uncertain parameter has on the sizing of each system component and the cost are then computed using \glsxtrshort{gsa}. It is found that the parameters related to the thermal performance of the building (internal thermal gain intensity, indoor temperature set-point, and \glsxtrshort{hvac} \glsxtrshort{cop}) have the greatest effect on the optimal system design and total cost.
+
+From this analysis we could conclude that measuring these parameters would have the greatest effect on the energy system design that would be chosen, and so this suggests that reducing uncertainty in these parameters might be important. However, this study only performs deterministic optimisation. So, there is no initial stochastic solution, which accounts for and manages the uncertainties in the design, to compare the changes in components sizings and costs to. The sensitivity analyses performed are also deterministic, with changes in parameter values taken from feasible ranges within consideration of whether those values are likely. Before collecting data it is not possible to know what values will be measured, so properly quantifying the effect data collection has on decision making inherently requires a statistical approach. Therefore the results of this study have significant limitations. They show how the optimal design and cost of the \glsxtrshort{nzeb} would change if the parameters were measured to have certain values, but as there is no initial stochastic design to compare against, the effect of uncertainty \textit{reduction} cannot be seen. Further, as the analysis is not statistical, it is not possible to see whether significant changes in the design and cost would be likely to occur. However, the results do demonstrate the relative sensitivity of the energy system design to the different uncertain parameters, and importantly can identify parameters which do not have a significant effect on the optimal design and cost, and so can be treated as deterministic without affecting decision making. Also, all uncertain parameters considered are possible to measure, which is not the case in many other studies.
+
+A similar sensitivity analysis is performed in \citei{sanajaobasingh2018ModelingSizeOptimization} when investigating the sizing of solar, wind, battery storage, and AC-DC converter systems for an isolated district energy system in rural India. Local sensitivity analysis is used to determine the changes in capacity sizings and total cost of energy provision caused by changes in the capital cost of the system components, and the annual average solar and wind generation.
+
+\citei{mavromatidis2018UncertaintyGlobalSensitivity} addresses one of the limitations of \citei{sun2015SensitivityAnalysisMacroparameters} by assigning probabilities to the uncertain parameters it considers and sampling values from their distributions. It optimises the sizing of boilers, heat pumps, thermal storage, and solar generation in an urban district energy system. This optimisation is performed for a large set of samples from 30 uncertain parameters, including energy prices, investment costs, energy demand, and generation profiles, to minimise the total cost (investment plus operation) given each set of sampled values. Distributions of the optimised capacities of the components in the system are visualised to demonstrate how the system design changes when the uncertainties are realised. However, a distribution of the resulting total costs is not provided. Instead Sobol indices are computed to quantify the relative effect of each uncertain parameter on the cost of the system. Additionally, no stochastic optimisation is performed to determine the decision that would be made in the initial state of uncertainty that could be compared against. So while this study does determine the distribution of decisions (system designs) that would be made if uncertainty were removed from the problem, there is nothing to compare these reduced uncertainty decisions to.
+
+A stochastic optimisation which provides the design decision made in the initial state of uncertainty is performed in \citei{pickering2019DistrictEnergySystem}. Scenario Optimisation is used to determine the sizings of gas boilers, solar thermal \& PV panels, and electrical \& thermal storage in a district energy system that minimise the average total cost of meeting the district's energy demands, considering uncertainty in the energy demand time series of the buildings. To do so, 500 samples are taken from the building energy demand distributions, and a deterministic optimisation is performed for each sample. Scenario reduction is then used to determine 16 representative scenarios to use in the Scenario Optimisation. The aim of the paper is to investigate the robustness of the stochastic design to ``out of sample tests'', i.e. samples not included in the scenario optimisation. But while performing the scenario reduction, the analysis computes how the optimal design and cost changes with the realisations of the uncertain building energy demands. However, the paper does not report these results. It does compare the distributions of investment and operation costs for the optimal designs without uncertainty to the costs of the stochastic design. But as it does not combine them and compare total costs, it does not quantify the reduction in cost that would result from removing uncertainty in the problem to improve decision making.
+
+While these studies did not explicitly aim to investigate the effect of uncertainty reduction on decision making, they do consider similar questions and perform some of the necessary analysis steps. In the case of \citei{sun2015SensitivityAnalysisMacroparameters}, \citei{sanajaobasingh2018ModelingSizeOptimization}, and \citei{mavromatidis2018UncertaintyGlobalSensitivity}, the focus is on the `sensitivity' of the energy system designs to the uncertain parameters. This provides some broad indication about which uncertainties are important to the design process and so may be beneficial to reduce by taking measurements. However, ultimately decision makers are not concerned with what action they end up taking, but with their objective and how well they can perform the decision task (for example how much the cost of an energy system can be reduced). So it is unclear how these results showing the changes in optimal system design should be interpreted and actioned. They cannot inform the decision maker about whether reducing the uncertainties will significantly improve their decision making, only that some uncertainties do not affect it, and that others will change the actions they take. While these studies give some indication of the importance of uncertainties for decision making, none of them quantify the improvement in decision making that reducing uncertainty would provide.
+
+
+\subsubsection{\glsxtrlong{voi} analysis (\glsxtrshort{voi})} \label{sec:voi-lit}
+
+% Discuss how VoI is a useful method for investigating uncertainty reduction (basically it's the full-fat proper way of doing things if you take the stoch. opt. approach to decision making)
+% Comment that it is the method used in this thesis, explained in detail in \Cref{chap:methodology}
+% Discuss how it has been used in other fields - e.g. medicine \& agriculture (provide more detailed explanation of how it is used than previous papers), and in more detail \citer{acar2009SystemReliabilityBased} (vehicle design - most design relevant study)
+
+Understanding the benefit of collecting data to reduce uncertainty and improve decision making is extremely important in many contexts. This research topic has been studied extensively in several different fields, and many approaches for assessing the benefits of uncertainty reduction have been developed. The most relevant method to decision making in energy systems is \glsxtrlong{voi} analysis (\glsxtrshort{voi}). This is because it is built on Statistical Decision Theory and Stochastic Optimization, and so aligns with the design optimisation approach commonly taken in the study of energy systems. \glsxtrshort{voi} provides a framework for rigorously quantifying the improvement in decision making provided by a given reduction in uncertainty. In situations where optimisation is used for decision making and Bayesian probabilistic models of uncertainty reduction are available, \glsxtrshort{voi} provides a full mathematical treatment of how uncertainty reduction impacts decision making. \glsxtrshort{voi} is the main methodology used in this thesis. \Cref{chap:methodology} explains the methodology and its background in detail.
+
+A large number of studies have applied \glsxtrshort{voi} to investigate uncertainty reduction in fields such as environmental science, medicine, agriculture, and economics \citer{keisler2014ValueInformationAnalysis}. For example in medicine, \glsxtrshort{voi} has been used to determine the sample size for randomised clinical trials that provides the best trade-off between reducing uncertainty in the efficacy of treatments and the cost of performing trials \citer{willan2005ValueInformationOptimal}, and to decide whether further research is required before a new medical technology is adopted \citer{tuffaha2014ValueInformationAnalysis}.
+
+Within engineering, \glsxtrshort{voi} has been used to study the benefit of collecting data to reduce uncertainty and improve decision making in contexts such as maintenance scheduling for buildings \citer{grussing2018OptimizedBuildingComponent} and wind farms \citer{myklebust2020ValueInformationAnalysis}, construction project planning \citer{esnaasharyesfahani2020PrioritizingPreprojectPlanning}, sensor placement \citer{malings2016ValueInformationSpatially}, and structural health monitoring \citer{difrancesco2021DecisiontheoreticInspectionPlanning,difrancesco2023SystemEffectsIdentifying}.
+\citei{acar2009SystemReliabilityBased} applies \glsxtrshort{voi} to a design optimisation problem in the automotive industry, quantifying the improvements in the reliability and weight of vehicle designs optimized for crash worthiness achieved by reducing uncertainty in structural material properties, crash performance estimates (from simulations), and experimental tolerances.\\
+
+% Discuss uses of VoI in energy systems literature, and lack thereof - see Sec 1.3 of BD-VOI
+% Mention old school VoI studies in large-scale energy systems - simplistic energy models and VoI analyses
+% Blast \citer{niu2023FrameworkQuantifyingValue} - only energy systems VoI paper in the literature other than mine
+
+Few studies have used \glsxtrshort{voi} to investigate how uncertainty reduction can improve decision making in energy systems. Almost all of these works look at capacity expansion planning problems in large-scale power generation or transmission-level energy systems, e.g. \citei{modiano1987DerivedDemandCapacity}, while this thesis focuses on planning in smaller, district-scale energy systems. For instance, \citei{krukanont2007ImplicationsCapacityExpansion} explores planning of the generation mix in the Japanese energy grid over a 10 year horizon.
+The key issue with all of these studies is that they analyse uncertainty reductions which are not achievable by any practical measurement. They all quantify the improvement in decision making achieved when the uncertainties in their problem are completely removed. This hypothetical case of obtaining perfect information provides an upper bound on the benefit of uncertainty reduction\footnote{This is discussed in more detail in \Cref{sec:methodology-voi}.}. This can be useful for decision making if the upper bound is sufficiently tight, and in some sense quantifies the sensitivity of the decision making process to the uncertainties, allowing comparison and the most important uncertainties to be identified.
+Only one study \citer{wendling2019BridgesRenewableEnergy} finds one reasonably tight bound, and can conclude that the learning rate for the capital cost of \glsxtrshort{ccus}-coal does not have a significant impact on planning the decarbonisation of the global electricity sector.
+In fact, none of the uncertainties considered in these studies can be physically measured, for example the proportion of renewable generation in the future energy mix \citer{fursch2014OptimizationPowerPlant}, the ultimate social cost of carbon \citer{wendling2019BridgesRenewableEnergy}, or the future national transport energy demand \citer{krukanont2007ImplicationsCapacityExpansion}. While research could improve the estimation of these quantities, the uncertainty reduction achieved will be far from total as these future values are inherently uncertain. As a result the studies can only provide rough suggestions as to at most how much money we should be willing to spend on research to improve the design of large-scale energy systems.
+
+Only one existing study, \citei{niu2023FrameworkQuantifyingValue}, has applied \glsxtrshort{voi} in the context of a district energy system. It looks at the sizing of chillers, gas generators, solar panels, and energy storage, in a district of five industrial buildings located in Shanghai to minimise the total cost (capital investment plus operation) of providing the cooling and electrical loads. Uncertainty in the solar generation and cooling \& electrical loads are considered\footnote{However, there are significant issues with either the methodology or the explanation of how the probabilities of these uncertainties are assigned and treated during the analysis.}. This work does not acknowledge the existing VoI framework and mature literature applying it in other fields. It does however compute the average reduction in the total cost of the energy system if all uncertainty is removed from the problem (which is called the \glsxtrlong{evpi} (\glsxtrshort{evpi}), defined in \Cref{sec:methodology-voi}). The key limitation of this study is that this uncertainty reduction is not related to any practical measurement that could be taken in the energy system. In fact, the uncertainty in solar generation as defined in the model used is not reducible, as at the time of system design the patterns of solar generation are not knowable. The uncertainty in the cooling and electrical loads also cannot be fully removed, as while improved information about the energy usage behaviours of the buildings could be gathered, their exact energy usage during operation also cannot be known. As with the large-scale system studies, the upper bound on the benefit of uncertainty reduction computed is large and so is not very informative.\\
+% I have lots more issues with this paper, but lets leave it here and avoid ranting
+
+So far no study has quantified the benefit that uncertainty reduction from practical data collection would provide to decision making in energy systems.
+
+
+\newpage
+
+\subsection{Data collection requirements \& costs} \label{sec:data-collection-lit}
+
+%%% Places with relevant content
+% BD-VOI paper - end of Sec 1.1
+% Annex paper - first and last paragraph of Sec 1.3
+% Group VoI paper - second half of Sec 1.1 and all of Sec 1.2
+
+%%% Plan
+% Broad acknowledgement of importance of and issues with data collection in literature
+% But study of cost of data collection in energy systems very limited, and in most cases many cost contributions and caveats of data collection (e.g. data quality, maintenance, etc.) are ignored
+% Use UK smart meter rollout cost example (see BD-VOI Sec 1.1)
+
+% Study of data collection requirements for energy system design/control is also very limited
+% However there has been some investigation for model calibration (see Sec. 1.2 of VoI paper)
+
+% No studies look at whether benefits of data collection justify costs
+
+%% Additional references:
+% \citer{alahakoon2016SmartElectricityMeter} discusses value of smart meter data and challenges in a holistic sense, but puts not numbers to anything, also doesn't mention cost of metering at all
+
+The importance of collecting data to support decision making in energy systems has been fully accepted for some time \citer{kathirgamanathan2021DatadrivenPredictiveControl,zhan2021DataRequirementsPerformance,rysanek2013OptimumBuildingEnergy,molina-solana2017DataScienceBuilding}. Recently there has been significant interest in the research community in greatly increasing monitoring of buildings to gather greater volumes and new types of data, and develop `smart buildings' \citer{aldakheel2020SmartBuildingsFeatures,hernandez2024ChallengesOpportunitiesEuropean}. At the same time, many significant issues with data collection are widely acknowledged. Such as data quality, sensor reliability and the cost of maintenance, data relevance and curation, data warehousing and management, and data privacy \citer{mobaraki2022NovelDataAcquisition,mantha2015RealTimeBuildingEnergy,xia2014ComparisonBuildingEnergy}. These issues reduce the ability of the collected data to support decision making, and overcoming them is costly. A prime example of the high cost of achieving building smartness is the UK smart meter rollout. Currently only 51\% of electricity and gas meters in the UK are  ‘smart’ (able to collect hourly energy usage data), despite the government's rollout beginning in 2012, with a current expected total cost of £19.4bn \citer{desnz2023UpdateRolloutSmart}.\\
+
+Few studies have looked at the data collection requirements for supporting decision making such as the design and control/operation of building energy systems.
+
+\citei{zhai2020AssessingImplicationsSubmetering} reviews case studies from the literature where submetered building energy usage data is used to identify energy savings measures. It investigates the relationship between the depth of submetering, the resolution of the building energy data used for analysis, and the energy savings achieved. It finds that submetering energy usage at higher spatial resolution enables greater energy savings down to the equipment level, but that submetering within plant equipment (sensor level) did not lead to additional energy savings. This indicates that building monitoring at the equipment level is required to properly identify energy savings measures. The average cost savings achieved are also quantified for each submetering resolution and for metering different equipment types. These costs are compared to the average hardware cost of the metering systems to assess the cost effectiveness of the different monitoring options. The cost savings from metering are found to be larger than the hardware costs, but this neglects a significant number of other costs associated with data collection, such as the costs of installing, maintaining, and using the monitoring systems. Another limitation is that only case studies are considered, and so the results are only valid for the types of building energy systems covered in those case studies. This work does not provide a generalisable method for assessing data collection requirements for new systems, new data variables, or even existing systems under altered conditions.
+
+\citei{winschermann2023AssessingValueInformation} investigates the impact of information availability on the performance of \glsxtrshort{ev} charging strategies in a set of simulated office buildings, with respect to satisfying user charging demands and limiting power draw from the grid. It quantifies the improvements in charging performance achieved when historic data on \glsxtrshort{ev} charging behaviours for the specific office building are available for planning, including the consideration of combinations of data variables, and the case where perfect foresight of \glsxtrshort{ev} behaviour is used. The analysis performed has some similarities to \glsxtrshort{evpi} calculations, however it does not follow a clear decision making framework. The results demonstrate that using historic \glsxtrshort{ev} charging session data from the specific office buildings significantly improves the ability to set \glsxtrshort{ev} charging strategies in terms of both user service and peak power management, and so provides some indication that this could be worth collecting. However, the costs of acquiring and using this historic data to optimise charging are not quantified, nor is the charging performance of the energy system linked to a practical cost, e.g. the cost of grid connection or the lost revenue from unfulfilled charging demand. It is also shown that perfect foresight of \glsxtrshort{ev} charging requirements can further improve performance. However, this is not a practically available option, and so does not inform us of the actual benefit of using real-time monitoring to optimise charging strategies, which is very feasible to study. Therefore, it is difficult to use these results to guide decision making about which data is worthwhile collecting for developing \glsxtrshort{ev} charger controllers.\\
+
+% Excerpts taken from VoI paper (end of Sec 1.2) and Annex paper (end of Sec 1.3)
+Far more work has been done to investigate data collection requirements in the contexts of model calibration, system identification, and forecasting. In the field of model calibration, studies have quantified the effects of the quantity of data gather on the accuracy of calibrated energy models \citer{glasgo2017AssessingValueInformation,risch2021InfluenceDataAcquisition}, the relative sensitivity of models to different types of energy data to prioritise collection \citer{tian2016IdentifyingInformativeEnergy}, data precision requirements and the cost of data collection \citer{wang2022DataAcquisitionUrban}, and methods for maximizing the efficacy of collected data to reduce data collection costs \citer{han2021ApproachDataAcquisition}. Within systems identification, works have investigated the data requirements of different modelling approaches \citer{zhan2021DataRequirementsPerformance,balali2023EnergyModellingControl,zhang2023InvestigationsMachineLearningbased}, the impact of data resolution on model accuracy \citer{erfani2023LinkingDatasetQuality}, the impact of model prediction accuracy on operational performance \citer{zhan2022ImpactOccupantRelated}, and cost optimal data collection strategies to support model development \citer{zhan2022ModelcentricDatacentricPractical}. And in forecasting, only one existing study, \citei{choi2023PerformanceEvaluationDeep}, has looked at the effect of the quantity of training data used on the accuracy of models forecasting thermal loads and building zone temperatures, which could be used for building control.
+
+In these fields, the focus is on creating accurate models of energy systems. But ultimately these models are used to support decision making, and no studies have investigated how data collection to improve model accuracy carries through to improved decision making. Additionally, in very few of the studies listed above is the cost of collecting the data mentioned.\\
+
+To determine if data is worth collecting, we need to understand how much it will benefit decision making (and so reduce the cost of what we're trying to do), and how much the data itself will cost to collect. However, discussions of data collection cost in the literature are often just holistic \citer{alahakoon2016SmartElectricityMeter}. Other research has focused on reducing the quantity of data that needs to be collected in building energy systems, e.g. through the creation of standard datasets \citer{luo2022ThreeyearDatasetSupporting}, but without discussing why it is costly or what those costs are.
+Where costs are quantified, the cost of hardware is often focused on \citer{han2020EnergysavingBuildingSystem}, but this is just one of many important components of the total cost. For a building monitoring system there are significant costs from installing the sensors and data network needed, monitoring and maintenance to ensure sufficient data quality, and software licenses or consulting for managing, curating, and analysing the data. These costs are frequently neglected.
+For example, \citei{motegi2003CaseStudiesEnergy} estimates the capital cost of electricity and gas smart-metering for a university campus to be \$0.27/m$^2$, plus an additional \$0.11/m$^2$ for maintenance and supporting IT systems. However, it does not account for installation costs, or cost of using the data to support building control, e.g. the substantial costs of training and deploying machine learning models for prediction \citer{strubell2020EnergyPolicyConsiderations}.
+\citer{han2020EnergysavingBuildingSystem} quotes the cost of sensors for occupancy detection to be \$0.2-3 per m$^2$ of building area, but acknowledges that many technologies suffer from either coverage or detection issues, which would need to be corrected at some expense.\\
+
+% ... nobody investigates whether the benefits of data collection justify the costs - nobody has actually quantified the benefits, and very few properly look at the costs ...
+% does this add much?
+
+
+\newpage
+%********************************** Aims & Goals section **************************************
+
+\section{Thesis overview}
+
+\subsection{Research gap and thesis aims}
+
+% State nice clear questions and aims. Use bullet points. See Bryn's Sec. 1.1.1.
+
+The literature review in the previous section demonstrated the following research gaps regarding the use of data to support decision making in energy systems:
+\begin{enumerate}[label=\arabic*\hspace{.5ex}]
+    \item No studies have rigorously determined the data collection requirements for supporting the design and operation of energy systems, and how model accuracy affects the quality of decision making.
+    \item No studies have quantified the benefits of practical data collection for improving decision making by reducing uncertainty.
+    \item No studies have compared the benefits of practical data collection to its cost to determine whether it is worthwhile, and which data are most economical to collect.
+\end{enumerate}
+
+\noindent The aims of this thesis are to:
+\begin{enumerate}[label=\bf\arabic*\hspace{.5ex}]
+    \item Demonstrate that \glsxtrlong{voi} analysis provides a principled and rigorous methodology for quantifying the benefit of data collection for supporting decision making in energy systems;
+    \item Investigate how training data impacts the accuracy of forecasting models, and how this affects the performance of \glsxtrlong{mpc}; and
+    \item Study how uncertainty reduction from practical data collection affects the design of real-world energy systems, and so what data should be collected and how the decision making process should be adapted to make best use of that data.
+\end{enumerate}
+
+\noindent These aims are achieved by:
+\begin{enumerate}[label=\it\arabic*\hspace{.5ex}]
+    \item Extending the \glsxtrlong{voi} framework to allow the study of decision making via policies, and the benefit of retaining optionality as uncertainty reduces;
+    \item Illustrating how \glsxtrshort{voi} can be used to quantify the benefit of data collection for supporting decision making across a range of example energy system decision problems;
+    \item Investigating the effects of training data on the accuracy of building load and grid condition forecasts, and the resulting performance of \glsxtrshort{mpc};
+    \item Quantifying the value of hourly building load monitoring data for improving the design of solar-battery systems in a district energy system; and
+    \item Quantifying the value of building small-scale demonstrators, and retaining optionality in energy storage technology selection, for improving the design of an energy park.
+\end{enumerate}
+
+
+\newpage
+\subsection{Thesis structure}
+
+The remainder of this thesis is structured as follows:
+\begin{enumerate}[wide, labelwidth=!, labelindent=0pt]
+    \item[\it\Cref{chap:methodology}] explains the \glsxtrlong{voi} analysis framework, progressively building up the theory from first principles, and then extending it to study decision making via policies and the benefits of optionality. Alongside this, the interpretation of each analysis step and the insights the results provide on how uncertainties affect decision making in energy systems is illustrated by applying the theory to a simple worked example of designing a solar-battery system for a commercial building.
+
+    \item[\it\Cref{chap:demonstrations}] then demonstrates how \glsxtrshort{voi} can be used to understand the data collection requirements for supporting decision making in energy systems. It does so through three example decision problems, covering different building energy systems and decision making contexts. For each example, the model of decision making is explained, the \glsxtrshort{voi} is quantified, and the insights this provides into the usefulness of collecting data are discussed.
+
+    \item[\it\Cref{chap:forecasting}] investigates how the available data affects the forecasting accuracy of machine learning prediction models of building load and grid conditions, and how the accuracy of these prediction models affects the performance of \glsxtrshort{mpc} in a simulated multi-building energy system. The data collection requirements for forecasting and measures to improve the data efficiency of prediction models are studied using a historic building energy usage dataset from the Cambridge University Estate. A case study approach is used rather \glsxtrshort{voi}, as the patterns in the training data are too complex for a Bayesian model.
+
+    \item[\it\Cref{chap:districts}] quantifies the value of using hourly load monitoring data to improve the sizing of solar-battery systems within a district, to determine whether uncertainty in building energy usage should be reduced before designing local generation \& storage systems. It investigates a case study district energy system with grid constraints, modelled using the same building energy usage dataset from the Cambridge University Estate, where a Stochastic Program is used as a decision policy for system sizing.
+
+    \item[\it\Cref{chap:parks}] quantifies the value of retaining flexibility to adapt energy park designs and optionality over energy storage technology choice as uncertainty in storage performance reduces, to determine whether the energy park design process should be adjusted to enable this flexibility and optionality. An illustrative energy park model based on a proposed green hydrogen plant near Rotterdam is used, which considers four possible bulk energy storage technologies with uncertain round-trip efficiency, lifetime, and capital cost.
+
+    \item[\it\Cref{chap:conclusion}] concludes, summarising the results of the thesis, and discussing their limitations and how these could be addressed through future work.
+
+    %\item[\it\Cref{app:data}] describes the Cambridge University Estate energy usage dataset ...
+\end{enumerate}
+
+
+
+\ifdefineSpeech
+ % pass
+\else
+
+\newpage
+\subsection{Open data and models}
+
+All code and data used to perform the analyses in this thesis are publicly available under an open-source license. Links to the repositories are provided at the start of each chapter.
+
+Additionally, as part of this PhD project, a dataset of energy usage data from buildings across the Cambridge University Estate was created and made publicly available. The dataset is described in Appendix \ref{app:data}. It has been released as:
+
+\begin{cbox}[colback=Cerulean!10!white]{}
+    \setlength{\parindent}{0pt}%
+
+    \printpublication{langtry2024CambridgeUniversityEstates} \textit{(\ref{app:data})}
+
+\end{cbox}
+
+\hfill \\
+
+\subsection{Research outputs and contributions}
+
+The work in this thesis has been published in the following articles:
+
+\begin{cbox}{}
+    \setlength{\parindent}{0pt}%
+
+    {\small\it \Cref{chap:demonstrations}} \newline
+    \printpublication{langtry2023ValueInformationAnalysis} \\
+
+    \printpublication{langtry2024RationalisingDataCollection}
+
+    \newpage
+    {\small\it \Cref{chap:forecasting}} \newline
+    \printpublication{langtry2024ImpactDataForecasting}\\
+
+    {\small\it \Cref{chap:districts}} \newline
+    \printpublication{langtry2025QuantifyingBenefitLoad}\\
+
+    {\small\it \Cref{chap:parks}} \newline
+    \printpublication{langtry2025ValueHedgingEnergya} \\
+
+    \printpublication{langtry2025TheConversation} \\ % The Conversation article
+
+    {\small\it \Cref{chap:methodology}} \newline
+    \printpublication{langtry2025VoItutorial} ? % VoI tutorial paper
+
+\end{cbox}
+
+\hfill \\
+
+\noindent
+However, there is much more to a PhD than just a thesis. Alongside the work in this thesis, contributions\footnote{Starred items indicate a supervisory role in the project.} were made to the following publications and projects:
+
+\begin{cbox}[colback=ForestGreen!10!white]{}
+    \setlength{\parindent}{0pt}%
+
+    \printpublication{difrancesco2023SystemEffectsIdentifying}\\
+
+    \printpublication{nagy2023CityLearnChallenge2023}\\
+
+    \printpublication{choi2025RepresentationVectorBasedTime}\\
+
+    * \printpublication{lu2025SelfattentionVariationalAutoencoderbased}\\
+
+    * \printpublication{lu2025AutomatedBuildingEnergy}\\
+
+    * \printpublication{raisch2025AdaptingChangeComparison}\\
+
+    \printpublication{choi2025PrivacypreservingTransferLearning}
+
+\end{cbox}
+
+\fi

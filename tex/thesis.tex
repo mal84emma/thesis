@@ -1,0 +1,259 @@
+% ******************************* PhD Thesis Template **************************
+% Please have a look at the README.md file for info on how to use the template
+
+% !TeX TXS-program:bibliography = txs:///biber
+\documentclass[a4paper,12pt,print,custombib,customfont,custommargin]{PhDThesisPSnPDF}
+
+% ******************************************************************************
+% ******************************* Class Options ********************************
+% *********************** See README for more details **************************
+% ******************************************************************************
+
+% `a4paper'(The University of Cambridge PhD thesis guidelines recommends a page
+% size a4 - default option) or `a5paper': A5 Paper size is also allowed as per
+% the Cambridge University Engineering Department guidelines for PhD thesis
+%
+% `11pt' or `12pt'(default): Font Size 10pt is NOT recommended by the University
+% guidelines
+%
+% `oneside' or `twoside'(default): Printing double side (twoside) or single
+% side.
+%
+% `print': Use `print' for print version with appropriate margins and page
+% layout. Leaving the options field blank will activate Online version.
+%
+% `index': For index at the end of the thesis
+%
+% `draftclassic': For draft mode without loading any images (same as draft in book)
+%
+% `draft': Special draft mode with line numbers, images, and water mark with
+% timestamp and custom text. Position of the text can also be modified.
+%
+% `abstract': To generate only the title page and abstract page with
+% dissertation title and name, to submit to the Student Registry
+%
+% `chapter`: This option enables only the specified chapter and its references
+%  Useful for review and corrections.
+%
+% ************************* Custom Page Margins ********************************
+%
+% `custommargin`: Use `custommargin' in options to activate custom page margins,
+% which can be defined in the preamble.tex. Custom margin will override
+% print/online margin setup.
+%
+% *********************** Choosing the Fonts in Class Options ******************
+%
+% `times' : Times font with math support. (The Cambridge University guidelines
+% recommend using times)
+%
+% `fourier': Utopia Font with Fourier Math font (Font has to be installed)
+%            It's a free font.
+%
+% `customfont': Use `customfont' option in the document class and load the
+% package in the preamble.tex
+%
+% default or leave empty: `Latin Modern' font will be loaded.
+%
+% ********************** Choosing the Bibliography style ***********************
+%
+% `authoryear': For author-year citation eg., Krishna (2013)
+%
+% `numbered': (Default Option) For numbered and sorted citation e.g., [1,5,2]
+%
+% `custombib': Define your own bibliography style in the `preamble.tex' file.
+%              `\RequirePackage[square, sort, numbers, authoryear]{natbib}'.
+%              This can be also used to load biblatex instead of natbib
+%              (See Preamble)
+%
+% **************************** Choosing the Page Style *************************
+%
+% `default (leave empty)': For Page Numbers in Header (Left Even, Right Odd) and
+% Chapter Name in Header (Right Even) and Section Name (Left Odd). Blank Footer.
+%
+% `PageStyleI': Chapter Name next & Page Number on Even Side (Left Even).
+% Section Name & Page Number in Header on Odd Side (Right Odd). Footer is empty.
+%
+% `PageStyleII': Chapter Name on Even Side (Left Even) in Header. Section Number
+% and Section Name in Header on Odd Side (Right Odd). Page numbering in footer
+
+% Uncomment to change page style
+%\pagestyle{PageStyleII}
+
+% ********************************** Preamble **********************************
+% Preamble: Contains packages and user-defined commands and settings
+\input{Preamble/preamble}
+
+% ************************ Thesis Information & Meta-data **********************
+% Thesis title and author information, reference file for biblatex
+\input{thesis-info}
+
+% ***************************** Abstract Separate ******************************
+% To printout only the titlepage and the abstract with the PhD title and the
+% author name for submission to the Student Registry, use the `abstract' option in
+% the document class.
+
+\ifdefineAbstract
+ \pagestyle{empty}
+ \includeonly{Declaration/declaration, Abstract/abstract}
+\fi
+
+% ***************************** Chapter Mode ***********************************
+% The chapter mode allows user to only print particular chapters with references
+% Title, Contents, Frontmatter are disabled by default
+% Useful option to review a particular chapter or to send it to supervisior.
+% To use choose `chapter' option in the document class
+
+\ifdefineChapter
+ \includeonly{Introduction/introduction}
+ %\includeonly{Methodology/methodology}
+ %\includeonly{Demonstrations/demonstrations}
+ %\includeonly{Forecasting/forecasting}
+ %\includeonly{Data/data}
+ %\includeonly{Districts/districts}
+ %\includeonly{Parks/parks}
+ %\includeonly{Conclusion/conclusion}
+\fi
+
+% ********************************** Speech Mode *********************************
+% Remove all extraneous bits of the text that would not be spoken out loud, e.g.
+% citations (rather than explicit references), footnotes, page styling, etc.
+\ifdefineSpeech
+ \pagestyle{empty} % no page numbers
+ % disable non-inline citations
+ \newcommand{\citer}[1]{}
+ \newcommand{\citei}{\citep}
+ % make footnotes do nothing
+ \renewcommand{\footnote}[1]{}
+ \renewcommand{\footnotemark}{}
+ \renewcommand{\footnotetext}[1]{}
+ \RenewDocumentEnvironment{cbox}{+b}{}{} % make cbox do nothing
+\else
+ \newcommand{\citer}{\citep}
+ \newcommand{\citei}{\citep}
+\fi
+
+% ******************************** Front Matter ********************************
+\begin{document}
+%TC:ignore
+
+\ifdefineChapter
+ % pass
+\else
+ % make frontmatter
+
+ \frontmatter
+ 
+ \maketitle
+ 
+ \include{Dedication/dedication}
+ \include{Declaration/declaration}
+ \include{Acknowledgement/acknowledgement}
+ \include{Quip/quip}
+ \include{Abstract/abstract}
+ 
+ %% Adding TOC and List of Figures
+ 
+ \tableofcontents
+ 
+ \listoffigures
+ 
+ \listoftables
+ 
+ % \printnomenclature[space] space can be set as 2em between symbol and description
+ %\printnomenclature[3em]
+
+ \printacronyms[title=List of abbreviations,nonumberlist]
+ \addtocontents{toc}{\vspace{1\baselineskip}} % add gap to toc
+\fi
+
+% ******************************** Main Matter *********************************
+\mainmatter
+
+% change title formatting depending on mode
+\ifdefineSpeech
+ \titleformat{\chapter}{}{Chapter \thechapter}{0pt}{ #1.}
+ \titleformat{\section}{}{Section \thesection}{0pt}{ #1.}
+ \titleformat{\subsection}{}{Section \thesubsection}{0pt}{ #1.}
+ \titleformat{\subsubsection}{}{Section \thesubsubsection}{0pt}{ #1.}
+ \titleformat{\paragraph}{}{Paragraph \theparagraph}{0pt}{ #1.}
+\else
+ \titleformat{\chapter}[display]
+     {\bfseries}{\filleft\VERYHUGE\thechapter}{0pt}{\singlespacing\HUGE\filleft #1}
+ \titlespacing*{\chapter}{10pt}{0pt}{60pt} % left, before, after
+ \titleformat{\paragraph}[runin]{\normalfont\normalsize\itshape}{}{0pt}{#1.}
+\fi
+
+%TC:endignore
+
+\cleardoublepage
+\include{Introduction/introduction}
+\cleardoublepage
+\include{Methodology/methodology}
+\cleardoublepage
+\include{Demonstrations/demonstrations}
+\cleardoublepage
+\include{Forecasting/forecasting}
+\cleardoublepage
+\include{Districts/districts}
+\cleardoublepage
+\include{Parks/parks}
+\cleardoublepage
+\include{Conclusion/conclusion}
+
+%TC:ignore
+\addtocontents{toc}{\vspace{1\baselineskip}} % add gap to toc
+
+% ********************************** Appendices ********************************
+
+% change title format back for appendices
+\titleformat{\chapter}[block]
+    {\raggedright\bfseries\huge}{Appendix \thechapter.}{15pt}{#1}
+\titlespacing*{\chapter}{0pt}{0pt}{40pt} % left, before, after
+
+%TC:endignore
+\cleardoublepage
+\begin{appendices} % Using appendices environment for more functionality
+
+\include{Data/data}
+
+\end{appendices}
+
+
+%TC:ignore
+% ********************************** Bibliography ******************************
+\ifdefineSpeech
+ % pass
+\else
+
+\begin{spacing}{1} % 0.9
+\setlength\bibitemsep{1.2\itemsep}
+\renewcommand*{\bibfont}{\normalfont\small}
+
+% To use the conventional natbib style referencing
+% Bibliography style previews: http://nodonn.tipido.net/bibstyle.php
+% Reference styles: http://sites.stat.psu.edu/~surajit/present/bib.htm
+
+% ToDo: find a nice bibliography style (Bryn's is lush)
+%\bibliographystyle{elsarticle-harv}
+
+%\bibliographystyle{apalike}
+%\bibliographystyle{unsrt} % Use for unsorted references  
+%\bibliographystyle{plainnat} % use this to have URLs listed in References
+
+\cleardoublepage
+%\bibliography{References/references} % Path to your References.bib file
+
+
+% If you would like to use BibLaTeX for your references, pass `custombib' as
+% an option in the document class. The location of 'reference.bib' should be
+% specified in the preamble.tex file in the custombib section.
+% Comment out the lines related to natbib above and uncomment the following line.
+
+\printbibliography[heading=bibintoc, title={References}]
+
+\end{spacing}
+
+\fi
+
+%TC:endignore
+\end{document}

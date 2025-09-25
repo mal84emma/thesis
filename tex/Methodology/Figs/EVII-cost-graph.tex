@@ -1,0 +1,71 @@
+\pgfplotsset{
+  layers/axis lines on top/.define layer set={
+    axis background,
+    axis grid,
+    axis ticks,
+    axis tick labels,
+    pre main,
+    main,
+    axis lines,
+    axis descriptions,
+    axis foreground,
+  }{/pgfplots/layers/standard},
+} % from https://tex.stackexchange.com/questions/240359/tikz-axis-border-on-top-grids-below
+
+\begin{figure}[h]
+    \centering
+    \vspace*{0.25cm}
+    \resizebox{0.8\textwidth}{!}{
+    \begin{tikzpicture}
+        \def\N{100}
+        \def\C{5}
+        \def\xmax{10}
+        \def\ymin{-0.1}
+        \def\ymax{1.2}
+        \def\xopt{2.44102} % from desmos
+        \def\yopt{0.92817} % from desmos
+        \def\xint{5.46579}
+
+        \begin{axis}[
+            set layers=axis lines on top,
+            every axis plot post/.append style={
+                mark=none,domain={0}:{10},samples=\N,smooth},
+                xmin={-1}, xmax=\xmax,
+                ymin=\ymin, ymax={\ymax},
+                axis lines=middle,
+                axis line style=thick,
+                enlargelimits=upper, % extend the axes a bit to the right and top
+                %ticks=none,
+                xlabel={\large $\sigma^2$},
+                ylabel={\glsxtrshort{evii}},
+                xtick={{10}},
+                xticklabels={{$\sigma^2_{\text{prior}}$}},
+                ytick={{1},{0.75}},
+                yticklabels={{\normalfont \glsxtrshort{evpi}},{\large $c(e)$}},
+                every major tick/.append style={thick, major tick length=7pt, black!50},
+                every axis x label/.style={at={(current axis.right of origin)},anchor=west},
+                every axis y label/.style={at={(current axis.above origin)},anchor=south},
+                width=0.7*\textwidth, height=0.4*\textwidth,
+                y=4cm,
+                clip=false,
+                %every tick label/.append style={font=\scriptsize}
+            ]
+
+        \draw[draw=none, left color=red!30, right color=red!10!white] (axis cs:\xint,0) rectangle (axis cs:\xmax,\ymax);
+
+        \addplot[black!25,ultra thick,name path=D] {0.75-x/15};
+        \addplot[black,ultra thick,name path=B] {1-sig(x,\C)};
+        \addplot[black,ultra thick,dashed,name path=C] {1};
+
+        \draw[ultra thick, green!50!black!50, arrows = {Stealth[inset=0pt, angle=60:6pt]-Stealth[inset=0pt, angle=60:6pt]}, shorten >= .5mm, shorten <= .5mm] (axis cs:\xopt,0.75-\xopt/15) -- (axis cs:\xopt,\yopt);
+        %\draw[ultra thick, red!50] (axis cs:\xint,0) -- (axis cs:\xint,\ymax);
+
+        \node[draw=none] at (axis cs:\xopt-0.8,0.475) {\scriptsize Best measurement};
+        \node[draw=none] at (axis cs:7.75,0.75) {\footnotesize Not economical};
+
+        \end{axis}
+    \end{tikzpicture}
+    }
+    \vspace*{-0.25cm}
+    \caption{Illustrative EVII vs. measurement cost curve} \label{fig:methodology-EVII-precision-cost-curve}
+\end{figure}

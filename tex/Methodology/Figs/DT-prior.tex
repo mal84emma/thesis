@@ -1,0 +1,47 @@
+\begin{figure}[h]
+    \vspace*{-1.5cm}
+    {\centering
+    \begin{tikzpicture}[node distance=0cm]
+
+    % Nodes
+    \node[DTnode, rectangle] (action) at (0,0) {$A$};
+    \node[annot, below of=action, yshift=-\tkzlabsep] {$a \in \mathcal{A}$};
+    \node[DTnode, circle, right of=action, xshift=\tkzhsep, yshift=\tkznodeysep] (theta) {$\theta$};
+    \node[annot, below of=theta, yshift=-\tkzlabsep] {$\theta \sim \pi(\theta)$};
+    \node[DTnode, triangle, right of=theta, xshift=\tkzhsep, yshift=-\tkznodeysep] (utility) {$U$};
+    \node[annot, below of=utility, yshift=-\tkzlabsep] {$u\left(a,\theta\right)$};
+
+    % True arcs
+    \begin{scope}[ultra thick]
+        \draw[->] (action) -- (theta);
+        \draw[->, dashed] (theta) -- (utility);
+    \end{scope}
+
+    % Dummy nodes
+    \node[DTnode, dummy, circle, draw=none, below of=theta, yshift=2*\tkznodeysep]  (dt1) {};
+    \node[DTnode, dummy, circle, draw=none, below of=theta, yshift=-2*\tkznodeysep]  (dt2) {};
+    \node[DTnode, dummy, circle, draw=none, below of=theta, yshift=-4*\tkznodeysep]  (dt3) {};
+
+    \node[DTnode, dummy, circle, draw=none, below of=utility, yshift=4*\tkznodeysep]  (du1) {};
+    \node[DTnode, dummy, circle, draw=none, below of=utility, yshift=2*\tkznodeysep]  (du2) {};
+    \node[DTnode, dummy, circle, draw=none, below of=utility, yshift=-2*\tkznodeysep]  (du3) {};
+
+    % Dummy arcs
+    \begin{scope}[draw=gray]
+        \draw[-] (action) -- (dt1);
+        \draw[-] (action) -- (dt2);
+        \draw[-] (action) -- (dt3);
+        \draw[-] (theta) -- (du1);
+        \draw[-] (theta) -- (du2);
+        \draw[-] (theta) -- (du3);
+    \end{scope}
+
+    \end{tikzpicture}
+    \vspace*{-1.5cm}
+    \caption{Decision tree representation of decision making under uncertainty.} \label{fig:methodology-DT-prior}
+    \vspace*{0.15cm}
+    {\hfill
+    \footnotesize{Adapted from Figure 1 of \citep{difrancesco2021DecisiontheoreticInspectionPlanning}}
+    \hfill}
+    }
+\end{figure}

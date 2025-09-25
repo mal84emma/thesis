@@ -1,0 +1,60 @@
+\documentclass[crop,tikz]{standalone}
+
+\usepackage{amssymb,amsfonts}
+
+% ***************** Tikz settings *****************
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes}
+\usetikzlibrary{fit,backgrounds}
+\usetikzlibrary{decorations.pathreplacing,calligraphy}
+\usetikzlibrary{patterns}
+
+
+% Tikz settings for decision tree diagrams
+\tikzset{%
+>={Latex[width=3.5mm,length=3.5mm]},
+  % Specifications for style of nodes:
+  base/.style = {text centered, very thick},
+  DTnode/.style = {draw=black, minimum width=1.5cm, minimum height=1.5cm, align=center, font=\sffamily, inner sep=5pt},
+  triangle/.style = {shape=regular polygon, regular polygon sides=3, inner sep=3pt},
+  dummy/.style = {minimum width=2.25cm, minimum height=2.25cm},
+  annot/.style = {draw=none, minimum width=0cm, minimum height=0cm, align=center, font=\sffamily\normalsize}
+}
+\newcommand{\tkzhsep}{4.25cm}
+\newcommand{\tkznodeysep}{3cm}
+\newcommand{\cornerrad}{0.35cm}
+
+
+\begin{document}
+
+\begin{tikzpicture}[node distance=0cm]
+
+% Nodes
+\node[DTnode, rectangle] (measure) at (0,0) {Electricity meter};
+\node[DTnode, diamond, right of=measure, xshift=\tkzhsep, yshift=-0.5*\tkznodeysep] (meter-cost) {Metering\\cost};
+\node[DTnode, rectangle, rounded corners=\cornerrad, right of=measure, xshift=\tkzhsep, yshift=0.5*\tkznodeysep] (load) {Building electrical\\load during operation};
+\node[DTnode, rectangle, rounded corners=\cornerrad, right of=load, xshift=\tkzhsep, yshift=0] (energy) {Battery schedule\\ \& grid load};
+\node[DTnode, rectangle, rounded corners=\cornerrad, below of=energy, xshift=0, yshift=-1*\tkznodeysep] (unc-other) {Solar generation \&\\battery efficiency};
+\node[DTnode, diamond, right of=energy, xshift=\tkzhsep, yshift=0] (op-cost) {Operating\\cost};
+\node[DTnode, rectangle, above of=energy, xshift=0.5*\tkzhsep, yshift=\tkznodeysep] (sys) {\textbf{Solar \& battery}\\\textbf{sizings}};
+\node[DTnode, diamond, left of=sys, xshift=-1*\tkzhsep, yshift=0] (sys-cost) {Capital\\cost};
+\node[DTnode, rectangle, rounded corners=\cornerrad, left of=sys-cost, xshift=-1*\tkzhsep, yshift=0] (bat-cost) {Battery cost};
+
+% Arcs
+\begin{scope}[ultra thick]
+  \draw[->, bend left, gray] (measure.north) to [in=165] (load.west);
+  \draw[->, bend right] (measure.south) to [in=195] (meter-cost.west);
+  \draw[->] (load) -- (energy);
+  \draw[->] (unc-other) -- (energy);
+  \draw[->] (energy) -- (op-cost);
+  \draw[->, bend left] (sys) to [in=210] (energy.north);
+  \draw[->] (sys) -- (sys-cost);
+  \draw[->] (bat-cost) -- (sys-cost);
+\end{scope}
+
+\end{tikzpicture}
+
+\end{document}

@@ -1,0 +1,70 @@
+\begin{figure}[h]
+    \vspace*{-1.5cm}
+    {\centering
+    \begin{tikzpicture}[node distance=0cm]
+    
+    % Nodes
+    \node[DTnode, rectangle] (measure) at (0,0) {$E$};
+    \node[annot, below of=measure, yshift=-\tkzlabsep] {$e \in E$};
+    \node[DTnode, circle, right of=measure, xshift=\tkzhsep, yshift=\tkznodeysep] (z) {$Z$};
+    \node[annot, below of=z, yshift=-\tkzlabsep] {$z \sim \pi(z)$};
+    \node[DTnode, rectangle, right of=z, xshift=\tkzhsep, yshift=-\tkznodeysep] (action) {$A$};
+    \node[annot, below of=action, yshift=-\tkzlabsep] {$a \in \mathcal{A}$};
+    \node[DTnode, circle, right of=action, xshift=\tkzhsep, yshift=\tkznodeysep] (theta) {$\theta$};
+    \node[annot, below of=theta, yshift=-\tkzlabsep] {$\theta \sim \pi(\theta | z)$};
+    \node[DTnode, triangle, right of=theta, xshift=\tkzhsep, yshift=-\tkznodeysep] (utility) {$U$};
+    \node[annot, below of=utility, yshift=-\tkzlabsep] {$u\left(a,\theta\right)$};
+
+    % True arcs
+    \begin{scope}[ultra thick]
+        \draw[->] (measure) -- (z);
+        \draw[->, dashed] (z) -- (action);
+        \draw[->] (action) -- (theta);
+        \draw[->, dashed] (theta) -- (utility);
+    \end{scope}
+    
+    % Dummy nodes
+    \node[DTnode, dummy, circle, draw=none, below of=z, yshift=2*\tkznodeysep]  (dz1) {};
+    \node[DTnode, dummy, circle, draw=none, below of=z, yshift=-2*\tkznodeysep]  (dz2) {};
+    \node[DTnode, dummy, circle, draw=none, below of=z, yshift=-4*\tkznodeysep]  (dz3) {};
+
+    \node[DTnode, dummy, circle, draw=none, below of=action, yshift=4*\tkznodeysep]  (da1) {};
+    \node[DTnode, dummy, circle, draw=none, below of=action, yshift=2*\tkznodeysep]  (da2) {};
+    \node[DTnode, dummy, circle, draw=none, below of=action, yshift=-2*\tkznodeysep]  (da3) {};
+
+    \node[DTnode, dummy, circle, draw=none, below of=theta, yshift=2*\tkznodeysep]  (dt1) {};
+    \node[DTnode, dummy, circle, draw=none, below of=theta, yshift=-2*\tkznodeysep]  (dt2) {};
+    \node[DTnode, dummy, circle, draw=none, below of=theta, yshift=-4*\tkznodeysep]  (dt3) {};
+
+    \node[DTnode, dummy, circle, draw=none, below of=utility, yshift=4*\tkznodeysep]  (du1) {};
+    \node[DTnode, dummy, circle, draw=none, below of=utility, yshift=2*\tkznodeysep]  (du2) {};
+    \node[DTnode, dummy, circle, draw=none, below of=utility, yshift=-2*\tkznodeysep]  (du3) {};
+    
+    % Dummy arcs
+    \begin{scope}[draw=gray]
+        \draw[-] (measure) -- (dz1);
+        \draw[-] (measure) -- (dz2);
+        \draw[-] (measure) -- (dz3);
+        
+        \draw[-] (z) -- (da1);
+        \draw[-] (z) -- (da2);
+        \draw[-] (z) -- (da3);
+
+        \draw[-] (action) -- (dt1);
+        \draw[-] (action) -- (dt2);
+        \draw[-] (action) -- (dt3);
+
+        \draw[-] (theta) -- (du1);
+        \draw[-] (theta) -- (du2);
+        \draw[-] (theta) -- (du3);
+    \end{scope}
+    
+    \end{tikzpicture}
+    \vspace*{-1.5cm}
+    \caption{Decision tree representation of decision making with measurements} \label{fig:methodology-DT-prepost}
+    \vspace*{0.15cm}
+    {\hfill
+    \footnotesize{Adapted from Figure 1 of \citep{difrancesco2021DecisiontheoreticInspectionPlanning}}
+    \hfill}
+    }
+\end{figure}

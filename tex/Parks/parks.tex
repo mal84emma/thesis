@@ -1,0 +1,789 @@
+%!TEX root = ../thesis.tex
+%*******************************************************************************
+%*********************************** Energy parks chapter *****************************
+%*******************************************************************************
+
+\chapter{Hedging storage technology selection for energy park design} \label{chap:parks}
+
+\graphicspath{{Parks/Figs/}}
+
+\begin{cbox}{}
+    \printpublication{langtry2025ValueHedgingEnergya}
+
+    \noindent{\color{black!50}\rule{\textwidth}{0.4mm}}\vspace{2mm}
+
+    \noindent
+    This chapter has been published as the journal article above.\\
+
+    \noindent
+    All code and data used to perform the experiments in this chapter is available at \url{https://github.com/mal84emma/Energy-Park-Design}.
+\end{cbox}
+
+\newpage
+
+% Make sure to mention \glsxtrlong{voo} (\glsxtrshort{voo}) from \Cref{sec:methodology-optionality} is used in this section (limited back refs in body text).
+
+\noindent
+Grid scale energy storage needs to be built quickly and in large quantities to support variable renewable generation. Co-locating generation and storage with industrial loads, referred to as energy parks, allows the renewable supply to be matched the energy demand, enabling greater decarbonisation while also reducing operating costs and grid impact.
+However the performance of bulk energy storage technologies is currently highly uncertain. As technology development progresses and uncertainty in storage performance reduces, a different technology may turn out cheaper than the one chosen at the start of the energy park project. Enabling flexibility in the design process so that system designs can be updated as better information becomes available would lower the cost of decarbonising industry. But achieving this flexibility is itself costly. This raises the question, ``Is it worth it?''. This chapter quantifies the benefit of retaining flexibility to adapt energy park designs and optionality over storage technology choice as uncertainty reduces, to determine whether they are economically worthwhile. It applies the \glsxtrlong{voo} (\glsxtrshort{voo}) framework from \Cref{sec:methodology-optionality} to the sizing of wind, solar, and storage in an illustrative energy park model based on a real-world proposal near Rotterdam, considering uncertainty in storage efficiency, lifetime, and capital cost. The chapter investigates the reduction in the total cost of the energy park when the asset sizings and energy storage technology can be changed after uncertainty in storage performance has been reduced by building demonstrator storage systems. It also considers how this changes when multiple storage technologies are used in the energy park, and when the energy park developer is risk averse.\\
+
+\newpage
+%********************************** Intro section **************************************
+\section{Introduction}
+
+Currently 40\% of electricity in the UK is generated from carbon intensive sources \citep{desnz2024DigestUKEnergy}, and electricity demand is expect to increase by a factor 3 to 4 as heating and transport energy usage are decarbonized via electrification \citep{nationalgrideso2023FutureEnergyScenarios}. As a result, around 100 GW of wind and 60 GW of solar generation need to be constructed by 2050 \citep{nationalgrideso2023FutureEnergyScenarios}.
+However, managing the variability of electricity generation from these renewable sources to maintain security of supply presents a significant challenge \citep{papadis2020ChallengesDecarbonizationEnergy}, and the required adaptation of the energy system will be costly.
+Grid-scale energy storage is expected to be the main mechanism for matching renewable electricity supply with demand.
+Co-locating bulk energy storage with renewable generation and industrial loads, referred to as an energy park, has been proposed as a way of both improving the profitability of grid-scale storage (reducing the cost of its services), and reducing the grid impact of variable renewable generation \citep{chinaris2025HybridizationWindFarms,fan2021SizingCoordinationStrategies}.
+
+The design of energy parks, including the selection and sizing of renewable generation and energy storage technologies, has been extensively studied in the literature.
+For example, Arévalo \& Jurado \citep{arevalo2021PerformanceAnalysisPV} investigates the combination of energy storage technology and control scheme that provides the lowest net present cost for supporting an autonomous grid with solar, wind, hydro, and diesel generation. Sizing optimization is performed for each system configuration, and it is found that due to the different performance characteristics of the storage technologies, they are best suited to supporting substantially different generation mixes. This indicates that the technical performance of energy storage has a significant impact on how the energy system should be sized.
+Hu et al. \citep{hu2024OptimalPlanningElectricheating} considers a district energy system with local renewable generation providing both electricity and heat. It demonstrates that optimizing the sizing and location of battery storage, hydrogen storage, and CHP units in the system can reduce the net load fluctuation by 25\%. Similar benefits of using energy storage to manage variability in both renewable generation and load are shown by Phu et al. \citep{phu2024IGDTApproachMultiobjective}, which studies an energy park producing green hydrogen from biomass using electricity from wind and solar generation. Optimizing battery and hydrogen energy storage within the system is shown to substantially reduce the operating cost, carbon emissions, and grid reliance of the energy park. Further this optimized configuration is demonstrated to be robust against uncertainties in hydrogen demand, grid electricity price, and renewable generation.
+
+Many different energy storage technologies have been considered for supporting energy parks, such as Lead-acid batteries, Lithium-ion batteries, compressed-air storage, and redox flow batteries \citep{irena2017ElectricityStorageRenewables}.
+However the future performance of these technologies, i.e. how they will perform when implemented in the grid from around 2030 onwards, is still highly uncertain. Across the literature, estimates of technical parameters (e.g. round-trip efficiency and self-discharge rate) and economic parameters (e.g. cost per energy capacity and service lifetime) vary over wide ranges \citep{irena2017ElectricityStorageRenewables,kebede2022ComprehensiveReviewStationary,kittner2020ChapterGridscaleEnergy,neso2022PotentialElectricityStorage,petkov2020PowertohydrogenSeasonalEnergy}.
+For example, a literature review, \citep{kebede2022ComprehensiveReviewStationary}, found estimates for Sodium--Sulphur high-temperature batteries ranging from 70--90\% for round-trip efficiency, and 0--20\% for self-discharge rate. \citep{petkov2020PowertohydrogenSeasonalEnergy} found values for the capital cost of Li-ion batteries between 150 and 600 \euro/kWh, and operational costs between 1 and 5\%. And an IRENA report, \citep{irena2017ElectricityStorageRenewables}, estimated the annualized energy capacity cost of compressed-air storage to be between 2 and 355 cents/kWh/yr.
+
+These highly uncertain technical and economic performance parameters have a significant impact on the cost of developing and operating grid-scale storage in energy parks. Crucially, it also causes uncertainty in which storage technology will provide the lowest cost pathway to supporting variable renewable generation. As research and development of storage technologies progresses, uncertainty in their performance will decrease, and the best technology will emerge. However, to meet 2030 and 2040 carbon emissions reductions targets, energy parks must be designed and begin development in the near future.
+
+This raises the following question, ``When designing an energy park, can the best energy storage technology be identified with the current level of uncertainty in performance? Or should developers keep their options open to potentially make a better choice when uncertainty has reduced?''
+No existing studies have considered the impact of reduction in storage performance uncertainty on the design of energy parks and the selection of storage technologies. In fact, very few consider storage uncertainties during energy park design.
+
+
+\subsection{Storage technology performance uncertainty in energy park design}
+
+The impact of uncertainty on the operation of energy parks, and so the cost of arbitraging energy to match variable generation with demand, has been widely studied \citep{kim2017RobustOperationEnergy,ji2025OptimalSchedulingParklevel,zhang2023OptimalEconomicProgramming,li2021OptimalOperationModel}. % control/operational papers studying uncertainties
+For instance, \citep{kim2017RobustOperationEnergy} shows that accounting for load forecast uncertainty in control can reduce operating costs by 10\%, and \citep{ji2025OptimalSchedulingParklevel} develops a method for managing the risk introduced by uncertainty in load and solar generation during operation.
+Many previous articles have investigated the optimal sizing of generation and storage assets to maximize total profit in the presence of various uncertainties.
+For example, Kim et al. \citep{kim2024MultiperiodMultitimescaleStochastic} consider the sizing of wind generation, battery storage, and electrolyser capacity in a micro-grid with local demands for both electricity and hydrogen. A bi-level optimization method is used to minimize the average cost of meeting the local energy demands, accounting for uncertainty in wind generation and demand patterns on operating costs, and uncertainty in the per capacity costs of the assets.
+Gabrielli et al. \citep{gabrielli2019RobustOptimalDesign} develop a method for sizing a multi-energy system with solar generation, battery storage, heat pumps, and an electrolyser, so that the design is robust to uncertainty in weather conditions and the electricity and heating demands which must be met.
+Bakke at al. \citep{bakke2016InvestmentElectricEnergy} study the optimal level and timing of investment in stand-alone battery storage for providing energy arbitrage and ancillary grid services, considering uncertainty in both electricity prices (which determine operational revenue) and evolution in the price per capacity of battery storage.
+
+Uncertainty in renewable generation \citep{kim2024MultiperiodMultitimescaleStochastic,gabrielli2019RobustOptimalDesign}, energy demands \citep{maia2021CertaintyUncertaintyStochastic,keyvandarian2023OptimalSizingReliabilityconstrained}, and the price of grid electricity \citep{bakke2016InvestmentElectricEnergy,mohammadi2022EffectMultiUncertainties} and carbon \citep{yang2024PlanningMicrogridsIndustrial} are commonly considered during energy park design.
+However, few studies account for uncertainties related to storage technologies. Some have included uncertainty in the cost of energy storage \citep{kim2024MultiperiodMultitimescaleStochastic,bakke2016InvestmentElectricEnergy,chadly2023TechnoeconomicAssessmentEnergy,coppitters2021RobustDesignOptimization}.
+However only two studies could be found that consider uncertainty in the technical performance of storage technologies, \citep{coppitters2021RobustDesignOptimization} which accounted for uncertain cycle life and self-discharge rate, and \citep{chadly2023TechnoeconomicAssessmentEnergy} which considered uncertain round-trip efficiency.
+
+No existing works have investigated the impact that uncertainty reduction has on the process of energy park design.
+Additionally, in the broader energy systems literature, risk aversion is known to be an important feature of decision making \citep{pickering2019PracticalOptimisationDistrict,mu2022CVaRbasedRiskAssessment,tostado-veliz2024RiskaverseElectrolyserSizing}. Its effect on the selection and sizing of energy infrastructure in parks has been investigated in studies such as \citep{mu2022CVaRbasedRiskAssessment} and \citep{tostado-veliz2024RiskaverseElectrolyserSizing} respectively.
+However, the impact risk aversion has on the benefit of uncertainty reduction is yet to be studied\footnote{Some early work investigated the effect of risk on \glsxtrshort{voi} \citep{gould1974RiskStochasticPreference}. However this explored only the theory and simple demonstration problems. No studies have investigated the effect that risk preferences have on \glsxtrshort{voi} in complex, real-world decision making.}.
+
+
+\newpage
+\subsection{Storage technology selection in energy park design}
+
+While the majority of energy park design studies consider only a single storage option, a few do compare multiple storage technologies to identify the option best suited to the energy system.
+Zhang et al. \citep{zhang2019BalancingWindpowerFluctuation} compares the use of hydrogen storage and Lithium-ion batteries to manage the variability of wind generation and reduce curtailment. \citep{mazzoni2019EnergyStorageTechnologies} \& \citep{mohseni2022QuantifyingEffectsForecast} compare different battery storage technologies for supporting distributed energy systems with local renewable generation. They find that Lead-acid and Sodium--Sulphur batteries provide the lowest total operating cost for their respective energy systems. However, none of these studies account for uncertainty in the characteristics of the storage technologies during the design optimizations which are then compared. A comparison of battery technologies which does account for performance uncertainties is performed in the context of building energy systems in \citep{chadly2023TechnoeconomicAssessmentEnergy}.
+
+The main limitation of all these existing studies is that they consider the energy park design process, including both technology selection and sizing, as a static, single-point decision, where the entire design is determined up-front. This does not reflect the design process of practical energy systems, where several stages of engineering design are performed progressively with increasing detail, and greater information regarding available components (which for instance may be provided during contracting).
+
+As uncertainty in the performance of the available storage technology options reduces, the best technology choice (that with, for example, the lowest average cost under the remaining uncertainty) may change. As a result, retaining optionality over which storage technology is ultimately used through the design process could be valuable, as it may be possible to reduce the overall cost of the energy system by selecting a better performing technology at a later stage. However, keeping this optionality and gathering improved information about the performance of each storage technology is costly. This raises the question of whether the benefits of retaining storage optionality are worth the cost.
+
+
+\subsection{Research objectives \& contributions}
+
+There has been no study of the impact that reducing uncertainty in energy storage technology performance has on the design of energy parks or the selection of storage technologies. As there is currently large uncertainty in the performance of prominent storage technologies, it is important to understand whether developers are able to commit to a single technology up-front, or whether its is beneficial to hedge their bets and have the option to choose the best technology when better information about performance is available.
+
+This chapter uses the \glsxtrlong{voo} (\glsxtrshort{voo}) framework to numerically answer the following questions, ``How valuable is retaining optionality in storage technology choice for the design of an energy park as uncertainty reduces? Is this benefit to design worth the cost of obtaining improved estimates of storage performance and retaining the option to change storage technology?''. It investigates this in the context of sizing wind, solar, and storage capacities for an illustrative energy park system, modelled off a real-world green hydrogen plant proposal in the Port of Rotterdam.
+The main research objectives are to:
+\begin{itemize}
+    \item Quantify the benefit of updating the system design (sizings) after uncertainty in storage performance has been reduced % by R\&D
+    \item Determine whether the benefit to design of retaining optionality in storage technology selection by speculatively developing multiple technologies is worth its cost
+    \item Investigate how the level of uncertainty reduction and risk aversion impact whether design adaptation and storage optionality are worthwhile
+\end{itemize}
+
+The key research contribution is that this work is the first to investigate the impact of reducing uncertainty in storage technology performance on energy system design, and to quantify the benefit of retaining optionality in storage technology selection as uncertainty reduces. The analysis in this chapter demonstrates the value to energy system developers of providing the opportunity to update system designs as improved information about the performance of energy storage (with reduced uncertainty) becomes available, which has important implications for industry design practice.
+
+The remainder of this chapter is structured as follows.
+\Cref{sec:parks-experiment} describes the illustrative energy park studied, including the probabilistic models of renewable generation, industrial load, and energy storage technology performance uncertainty used, and the Stochastic Programming model used to perform system design.
+\Cref{sec:parks-results} presents the results of the numerical experiments and discusses their importance for informing energy park design practices. An initial experiment quantifies the value of being able to update the energy park design, and change choice of energy storage technology, after uncertainty in storage technology performance has been reduced by R\&D. However, as no information is available in the literature regarding how much R\&D might reduce uncertainty, i.e. how closely the performance of a demonstrator system matches a large-scale version, a sensitivity analysis over the level of uncertainty reduction is performed. The \glsxtrshort{voo} is then investigated in two further cases where two energy storage technologies are used in the park, and where risk aversion is incorporated into the design process.
+Finally conclusions are drawn in \Cref{sec:parks-conclusions}.
+
+
+\newpage
+%********************************** Experiment section **************************************
+\section{Experimental setup} \label{sec:parks-experiment}
+
+% Aim for 1500 words
+
+\subsection{Illustrative energy park system} \label{sec:parks-setup}
+
+% Explain energy system, motivation (interest in energy parks \& hydrogen context), location, data used, etc.
+% What energy system are we studying and why?
+
+The value of retaining optionality in energy storage technology choice during design is investigated for an illustrative energy park system. This system is modelled on a real-world energy park proposal. Due to its importance for decarbonizing transportation, heavy industry, and chemical manufacturing, there has been substantial commercial interest in the production of low-carbon hydrogen at scale. A proposal to build a 250 MW hydrogen electrolyser facility in the Port of Rotterdam to decarbonize industry and transportation in the area has received early-stage support from the Dutch government \citep{2022ProjectH2Fifty,bp2022GreenHydrogenProject}.
+Co-locating renewable generation and energy storage with this industrial hydrogen plant in an energy park would reduce the total cost of operating the system, and its impact on the electricity grid.
+
+
+\subsection{System design under uncertainty}
+
+A key design challenge is determining the sizing of generation and storage, and the energy storage technology, that maximize the profitability of the energy park. It is assumed that offshore wind and solar generation (via direct wire connection) can be installed to support the site, and that energy can be traded with the grid. Fig. \ref{fig:parks-system-diagram} illustrates the energy flows within the system model. Limits are imposed on grid connection capacity to reflect network restrictions, and on the maximum solar generation capacity to reflect land scarcity. Additionally, a capital budget constraint is imposed. Optimization-based design is used to select the energy storage technology and generation \& storage sizings that minimize the expected cost of providing the industrial load. A carbon price is included to reflect the incentives for low-carbon hydrogen production. Uncertainties in the industrial load, patterns of wind and solar generation, and cost and technical performance of the different storage technologies are accounted for during design.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\linewidth]{parks_sys-diagram.pdf}
+    \smallskip
+    \caption{Schematic of energy flows within energy park model}
+    \label{fig:parks-system-diagram}
+\end{figure}
+
+% Explain decision sequence, what it corresponds to, why it's important, what we're studying and why (maybe create a sequence diagram to illustrate decision making process; initial design, R\&D, final design, operation); explain R\&D option and associated cost to project
+% What is the impact of uncertainty on the design problem and why is thinking about optionality important? How does it fit into the problem?
+
+A two-stage decision model of the energy park design process is used. In an initial design stage, an energy storage technology is selected, and approximate sizings of the wind, solar, and storage capacities are determined (for consenting, planning permission, and procurement).
+At the time of initial design, the expected performance of each storage technology during operation is uncertain. As project planning and the pre-construction phases are completed, it is assumed that procurement and R\&D is undertaken for the chosen storage technology, leading to the creation of a small-scale demonstrator. This demonstrator storage system provides the energy park designer with measurements of the storage technology performance, which reduce uncertainty in the actual performance of a large-scale system. However, performing this procurement and R\&D to reduce storage uncertainty is costly.
+After the demonstrator project is complete, a final design stage selects the exact wind, solar, and storage capacities for the energy park system. Finally, the system is constructed and operated, and the overall cost of providing the industrial load is observed.
+This decision model is illustrated in Fig. \ref{fig:parks-decision-sequence}.\\
+
+\begin{figure}[h]
+    \centering
+    \hspace*{-1.25cm}\includegraphics[width=1.15\linewidth]{parks_EP-VOI_decision_sequence.pdf}
+    \caption{Two-stage decision model of energy park design}
+    \label{fig:parks-decision-sequence}
+\end{figure}
+\vspace{0cm}
+
+% raises question; should R\&D be performed for multiple technologies even if only one is eventually used? is the optionality in the 2nd stage worthwhile?
+
+\newpage
+\noindent
+This decision model raises a question,\
+
+\begin{cbox}[colback=Aquamarine!10!white]{}
+Even though only one storage technology is ultimately used in the energy park, is it worthwhile performing procurement and R\&D for all \edit{available} technologies, so that at the final design stage, a possibly better choice of storage technology can be made once uncertainty has been reduced?\\
+\hspace*{0.5cm}\textit{I.e.}\\
+Is retaining optionality in storage technology choice until the final design stage worth the cost?
+\end{cbox}
+
+
+\subsection{\edit{Probabilistic models of renewable generation \& industrial load}} \label{sec:parks-prob-gen-load}
+
+% Use tables for dist. params for each storage technology, and prob. model for other uncertainties
+% Include plots of time series uncertainties, e.g. wind \& solar generation
+
+%\subsubsection{Renewable generation \& industrial load}
+
+% Wind generation \& solar generation (historic data, and specify locations assumed), load level ($\pm20\%$ with curtailment to prevent extreme values)
+
+Historic data is used to construct probabilistic models of uncertain wind and solar generation. In both cases, generation potential per installed capacity data was \edit{gathered} for 2010-2019. Uncertainty in renewable generation is modelled by randomly sampling a year from that range and using the corresponding generation data. For wind, data was collected from the \href{https://www.renewables.ninja/}{renewables.ninja} model \edittwo{\citep{staffell2016Renewablesninja}} at the location of a wind farm development zone near Rotterdam (IJmuiden Ver), using a power model from a typical offshore wind turbine. For solar, data was collected from the EU's \href{https://joint-research-centre.ec.europa.eu/photovoltaic-geographical-information-system-pvgis_en}{PVGIS} model \citep{jrceuproeancommission2017JRCPhotovoltaicGeographical}, using default PV module settings.
+Fig. \ref{fig:parks-example-gen-data} plots this data from periods in both summer and winter for three example years.
+
+Uncertainty in the demand for hydrogen in the local market during operation \edit{leads to} uncertainty in the \edit{final sizing of the electrolyser. The conversion efficiency of the electrolyser units also has some uncertainty. So, at the time the supporting generation and storage infrastructure is designed, the electrical load that will be required by the hydrogen plant is uncertain.}
+\edit{The industrial load} is modelled as being constant during operation\edit{, as electrolysers are typically run at high capacity factors to provide a competitive hydrogen price \citep{furfari2021GreenHydrogenCrucial}, but} with an unknown\edit{/uncertain} level. A truncated Gaussian distribution \edit{ is used for the load, with} mean set to the proposed electrolyser capacity of 250 MW, \edit{and} standard deviation $\sigma$ taken to be 25 MW (10\%), \edit{truncated} at $\pm2\sigma$. % to limit unrealistic extreme values
+
+The probabilistic models of the renewable generation and industrial load time series are summarized in Table \ref{tab:parks-ts-prob-models}.
+\edit{Grid electricity price and carbon intensity data for the Netherlands from 2023 is used as a base case}\footnote{Further information on data collection and processing is available \href{https://github.com/mal84emma/Energy-Park-Design/blob/main/data/data_sources.md}{online}.}. % most representative data available
+Uncertainties in price and carbon intensity \edit{are} not modelled\edit{, as due to global energy market events, few years of representative data are available. However 2024 data is used to perform a sensitivity analysis to determine if changes in grid price and carbon impact the conclusions derived.}
+
+\begin{table}[h]
+    \renewcommand{\arraystretch}{1.5}
+    \setlength{\tabcolsep}{12pt}
+    \centerline{
+    \begin{tabular}{c|ccl} \toprule \toprule
+        Parameter & Distribution & Parameters & \multicolumn{1}{>{\centering\arraybackslash}c}{Info} \\
+        \midrule \midrule
+        Wind & \multirow{2}{*}{Discrete uniform} & \multirow{2}{*}{$\{ 2010,\ldots,2019 \}$} & \multirow{2}{*}{\small\makecell[l]{Years of historic generation\\potential data sampled}} \\
+        Solar & &  & \\
+        Load & Truncated Gaussian & \makecell{$\mu=\SI{250}{MW}$\\$\sigma=\SI{25}{MW}$\\$\text{cut-off} = \pm2\sigma$} & \small\makecell[l]{
+            Truncation used to limit\\unrealistic extreme load\\values} \\
+        \bottomrule \bottomrule
+    \end{tabular}
+    }
+    \smallskip
+    \caption{Probabilistic models of renewable generation and industrial load}
+    \label{tab:parks-ts-prob-models}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \subfloat[Summer.]{
+        \includegraphics[width=\linewidth]{parks_gen_data_summer.pdf} \label{fig:parks-summer-gen}
+    }
+    \vspace{0.2cm}
+    \subfloat[Winter.]{
+        \includegraphics[width=\linewidth]{parks_gen_data_winter.pdf} \label{fig:parks-winter-gen}
+    }
+    \vspace*{-0.2cm}
+    \caption{Examples of wind and solar normalized generation profiles for Rotterdam.} \label{fig:parks-example-gen-data}
+    \vspace{0.1cm}
+    \small{\textit{The complete dataset of wind and solar generation profiles used in the case study can be viewed interactively} \href{https://mal84emma.github.io/Energy-Park-Design/generation_dataset_plot.html}{\textbf{here}}.}
+\end{figure}
+
+\clearpage
+%\subsubsection{Storage technology performance \& measurement}
+\subsection{\edit{Probabilistic models of storage technology performance \& measurement}} \label{sec:parks-prob-storage}
+
+% Detail probabilistic models of stuff used, where they're derived from, and what they correspond to (interpretation of prior and measurement models, including $r$ param; understanding of technology performance \& demonstrator project, $r$ models confidence in demonstrator)
+
+At the time the energy park is designed, the actual performance of the available storage technologies during operation (with regards cost and technical aspects such as efficiency) is unknown/uncertain. However, the energy system designer can develop a probabilistic understanding of how each storage technology might perform from existing storage systems (if any exist) and estimates from the scientific literature.
+
+This study considers four candidate energy storage technologies for use in the energy park:
+\begin{itemize}
+\itemsep0ex
+    \item Lithium ion batteries (\glsxtrshort{li-ion})
+    \item Sodium--Sulphur high-temperature batteries (\glsxtrshort{nas})
+    \item \glsxtrlong{vrfb} (\glsxtrshort{vrfb})
+    \item \glsxtrlong{caes} (\glsxtrshort{caes})
+\end{itemize}
+and considers uncertainty in the following economic and technical performance parameters of each storage technology:
+\begin{itemize}
+\itemsep0ex
+    \item Cost per unit energy capacity (\euro/kWh)
+    \item System lifetime (years)
+    \item Round-trip efficiency (\%)
+\end{itemize}
+It is assumed that the depth-of-discharge and discharge ratio\footnote{The ratio of power capacity to energy capacity, also frequently referred to using the `storage duration' (how long the storage unit can discharge for at full power output) which is the reciprocal.} of each technology are known, with values taken from \citep{irena2017ElectricityStorageRenewables} and \citep{kebede2022ComprehensiveReviewStationary} respectively.\\
+% not enough information in literature to get a decent prior distribution, and keeps the analysis a bit cleaner
+
+The level of uncertainty varies both between different technologies, due to varying levels of technology maturity and research, and between performance parameters, due to the underlying factors causing uncertainty, such as raw material prices. % for simplicity same shape of distribution used for all
+
+The uncertainty in each parameter for each technology at the time of initial design before any R\&D has been performed, is modelled using a Gaussian distribution truncated at two standard deviations. This is referred to as the prior probabilistic model,
+
+\begin{equation} \label{eq:parks-prior}
+    \theta \sim TN\left(\mu,\sigma,2\sigma\right)
+\end{equation}
+All uncertain parameters are taken to be independent, with mean ($\mu$) and standard deviation ($\sigma$) values derived separately for each parameter from literature estimates. % \citep{irena2017ElectricityStorageRenewables,kebede2022ComprehensiveReviewStationary,petkov2020PowertohydrogenSeasonalEnergy,kittner2020ChapterGridscaleEnergy}. % other references were used for cross-checking/validation - for thesis
+
+When R\&D is performed and the demonstrator system is built and tested, this provides the energy park designer with a measurement of the performance of that storage technology. This measurement can be used to update their understanding of how a large-scale storage system for that technology will perform. The information provided by this measurement is combined with the prior probabilistic model to produce a posterior distribution describing the remaining (reduced) uncertainty.
+The probability of obtaining a measurement, $z$, from the demonstrator system given the true performance of a large-scale storage system, $\theta$, called the likelihood model, is taken to be,
+\begin{equation} \label{eq:parks-measurement}
+    z|\theta \sim \mathcal{N}\left(\theta,r\sigma\right)
+\end{equation}
+The uncertainty reduction factor, $r$, models the confidence that the energy park designer has in the demonstrator, i.e. how closely they believe the performance of the demonstrator reflects that of a large-scale system. \edit{Determining a precise numerical value for this parameter is challenging, as there is very little data available regarding how the performance of demonstrator systems compares to large-scale energy storage plants, particularly in the case of newer technologies such as \glsxtrshort{caes} and \glsxtrshort{vrfb} where few large-scale projects have been completed. An initial estimate of $r=0.25$ is used for the experiments, representing a case where the designer has good confidence in the demonstrator, but retains a reasonable fraction of the initial uncertainty. To overcome this limitation, a sensitivity analysis over the value of $r$ is performed. Note that because $r$ is a multiplicative factor, the more mature storage technologies with lower uncertainty in their prior distributions also have correspondingly lower uncertainties in the posteriors.}\\
+
+Table \ref{tab:parks-tech-prob-models} summarises the probabilistic models of the uncertain performance of large-scale storage systems, and the measurements obtained from the demonstrators, providing mean and standard deviation values for each uncertain parameter.
+Fig. \ref{fig:parks-msr-dists} illustrates the prior distribution for the round-trip efficiency of \glsxtrshort{vrfb} storage, and the corresponding posterior distribution for an example measurement from a demonstrator system, showing the reduction in uncertainty provided by the demonstrator.\\
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{1}
+    \begin{tabularx}{\linewidth}{YYYYYY} \toprule \toprule
+        \multicolumn{6}{c}{\small Probabilistic models} \\[1ex]
+        Prior & \multicolumn{4}{c}{$\theta \sim TN\left(\mu,\sigma,2\sigma\right)$} & \\[1ex]
+        Likelihood & \multicolumn{4}{c}{$z|\theta \sim \mathcal{N}\left(\theta,r\sigma\right)$} & r=0.25 \\[1ex]
+        & \multicolumn{4}{c}{\small\it Independent for each parameter \& technology} & \\
+        \midrule \midrule
+        \multicolumn{6}{c}{\small Model parameters} \\
+         Parameter & Units & Technology & Mean $\mu$ & Std. dev. $\sigma$ & References \\
+        \midrule
+        \multirow{4}{*}{Cost} & \multirow{4}{*}{\euro/kWh} & \glsxtrshort{li-ion} & 200 & 50 & \multirow{4}{2.25cm}{\citep{irena2017ElectricityStorageRenewables}} \\
+        & & \glsxtrshort{nas} & 175 & 37.5 & \\
+        & & \glsxtrshort{vrfb} & 250 & 75 & \\
+        & & \glsxtrshort{caes} & 50 & 15 & \\
+        \arrayrulecolor{black!50}\midrule
+        \multirow{4}{*}{Lifetime} & \multirow{4}{*}{years} & \glsxtrshort{li-ion} & 20 & 5 & \multirow{4}{2.25cm}{\citep{kebede2022ComprehensiveReviewStationary}} \\
+        & & \glsxtrshort{nas} & 25 & 5 & \\
+        & & \glsxtrshort{vrfb} & 20 & 5 & \\
+        & & \glsxtrshort{caes} & 25 & 2.5 & \\
+        \arrayrulecolor{black!50}\midrule
+        \multirow{4}{*}{Efficiency} & \multirow{4}{*}{\%} & \glsxtrshort{li-ion} & 92 & 3.5 & \multirow{4}{2.25cm}{\citep{kebede2022ComprehensiveReviewStationary}} \\
+        & & \glsxtrshort{nas} & 80 & 5 & \\
+        & & \glsxtrshort{vrfb} & 75 & 5 & \\
+        & & \glsxtrshort{caes} & 60 & 2.5 & \\
+        \bottomrule \bottomrule
+    \end{tabularx}
+    \smallskip
+    \caption{Probabilistic models of uncertain storage technology performance parameters and their measurement.} \label{tab:parks-tech-prob-models}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.65\linewidth]{parks_measurement_dists.pdf}
+    \caption{Prior distribution of storage efficiency, and corresponding posterior for an example measurement value.}
+    \label{fig:parks-msr-dists}
+    \vspace{0.1cm}
+    \footnotesize{\textit{Note: distributions (kernel density estimates) are not quite truncated Gaussian due to small number of samples used (250); densities have been scaled to allow the distributions to be visually compared.}}
+\end{figure}
+
+
+\clearpage
+\subsection{Stochastic Programming for system design} \label{sec:parks-SP}
+
+% Detail SP model used to make decisions (standard in lit., include refs)
+%? refer to On-Policy VoI paper - note that as decision is made using SP, we actually quantify On-Policy VoI
+% include scenario reduction scheme \citep{heitsch2003ScenarioReductionAlgorithms,gioia2023ScenarioReducer}
+% provide settings in appendix as in BD-VOI
+
+\glsxtrlong{sp} is used to optimize the capacities of wind and solar generation and energy storage in the energy park system. Specifically, linear scenario programming is used due to its computational efficiency, enabling the use of an hourly resolved model with multiple scenarios, and its resulting prevalent use in the literature for designing district- and national-scale energy systems \citep{decarolis2017FormalizingBestPractice,pickering2019DistrictEnergySystem,yue2018ReviewApproachesUncertainty}.
+
+A linearized model of energy flows within the park system (refer to Fig. \ref{fig:parks-system-diagram}) is used. The system design optimization task is formulated as a Linear Program\footnote{As the design optimization is solved approximately using a \glsxtrshort{lp}, estimates of the \glsxtrshort{voi} and \glsxtrshort{voo} are provided. The accuracy of such estimates is discussed in \Cref{chap:districts}.}. Eq. \ref{eq:parks-SP-formualtion} describes this formulation for general case where multiple storage technologies are used together in the energy park. Table \ref{tab:parks-SP-params} provides descriptions of all model parameters. To determine the best storage technology (or combination), the optimization is solved for each option independently, and the lowest cost setup is identified.
+
+The design optimization aims to minimize the expected annualized cost of the energy park, the average total cost of running the energy park to provide the industrial load over all scenarios considered. The total cost is made up of the capital costs of the wind, solar, and energy storage, the cost (or profit) of energy bought from/sold to the grid, and the cost of carbon emissions associated with purchased grid electricity.
+The optimization is subject to energy conservation\footnote{$[\,\cdot\,]^+$ and $[\,\cdot\,]^-$ represent the positive and negative parts of the argument respectively.} (Eq. \ref{eq:parks-dynamics-constraint}), storage capacity (Eq. \ref{eq:parks-power-constraint} \& Eq. \ref{eq:parks-energy-constraint}), and grid capacity (Eq. \ref{eq:parks-grid-cap}) constraints for operation within each scenario $m$. As well as a budget constraint on total capital expenditure (Eq. \ref{eq:parks-budget-cap}). During operation, electricity can be bought from and sold to the electricity grid (Eq. \ref{eq:parks-grid-variable}), and the renewable generation can be dynamically curtailed (Eq. \ref{eq:parks-curtailment}).\\
+
+Scenarios are generated by sampling from the distributions of renewable generation, industrial load, and storage technology performance described in \Cref{sec:parks-prob-gen-load,sec:parks-prob-storage}. The sampled storage capacity cost and lifetime values are combined to produce annualized capacity cost samples for each technology, $p^s_{i,m}$.
+The number of scenarios that can be considered during optimization is limited by high computational cost. Therefore, scenario reduction \citep{pickering2019PracticalOptimisationDistrict} is used\footnote{Fast-forward scenario reduction algorithm from \citep{heitsch2003ScenarioReductionAlgorithms}, implemented by \citep{gioia2023ScenarioReducer}, used.} to improve the statistical representation of possible scenarios in the optimization. A large initial sample of scenarios is drawn, the optimization is performed considering each scenario separately, and a subset of scenarios which best represent the distribution of individually optimized costs is selected for use in the \glsxtrshort{sp}.
+
+The parameter settings used across all experiments in this study are detailed in \ref{app:parks-case-study-params}.
+
+\renewcommand{\arraystretch}{1}
+\begin{subequations} \label{eq:parks-SP-formualtion}
+    \begin{align}
+        \addtocounter{equation}{-1}
+        \begin{split}
+        \text{min} & \qquad p^{\textrm{w}} C^{\textrm{w}} + p^{\textrm{pv}} C^{\textrm{pv}} + \\[\smalleqnskip]
+        & \qquad\qquad \mathlarger{\mathlarger{\sum}}_m \: \rho_m \left( \mathlarger{\sum}_i \: p^s_{i,m} C^s_i + \mathlarger{\sum}_t \left( p^e[t] E^{\text{grid}}_m[t] + \, p^c \, c[t] \left[E^{\text{grid}}_m[t]\right]^+ \right) \right)
+        \end{split} \label{eq:parks-lp} \\[\eqnskip]%%
+        %%
+        \text{over} & \qquad C^{\textrm{w}},\, C^{\textrm{pv}},\, C^s_i,\, \nabla_m[t],\,  E_{i,m}[t],\, \textrm{SoC}_{i,m}[t{+}1] \quad \forall \: i,\, m,\, t \tag*{} \\[\eqnskip]%% z_i
+        %%
+        \text{subject to} & \qquad \textrm{SoC}_{i,m}[t{+}1] = \textrm{SoC}_{i,m}[t] + \sqrt{\eta_{i,m}} \left[E_{i,m}[t]\right]^{+} - 1/\sqrt{\eta_{i,m}} \left[\, E_{i,m}[t] \right]^{-} \label{eq:parks-dynamics-constraint} \\[\smalleqnskip]
+        & \qquad -P^{\textrm{max}}_i \Delta t \leq E_{i,m}[t] \leq P^{\textrm{max}}_i \Delta t \label{eq:parks-power-constraint} \\[\smalleqnskip]
+        & \qquad (1{-}\nu_i)\, C^s_i \leq \textrm{SoC}_{i,m}[t{+}1] \leq C^s_i \label{eq:parks-energy-constraint} \\[\smalleqnskip]
+        & \qquad P^{\textrm{max}}_i = \delta_i C^s_i \label{eq:parks-power-capacity} \\[\smalleqnskip]
+        & \qquad \textrm{SoC}_{i,m}[0] = \textrm{SoC}^0 C^s_i \label{eq:parks-initial-conditions} \\[\smalleqnskip]
+        & \qquad E^{\text{grid}}_m[t] = L_{m}[t] - \left(C^{\textrm{pv}} g_m^{\textrm{pv}}[t] + C^{\textrm{w}} g_m^{\textrm{w}}[t] - \nabla_m[t] \right) + \sum_i E_{i,m}[t] \label{eq:parks-grid-variable} \\[\smalleqnskip]
+        & \qquad \nabla_m[t] \leq C^{\textrm{pv}} g_m^{\textrm{pv}}[t] + C^{\textrm{w}} g_m^{\textrm{w}}[t] \label{eq:parks-curtailment} \\[\smalleqnskip]
+        & \qquad E^{\text{grid}}_m[t] \leq C^{\text{grid}} \Delta t \label{eq:parks-grid-cap} \\[\smalleqnskip]
+        & \qquad C^{\text{pv}} \leq C^{\text{pv}}_{\max} \\[\smalleqnskip]
+        & \qquad p^{\textrm{pv}} C^{\textrm{pv}} + p^{\textrm{w}} C^{\textrm{w}} + \mathlarger{\sum}_i \: p^s_{i,m} C^s_i \leq B^{\text{cap}} \label{eq:parks-budget-cap} \\[\smalleqnskip]
+        % & \qquad C^s_i \leq z_i C^{\text{max}} \\[\smalleqnskip]
+        % & \qquad \sum_i z_i = N \\[\eqnskip]
+        %%
+        \text{for all} & \qquad i \in [0,I{-}1], \: m \in [0,M{-}1], \: t \in [0,T{-}1] \tag*{}
+        \end{align}
+\end{subequations}
+
+\begin{table}
+    \centering
+    \renewcommand{\arraystretch}{1.1}
+    \begin{tabularx}{\linewidth}{ccX} \toprule \toprule
+        Parameter & Units & \multicolumn{1}{>{\centering\arraybackslash}c}{Description} \\
+        \midrule \midrule
+        \multicolumn{3}{>{\centering\arraybackslash}l}{\small \quad Decision variables} \\
+        $C^{\textrm{w}}$ & kWp & Installed offshore wind generation capacity \\
+        $C^{\textrm{pv}}$ & kWp & Installed solar PV generation capacity \\
+        $C^s_i$ & kWh & Installed energy capacity of storage technology $i$ \\
+        $\nabla_m[t]$ & kWh & Generation curtailment at time $t$ in scenario $m$ \\
+        $E_{i,m}[t]$ & kWh & Energy \textit{intake} to storage technology $i$ at time $t$ in scenario $m$ \\
+        $\textrm{SoC}_{i,m}[t]$ & kWh & State-of-charge of storage technology $i$ at time $t$ in scenario $m$ \\
+        \midrule
+        \multicolumn{3}{>{\centering\arraybackslash}l}{\small \quad Derived variables} \\
+        $E^{\text{grid}}_m[t]$ & kWh & Net energy \textit{drawn from} electricity grid at time $t$ in scenario $m$ \\
+        $P^{\textrm{max}}_i$ & kW & Power capacity of storage technology $i$ \\
+        \midrule
+        \multicolumn{3}{>{\centering\arraybackslash}l}{\small \quad Sampled parameters} \\
+        $\rho_m$ & -- & Probability of scenario $m$ \\
+        $L_m[t]$ & kWh & Industrial electrical load at time $t$ in scenario $m$ \\
+        $g_m^{\text{w}}[t]$ & kWh/kWp & Wind power generation potential at time $t$ in scenario $m$ \\
+        $g_m^{\text{pv}}[t]$ & kWh/kWp & Solar PV power generation potential at time $t$ in scenario $m$ \\
+        $\eta_{i,m}$ & -- & Round-trip efficiency of storage technology $i$ in scenario $m$ \\
+        $p^s_{i,m}$ & \euro/kWh/yr & Annualized capacity cost\textsuperscript{\textdagger} of storage technology $i$ in scenario $m$ \\
+        \midrule
+        \multicolumn{3}{>{\centering\arraybackslash}l}{\small \quad Known parameters} \\
+        $\Delta t$ & hrs & Time step of simulation data \\
+        $\nu_i$ & -- & Depth-of-discharge of storage technology $i$ \\
+        $\delta_i$ & kW/kWh & Discharge ratio of storage technology $i$ (power capacity/energy capacity) \\
+        $\textrm{SoC}^0$ & -- & Initial state-of-charge of storage (fraction of capacity) \\
+        $p^{\text{w}}$ & \euro/kWp/yr & Annualized capacity cost\textsuperscript{\textdagger} of offshore wind \\
+        $p^{\text{pv}}$ & \euro/kWp/yr & Annualized capacity cost\textsuperscript{\textdagger} of solar PV \\
+        $p^e[t]$ & \euro/kWh & Price of grid electricity at time $t$ \\
+        $p^c$ & \euro/kgCO$_2$ & Nominal carbon price \\
+        $c[t]$ & kgCO$_2$/kWh & Carbon intensity of grid electricity at time $t$ \\
+        $C^{\text{grid}}$ & kW & Grid connection capacity \\
+        $C^{\text{pv}}_{\max}$ & kWp & Solar capacity limit \\
+        $B^{\text{cap}}$ & \euro/yr & Annualized capital budget constraint \\
+        \midrule
+        \multicolumn{3}{>{\centering\arraybackslash}l}{\small \quad Indices} \\
+        $i$ & -- & Storage technology \\
+        $t$ & -- & Time step in modelled operation \\
+        $m$ & -- & Scenario number \\
+        \bottomrule \bottomrule
+    \end{tabularx}
+    \smallskip
+    \caption{Description of Stochastic Program variables \& parameters.} \label{tab:parks-SP-params}
+    \footnotesize{\textsuperscript{\textdagger}\,Capital cost per energy/power capacity per year of lifetime}
+\end{table}
+
+\newpage
+
+\subsubsection{Accounting for risk aversion} \label{sec:parks-risk-averse-obj}
+
+% Discuss CVaR tail up-weighting objective formulation, discuss motivation for this formulation (scale preservation which is important for comparability of VoI)
+% Mention existing studies considering risk aversion \citep{mu2022CVaRbasedRiskAssessment,tostado-veliz2024RiskaverseElectrolyserSizing,pickering2019PracticalOptimisationDistrict} to motivate interest, however nobody yet considered risk-aversion when studying uncertainty reduction
+% CVaR used to represent risk aversion in Linear Program \citep{rockafellar2000OptimizationConditionalValueatrisk}
+
+The optimization objective in Eq. \ref{eq:parks-SP-formualtion} assumes that the energy park designer is risk-neutral and is only interested in minimizing the average operating cost of the system, as is standard in the energy system design literature. However, when investing billions of Euros in large energy infrastructure projects, energy firms are typically risk-averse in their decision making, and \textit{are} concerned about the risk of high operating costs.
+Previous studies have investigated the impact of risk aversion on energy system design \citep{pickering2019PracticalOptimisationDistrict,tostado-veliz2024RiskaverseElectrolyserSizing,mu2022CVaRbasedRiskAssessment}, but none have considered how risk aversion affects the value of uncertainty reduction or optionality during decision making.
+
+To account for the impact of risk aversion during energy park design, a risk measure is included in the objective function. The \glsxtrlong{cvar} (\glsxtrshort{cvar}) is used as it is a coherent risk measure compatible with Linear Programming \citep{rockafellar2000OptimizationConditionalValueatrisk}.
+% and is what other studies use; (for thesis) maybe discuss choice of risk measures
+For a linear scenario program where the cost and probability of each scenario are $c_m$ and $\rho_m$ respectively, an optimization minimizing the \glsxtrshort{cvar} is given by,
+\begin{subequations} \label{eq:parks-cvar-defn}
+    \begin{align}
+        \addtocounter{equation}{-1}
+        \text{min} & \quad \xi + \frac{1}{\alpha} \sum\limits_{m} \rho_{m}\eta_{m}\\
+        \text{s.t.} & \quad \eta_{m} \geq 0 \:\: \text{and} \:\: \eta_{m} \geq c_{m} - \xi \tag*{}
+    \end{align}
+\end{subequations}
+
+When optimized, this objective is equal to the expected value of the costs in the $\alpha$ right-tail of scenarios, $\mathbb{E}_{m:\, c_{m}>\xi_\alpha} \lbrace c_{m} \rbrace$, i.e. the average of the highest $\alpha\%$ of costs across the scenarios.
+% For thesis: discuss how this happens and derive
+
+As \glsxtrshort{voi} and \glsxtrshort{voo} are differences in average costs, to allow valid comparison between the risk-neutral and risk-averse cases, we develop a risk-averse objective which maintains the scale of the cost.
+This objective is equivalent to a weighted average of the scenario costs, where the costs in the $\alpha\%$ right-tail are weighted by a factor $n{+}1$ relative to others. So, risk aversion is represented by the designer `caring' about high operating costs more than others, meaning the objective is still a physical cost, and so can be validly compared across cases.
+This risk-averse objective is,
+\begin{equation} \label{eq:parks-risk-averse-obj}
+    \frac{1}{1+n\alpha} \vast( \underbrace{\mathbb{E}\lbrace c_{m} \rbrace}_{\substack{\text{original}\\\text{obj.}}} + \ n\alpha \underbrace{\left(\xi + \frac{1}{\alpha} \sum\limits_{m} \rho_{m}\eta_{m} \right)}_{\text{CVaR}} \vast)
+\end{equation}
+
+where $c_m$ is the objective value in each scenario as specified in Eq. \ref{eq:parks-SP-formualtion}, and both the original constraints for Eq. \ref{eq:parks-SP-formualtion} and the constraints from Eq. \ref{eq:parks-cvar-defn} are imposed.
+When optimized this objective becomes $\left(\mathbb{E}\lbrace c_{m} \rbrace + n\alpha\, \mathbb{E}_{m:\, c_{m}>\xi_\alpha} \lbrace c_{m} \rbrace\right)/(1+n\alpha)$.\\
+
+
+
+%********************************** Results section **************************************
+\section{Results \& Discussion} \label{sec:parks-results}
+
+% Aim for 2000 words
+
+\subsection{Prior design} \label{sec:parks-prior-design}
+
+% Discuss system design \& VoI for system sizing (compare solutions and costs, also mention benefit of adding storage to energy park)
+%? Note optimized objective represents annualized cost of running system, assumed good enough
+
+Initial designs for the energy park using each storage technology are produced by applying the Stochastic Program (\glsxtrshort{sp}) model (described in \Cref{sec:parks-SP}), using the prior distributions of renewable generation, industrial load, and storage technology performance (defined in \Cref{sec:parks-prob-gen-load,sec:parks-prob-storage}).
+Table \ref{tab:parks-prior-comparison} compares the performance of these designs.
+Sodium--Sulphur high-temperature batteries (\glsxtrshort{nas}) are found to provide the lowest total system cost, so this design is selected, and \glsxtrshort{nas} is chosen for procurement and R\&D. The design sizes 441 MW wind and 500 MW solar generation capacity, with 1.51 GWh of \glsxtrshort{nas} storage to support the system. The average total cost of this system is {\euro}124.1m/yr, with {\euro}10.7m/yr expected to be spent on batteries. If no energy storage were used in the energy park, 486 MW of wind and 500 MW of solar generation would be installed, leading to an average cost of {\euro}183.7m/yr. Therefore, installing bulk energy storage for arbitrage reduces the average cost of the energy park system by {\euro}59.6m/yr (32\%), and reduces the average operational carbon emissions by 20.9 ktCO$_2$/yr (20\%).\\
+
+\begin{table}[h]
+    \renewcommand{\arraystretch}{1.25}
+    \centerline{
+    \begin{tabular}{ccccc} \toprule \toprule
+        Storage technology & \makecell{Total cost\\({\euro}m/yr)} & \makecell{Carbon emissions\\(ktCO$_2$/yr)} & \makecell{Storage capacity\\(GWh)} & \makecell{Cost of storage\\({\euro}m/yr)} \\
+        \midrule \midrule
+        None & 183.7 & 104.3 & -- & -- \\
+        \glsxtrshort{caes} & 148.1 & 84.2 & 3.59 & 7.2 \\
+        \glsxtrshort{li-ion} & 150.1 & 87.5 & 0.93 & 9.2 \\
+        \glsxtrshort{nas} & \textbf{124.1} & 83.4 & 1.51 & 10.7 \\
+        \glsxtrshort{vrfb} & 176.6 & 93.9 & 0.40 & 5.2 \\
+        \bottomrule \bottomrule
+    \end{tabular}
+    }
+    \caption{Performance of initial energy park designs using different storage technologies.}
+    \label{tab:parks-prior-comparison}
+    \footnotesize{\it Cost and carbon values are averages over prior distributions of load, generation, and storage performance.}
+\end{table}
+
+
+\subsection{\edit{Design updating without optionality \& the \glsxtrlong{voi}}} \label{sec:parks-design-wo-option}
+
+To investigate the final design of the energy park given the uncertainty in the performance of \glsxtrshort{nas} storage, 250 possible measurement values obtained from the demonstrator system built during R\&D were sampled for each performance parameter using the probabilistic model of storage performance (see Table \ref{tab:parks-tech-prob-models}). % only mention z samples to improve clarity
+For each sampled measurement, the SP model is applied using the corresponding posterior distribution of large-scale system performance to produce a final design.
+Fig. \ref{fig:parks-restricted-designs} plots the wind generation and \glsxtrshort{nas} storage capacities of the final designs for each sampled measurement, and compares them to the initial design. All designs install the maximum 500 MW of solar.
+
+The average total cost of the final energy park design over the samples is {\euro}102.0m/yr, whereas the cost of the initial design was {\euro}124.1m/yr. Therefore, the \glsxtrlong{voi} (\glsxtrshort{voi}) associated with designing the energy park after R\&D has been performed to reduce uncertainty in the performance of \glsxtrshort{nas} storage is {\euro}22.1m/yr (18\% of initial design cost). This cost reduction comes from the system designer's improved ability to trade off wind generation and storage capacity depending on the relative cost of energy arbitrage, and better make use of the capital budget. In some cases where the cost of \glsxtrshort{nas} storage is low and its efficiency is high, the storage capacity in the final design is more than double that initially chosen. Assuming a 20 year project lifetime, having the option to \edit{update} the capacities of wind and storage procured from their suppliers after R\&D is worth {\euro}442m to the energy park developer. As a result, they should be willing to pay more (per unit capacity) to a supplier offering a flexible contract.\\
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{parks_base_rest_post_designs.pdf}
+    \caption{Final designs of energy park with \glsxtrshort{nas} storage for each sampled measurement.}
+    \label{fig:parks-restricted-designs}
+\end{figure}
+
+
+\newpage
+\subsection{\edit{Designing with optionality \& the \glsxtrlong{voo}}} \label{sec:parks-design-with-option}
+
+% Discuss VoO - include lots of nice figures showing different tech selection \& performances
+% Spend some time discussing interpretation and importance (discuss that convincing a company to do R\&D and demonstrator, and give `option to purchase agreement'/call option would be expensive - compare against VoO to determine if worthwhile, willingness to pay)
+
+In the initial design, \glsxtrshort{nas} was found to provide the lowest total cost \textit{on average}, and R\&D was performed only for this technology. However, it may be the case that \glsxtrshort{nas} does not end up being the best technology, and after storage performance uncertainty is reduced another technology provides a lower average cost. Fig. \ref{fig:parks-tech-cost-dists} plots the distribution of the expected costs of final designs for each storage technology, obtained by repeating the process of sampling measurement values and optimizing sizings (as described in the previous section). The significant overlap in the distributions indicates there are likely several cases where other storage technologies provide a lower average cost than \glsxtrshort{nas} once performance uncertainty has been reduced.
+
+The average cost of the energy park could therefore be reduced by performing R\&D with all storage technologies, allowing the best technology to be selected during final design when uncertainty has been reduced. However, performing R\&D, developing demonstrator systems, and purchasing supplier contracts  giving the right-to-purchase for all energy storage technologies comes at a significant cost.\\
+% and ultimately only one technology is used
+% so are the benefits of storage technology optionality worth the cost?
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{parks_base_post_cost_dists.pdf}
+    \caption{Distribution of final design expected costs over sampled measurements for each storage technology.}
+    \label{fig:parks-tech-cost-dists}
+    \vspace*{0.1cm}
+    \footnotesize{\it Dashed line indicates total cost of final designs averaged over sampled msrmnts., which is Pre-Posterior cost (Eq. \ref{eq:methodology-preposterior-optimisation}).}
+\end{figure}
+
+The process of sampling possible demonstrator measurement values is repeated (for all technologies), and final energy park designs are determined for each sample, this time allowing the best technology to be selected. Fig. \ref{fig:parks-open-designs} plots the resulting final designs for each sample. The marker colour indicates which storage technology is selected in each case. In 132 of 250 samples (53\%) a different technology than \glsxtrshort{nas} is selected for the final design. In 123 of those cases \glsxtrshort{li-ion} is the best technology choice after performance uncertainty has been reduced. Fig. \ref{fig:parks-design-comparison} illustrates for each sample, how much the average cost of the energy park is reduced by being able to select the best storage technology, compared to the case where only \glsxtrshort{nas} is available.
+
+The average cost of the energy park designed \textit{with} storage technology optionality is {\euro}88.7m/yr, compared to {\euro}102.0m/yr if only \glsxtrshort{nas} is available for final design. Therefore, the value of retaining storage optionality for the final design of the energy park (\glsxtrshort{voo}, discussed in \Cref{sec:methodology-optionality}) is {\euro}13.3m/yr (13\% of cost without optionality).
+With a 20 year system lifetime, this optionality in storage technology selection is worth {\euro}266m to the energy park developer.
+Long-duration energy storage demonstrator projects funded by the UK government have received around {\euro}1m for proof-of-concept systems \citep{desnz2023LongerDurationEnergy,hydrostorinc2023HydrostorWrittenEvidence} and {\euro}10m for mid-scale demonstrators \citep{desnz2023LongerDurationEnergya,desnz2023LongerDurationEnergyb}.
+So, the cost of developing and contracting \glsxtrshort{li-ion}, \glsxtrshort{vrfb}, and \glsxtrshort{caes} storage is conservatively estimated at {\euro}20m each.
+Therefore, hedging bets on storage technology performance and maintaining optionality in technology choice through the energy park design process provides a net reduction in average cost of {\euro}206m (10\%) to the energy park developer.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{parks_base_post_designs_flat.pdf}
+    \caption{Final designs of energy park with storage optionality for each sampled measurement.}
+    \label{fig:parks-open-designs}
+    \vspace*{0.1cm}
+    \footnotesize{\it Marker colour indicates the selected storage technology. Squares indicate final designs using \glsxtrshort{nas} storage for samples where \glsxtrshort{nas} does not provide the lowest average cost.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{parks_base_designs_comparison.pdf}
+    \caption{Reduction in average cost of final design provided by storage technology optionality, and selected technology, for each sampled measurement.}
+    \label{fig:parks-design-comparison}
+\end{figure}
+
+
+\clearpage
+\subsection{Sensitivity \edit{analysis}}
+
+% Sensitivity analysis over $r$ parameter of measurement model - keep it brief, values change a bit, but not conclusion
+
+A key assumption made in the probabilistic model of uncertain storage performance in \Cref{sec:parks-prob-storage} was the level of uncertainty reduction provided by measuring the demonstrator system \edit{built during R\&D}. This is encapsulated by the uncertainty reduction factor parameter $r$ in Eq. \ref{eq:parks-measurement}, which quantifies how closely the \edit{designer believes the} performance of the demonstrator matches that of a large-scale system, and so how much uncertainty remains after measurement. Finding data from real-world storage systems to estimate this parameter is extremely challenging, as actual performance and cost data are highly commercially sensitive, and few large-scale systems currently exist.
+
+Sensitivity analysis is performed to determine whether the conclusions provided by the \glsxtrlong{voo} analysis remain valid. The process from \Cref{sec:parks-design-wo-option,sec:parks-design-with-option} is repeated for values of $r$ over the feasible range. Table \ref{tab:parks-r-sensitivity} shows \glsxtrshort{voi} and \glsxtrshort{voo} values for each case. For both \glsxtrshort{voi} and \glsxtrshort{voo}, the greater the uncertainty reduction provided by measurement (lower $r$), the greater the benefit to design. This is because lower uncertainty allows final designs with less hedging to be used, which achieve lower cost. While there will be some threshold of $r$ above which the \glsxtrshort{voo} is less than the cost of R\&D, even with the lowest level of uncertainty reduction tested, $r=0.5$, retaining storage technology selection optionality is still economically worthwhile. So the conclusions of the base case analysis are robust to the level of uncertainty reduction. The variation of \glsxtrshort{voi} with $r$ is larger than that of \glsxtrshort{voo}, as \glsxtrshort{voo} compares differences in designs both made with reduced uncertainty, so both costs in the difference benefit (reduce) from lower uncertainty.\\
+
+\begin{table}[b]
+    \renewcommand{\arraystretch}{1.25}
+    \centerline{
+    \begin{tabular}{ccc} \toprule \toprule
+        Uncertainty reduction factor, $r$ & \glsxtrlong{voi} ({\euro}m/yr) & \glsxtrlong{voo} ({\euro}m/yr) \\
+        \midrule \midrule
+        0.1 & 26.4 & 15.1 \\
+        0.2 & 23.5 & 13.9 \\
+        \textbf{0.25} & 21.1 & 13.3 \\
+        0.3 & 20.6 & 12.9 \\
+        0.4 & 18.5 & 11.6 \\
+        0.5 & 16.6 & 9.8 \\
+        \bottomrule \bottomrule
+    \end{tabular}
+    }
+    \smallskip
+    \caption{Sensitivity of \edit{\glsxtrlong{voi}} and \glsxtrlong{voo} to level of uncertainty reduction.}
+    \label{tab:parks-r-sensitivity}
+\end{table}
+% Julia (Stanford) had a really nice comment about this; Building the demonstrator takes time and potentially delays the project. But the more time and effort you spend on it, potentially the better information you get out of it (lower uncertianty). So if you could make a correspondence between the delay in building and better demonstrator and the associated uncertainty reduction r, you could compare against the cost of that delay to work out the best amount of time and effort to spend building the demonstrator. Nice!
+% Another comment from the STEER seminar was; As demonstrators are built, the uncertainty in storage performance will change not only for this project, but also for all future projects, which means there is additional value to building demonstrators, and the method needs to be rerun for each project with the current remaining level of uncertainty (updated prior), and over time the benefit of optionality will reduce because the uncertainty in storage performance is decreasing.
+
+\edit{During operation the energy park is able to trade with the grid to reduce the cost of the energy it supplies to the hydrogen plant, but must pay a cost for any associated carbon emissions. However, due to lack of data availability, uncertainty in grid electricity price and carbon emissions were not included in the uncertainty model. So, a similar sensitivity analysis is performed to check whether the pricing and carbon data assumed in the base case are representative, or whether changes in this data have a significant effect on the resulting \glsxtrshort{voi} and \glsxtrshort{voo} values.}
+
+\edit{Three alternative cases are tested: the 2023 pricing data is increased and decreased by 10\% respectively, and pricing and carbon data from 2024 is used. Table \ref{tab:parks-price-sensitivity} presents the \glsxtrshort{voi} and \glsxtrshort{voo} values for each of these cases.}
+\edit{While the \glsxtrshort{voi} is found to vary significantly, by up to 75\%, in all of the alternative cases it is greater than the base case. This suggests that design flexibility could be even more valuable than indicated by the initial results.
+As before, the changes in \glsxtrshort{voo} values are smaller than for the \glsxtrshort{voi}. And again, in all cases the \glsxtrshort{voo} is greater than the cost of developing the additional storage technologies, so retaining optionality is still found to be economically worthwhile.
+Therefore, the conclusions from \Cref{sec:parks-design-wo-option,sec:parks-design-with-option} are not affected by the electricity price and carbon emissions data used.}\\
+
+\begin{table}[t]
+    \renewcommand{\arraystretch}{1.33}
+    \centerline{
+    \begin{tabular}{cccc} \toprule \toprule
+        Case & \makecell{Prior operating cost\\({\euro}m/yr)} & \makecell{\glsxtrlong{voi}\\({\euro}m/yr)} & \makecell{\glsxtrlong{voo}\\({\euro}m/yr)} \\
+        \midrule \midrule
+        \makecell{2023 prices \& carbon\\(base case)} & 124.1 & 22.1 & 13.3 \\
+        2023 prices $+10\%$ & 124.9 & 39.2 & 16.1 \\
+        2023 prices $-10\%$ & 151.5 & 32.1 & 12.1 \\
+        2024 prices \& carbon & 80.9 & 38.2 & 17.1  \\
+        \bottomrule \bottomrule
+    \end{tabular}
+    }
+    \smallskip
+    \caption{\edit{Sensitivity of \glsxtrlong{voi} and \glsxtrlong{voo} to electricity prices and carbon emissions}}
+    \label{tab:parks-price-sensitivity}
+\end{table}
+
+\edit{Whether or not retaining optionality in storage technology selection is worthwhile is determined by the comparison between the \glsxtrshort{voo} and the cost of retaining optionality. The cost of optionality is therefore a critical driver of this conclusion.
+Were the \euro20m cost of building a demonstrator system used in the initial analysis (see \Cref{sec:parks-design-with-option}) to double, this would correspond to an annualized cost of {\euro}6m/yr for developing all three additional storage technologies. However, even this doubling of a pessimistic cost estimate is still significantly smaller than any of the \glsxtrshort{voo} values found across the sensitivity analyses, the smallest of which is \euro9.8m/yr from the extreme case of low uncertainty reduction, $r=0.5$.
+So, the assumptions made about the cost of optionality do not affect the conclusions drawn from the analysis, as the \glsxtrshort{voo} is sufficiently large to provide strong confidence that storage optionality is worthwhile for the design of the studied energy park.}
+
+
+\subsection{Use of multiple storage technologies}\label{sec:parks-two-techs}
+
+% Results for energy park with two storage technologies
+% Discuss importance for energy park design - two technologies is beneficial, lowers costs (could mention different behaviours of each technology); provide both reduced cost and reduced VoO values (implies using two storage technologies greatly improvements design robustness to uncertainty in storage performance)
+
+So far it has been assumed that only a single energy storage technology is installed in the energy park to perform arbitrage. The different characteristics of the energy storage technologies (such as efficiency, cost per energy capacity, and discharge ratio) make them suited for arbitrage over different time scales \citep{irena2017ElectricityStorageRenewables}. As trends in renewable generation and grid electricity price also occur over a range of time scales, the profit from energy arbitrage could be increased by installing multiple energy storage technologies, and sizing them for the volume of the arbitrage they are best suited to.
+
+The investigation is repeated for the case where two storage technologies are used in the energy park. This means two technologies are selected and developed following the initial design. Fig. \ref{fig:parks-op-sim} plots an example of the operation of the energy park with two storage technologies, for the initial system design with \glsxtrshort{li-ion} and \glsxtrshort{caes}. The state-of-charge traces for \glsxtrshort{li-ion} (orange) and \glsxtrshort{caes} (dark blue) demonstrate the different arbitrage behaviours of the two technologies.
+\edit{As the Linear Program simulating the energy park (Eq. \ref{eq:parks-SP-formualtion}) simultaneously optimizes over all operational variables, it is able to dynamically dispatch the two storage technologies, scheduling them to best suit their characteristics and maximize the combined performance. In this case, best performance is achieved by operating the} \glsxtrshort{li-ion} at short time scales with small traded energy volumes, while the \glsxtrshort{caes} \edit{is operated} over longer time scales with greater energy volumes.\\
+
+\begin{figure}[h]
+    \centering
+    \hspace*{-0.5cm}\includegraphics[width=1.1\textwidth]{parks_CAES-Li-ion_operation_plot.pdf}
+    \caption{Operation of energy park with \glsxtrshort{li-ion} and \glsxtrshort{caes} storage, demonstrating different energy arbitrage time scales.}
+    \label{fig:parks-op-sim}
+    \vspace{0.1cm}
+    \footnotesize{\textit{Interactive version of plot available online} \href{https://mal84emma.github.io/Energy-Park-Design/CAES-Li-ion_operation_plot.html}{\textbf{here}}.}
+\end{figure}
+
+% Prior cost - 113.97 €m/yr, ['Li-ion', 'NaS']
+% Restricted expected cost - 96.08 €m/yr
+% Open expected cost - 94.46 €m/yr
+% VoI - 17.88 €m/yr (15.7\%)
+% VoO - 1.62 €m/yr (1.7\%)
+% And much more even distribution of tech combo selections
+
+\newpage
+For the energy park with two technologies, the average cost of the final designs is {\euro}87.5m/yr for the case without optionality, and {\euro}85.7m/yr for the case with optionality.
+Table \ref{tab:parks-two-techs-comparison} compares these costs to the results for the system with only one storage technology from \Cref{sec:parks-design-wo-option,sec:parks-design-with-option}. While using two storage technologies provides a substantial cost reduction for the case without optionality in the final design, {\euro}14.5m/yr (14\%), with optionality this cost reduction falls to {\euro}3.0m/yr (3\%). However, this cost saving is still significant ({\euro}60m over a 20yr system lifetime), and shows that multiple energy storage technologies should be used for arbitrage in energy parks.\\
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{cccccc} \toprule \toprule
+        & Design case & \makecell{Total cost\\({\euro}m/yr)} & \makecell{VoI/{\color{gray!50!black}VoO}\\({\euro}m/yr)} & \makecell{Carbon emissions\\(ktCO$_2$/yr)} & \makecell{Cost of storage\\({\euro}m/yr)} \\
+        \midrule \midrule
+        & No storage & 183.7 & -- & 104.3 & -- \\
+        \arrayrulecolor{black!50}\midrule
+        \parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{1 tech.}}}
+        & Initial design & 124.1 & -- & 83.4 & 10.7 \\
+        & Design with flexibility* & 102.0 & 22.1 & 79.8 & 13.0 \\
+        & Design with optionality & 88.7 & {\color{gray!50!black}13.3} & 79.2 & 14.4 \\
+        \arrayrulecolor{black!50}\midrule
+        \parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{2 techs.}}}
+        & Initial design & 114.0 & -- & 80.6 & 11.2 \\
+        & Design with flexibility* & 87.5 & 26.5 & 78.9 & 15.1 \\
+        & Design with optionality & 85.7 & {\color{gray!50!black}1.8} & 79.0 & 15.0 \\
+        \bottomrule \bottomrule
+    \end{tabular}
+    \smallskip
+    \caption{Comparison of energy park performance for different design cases.}
+    \label{tab:parks-two-techs-comparison}
+    \footnotesize{\it All values are averages over the relevant distributions. *Updated (final) designs without optionality.}
+\end{table}
+
+The \glsxtrshort{voo} is now {\euro}1.8m/yr (2.1\%), or {\euro}36m over the 20 year lifetime. This is less than the estimated {\euro}40m cost of developing the remaining two storage technologies not selected in the initial design. So, when two technologies are used, it is not worthwhile hedging bets against uncertain storage performance by retaining optionality. This means selecting the best two storage technologies is robust to the performance uncertainty. The \glsxtrshort{voi} however remains high, {\euro}26.4m/yr, meaning that contract flexibility and updating the final system design are still very valuable.
+
+
+\newpage
+\subsection{Risk-averse design}
+
+% Results with risk aversion in objective, Eq. \ref{eq:parks-risk-averse-obj}
+% Looking at Fig. \ref{fig:parks-design-comparison}, for some samples the VoO is very high, meaning the energy park developer could lose out a lot (motivates risk aversion)
+% Briefly discuss impact of risk aversion on prior costs vs pre-posterior costs - i.e. impact on VoI vs VoO
+% Suggest little impact on VoO as tail risks similar for all storage technologies (uncertainties have same shape)
+
+% No storage cost: 195.91 €m/yr
+% Prior cost: 136.55 €m/yr, ['NaS']
+% Restricted expected cost: 114.76 €m/yr
+% Open expected cost: 101.46 €m/yr
+% VoI: 21.79 €m/yr (16.0%)
+% VoO: 13.30 €m/yr (11.6%)
+% costs are higher, indicating risk-aversion is working
+
+The objective function used to design the energy park in previous sections, Eq. \ref{eq:parks-SP-formualtion}, assumes that the designer is risk-neutral and is only interested in the average system cost. However, for capital-intensive energy infrastructure projects at this scale, energy firms are usually risk-averse and concerned by the possibility of poor financial returns. The effect of risk aversion on the energy park design, and the benefits of uncertainty reduction (\glsxtrshort{voi}) and optionality (\glsxtrshort{voo}) for improving design, are studied by repeating the investigation using the risk-averse objective defined in Eq. \ref{eq:parks-risk-averse-obj}, which increases the weighting on the worst $\alpha\%$ of scenarios $n$-fold in the cost average.
+
+For the case where $\alpha=10\%$ and $n=1$, adding risk aversion increases the expected cost of the initial design from \euro124.1m/yr in the risk-neutral base case to \euro136.6m/yr, with \glsxtrshort{nas} again being selected as the best storage technology. This cost increase occurs as the system designer is now more pessimistic, and puts more weighting on the highest 10\% of costs across the scenarios. However, whilst the expected cost increases by 10\%, the system sizing remains unchanged. The same pattern is found for the final designs, with costs increasing by 12.5\% on average but the designs changing negligibly.
+
+Table \ref{tab:parks-risk-averse-results} presents the \glsxtrshort{voi} and \glsxtrshort{voo} values calculated for various combinations of $\alpha$ and $n$. Increasing risk aversion causes a small decrease in \glsxtrshort{voi}, whereas the impact on \glsxtrshort{voo} is negligible. This indicates that the cost variability for the final designs, and so the risk penalty, is the same across the storage technologies. So this variability must be driven by the uncertainties in renewable generation and industrial load (see Table \ref{tab:parks-ts-prob-models}) rather than the storage uncertainties. % could do some analysis to demonstrate this?; note that generation and load uncertainties not reducable?
+Therefore, while reducing storage uncertainty is important for system design, it does not have a significant impact on risk.\\
+% There is significant risk associated with the cost of the energy park, which is important to consider for the financial planning of the project. However little can be done to reduce this risk as the system design does not significantly change with risk aversion, and the uncertainties in generation and load cannot be reduced at the time of system design. % accurate models of generation and load really important
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{cccc} \toprule \toprule
+        Confidence level, $\alpha$ (\%) & Tail-weighting, $n$ & \glsxtrshort{voi} ({\euro}m/yr) & \glsxtrshort{voo} ({\euro}m/yr) \\
+        \midrule \midrule
+        \textbf{10} & \textbf{1} & 21.8 & 13.3 \\
+        & 2 & 21.5 & 13.4 \\
+        & 5 & 20.8 & 13.5 \\
+        25 & 1 & 22.1 & 13.4 \\
+        & 2 & 22.0 & 13.5 \\
+        \midrule
+        \multicolumn{2}{>{\centering\arraybackslash}c}{\small Base case (no risk aversion)} & 21.1 & 13.3 \\
+        \bottomrule \bottomrule
+    \end{tabular}
+    \smallskip
+    \caption{\glsxtrlong{voi} and \glsxtrlong{voo} for risk-averse design cases}
+    \label{tab:parks-risk-averse-results}
+\end{table}
+
+
+%********************************** Conclusions  **************************************
+\section{Conclusions} \label{sec:parks-conclusions}
+
+This chapter investigated the impact of uncertainty in the cost, lifetime, and efficiency of energy storage technologies on energy park design, and the benefit of retaining optionality in storage technology choice through the design process. It quantified the improvement in design (reduction in average total cost) achieved when multiple technologies are developed to retain optionality in technology choice, and allow a better storage selection to be made after uncertainty in performance has been reduced.
+An illustrative energy park system containing wind and solar generation and bulk energy storage to support a hydrogen electrolyser, modelled off a real-world proposal in the Port of Rotterdam, was used for experiments. Four candidate bulk energy storage technologies were considered: Lithium-ion batteries (\glsxtrshort{li-ion}), Sodium--Sulphur high-temperature batteries (\glsxtrshort{nas}), Vanadium redox flow batteries (\glsxtrshort{vrfb}), and compressed air energy storage (\glsxtrshort{caes}).
+
+For the base case where only a single storage technology was selected for development, updating the system design (wind, solar, and storage sizings) after R\&D, when an improved estimate of storage performance is available (i.e. with reduced uncertainty), was found to reduce total costs by 18\% on average (\glsxtrshort{voi} of \euro442m). This demonstrates that flexibility in procurement contracts for generation and storage is highly valuable to energy park developers.
+
+If all four energy storage technologies were developed, so that when the system design was updated any technology could be selected for the final design, the average total cost was found to reduce by 13\% compared to the case without optionality (\glsxtrshort{voo} of \euro266m). As the cost of performing R\&D for three additional storage technologies was estimated at \euro60m, retaining optionality in storage technology selection through the design process is economically worthwhile, and reduces the net cost of the energy park project by \euro206m on average.
+
+Installing two storage technologies in the energy park to perform energy arbitrage at different time scales reduced the total system cost by 14\% on average (\euro290m) compared to the base case without optionality. And in this, case developing the two extra storage technologies to provide optionality was determined to not be worthwhile, reducing average costs by \euro36m (\glsxtrshort{voo}) compared to the \euro40m additional cost of R\&D. The \glsxtrshort{voi} however increased to \euro528m, so updating the system design is more valuable when trade-offs can be made between \textit{two} storage technologies and generation.
+
+The decision-making recommendations from the \glsxtrshort{voi} and \glsxtrshort{voo} results were shown to be robust to the level of uncertainty reduction in energy storage performance provided by R\&D used in the statistical model, as well as the grid electricity price and carbon emissions data used, and the cost of developing demonstrator storage systems assumed.
+Additionally, including risk aversion in the design objective was found to have little impact on the optimized system designs or \glsxtrshort{voi} and \glsxtrshort{voo} results, as the risk (variability in system cost) was driven mostly by uncertainty in renewable generation and industrial load.
+
+These results provide two important insights for energy park developers. Firstly, updating system designs after improved estimates of storage technology performance have been gathered (i.e. uncertainty reduced) provides substantial savings in system cost. Hence, flexible procurement contracts should be negotiated to allow design adjustments to be made as better information becomes available. Secondly, two energy storage technologies should be used to support the energy park. Doing so both significantly reduces the total cost of the system, and means that a robust choice of storage technologies can be made up-front, as hedging against the chance of a different technology providing better performance is not worthwhile if two technologies are developed and installed.
+
+However, as the \glsxtrshort{voi} framework does not provide generalisation guarantees, further work is required to determine whether these insights remain valid for other energy park systems, for example those with different industrial loads, different generation mixes, or in geographic locations with different weather patterns and so renewable generation uncertainties.
+The framework should also be used to study the importance of reducing uncertainty and providing optionality in other components of an energy park. For instance renewable generation technologies, where uncertainty in their energy production is driven by technical parameters and local site characteristics, which could be reduced by equipment testing and site surveys, that may then influence the site selection decision.
+
+The results of this chapter demonstrate the importance of performing this type of uncertainty analysis using the \glsxtrshort{voi} framework when designing energy parks. As they show that the total cost of an energy park system can be substantially reduced (in this case by 30\%) by enabling the system design to be updated with optionality in storage technology choice after uncertainty in the performance of those storage technologies has been reduced.
+More broadly, these results also demonstrate the importance of considering the options available in engineering design, and the effect that uncertainties which can be reduced over the course of the design process have on initial design decisions. The \glsxtrshort{voo} allows us to understand when we can make `good enough' early-stage design decisions, and when it's worth delaying design commitments and keeping optionality until better information is available.
+
+
+\clearpage
+%********************************** Chapter appendices **************************************
+\begin{subappendices}
+
+    \section{Parameter settings used in experiments} \label{app:parks-case-study-params}
+
+    % Maybe could delete text and just have tables with detailed captions
+    % Common parameter values specifying the district energy system, probabilistic model of building load, and procedure for sampling from that model, are used across all experiments. Table \ref{tab:parks-system-params} provides values for the parameters of the district energy system model, including costs defining the objective/utility, simulation durations, and assumptions regarding battery performance and grid control. All parameters for the probabilistic model of building load are specified within the definition of the probabilistic model in Sec. \ref{sec:parks-prob}. Table \ref{tab:parks-sampling-params} provides the settings used when sampling for the defined distributions, and performing scenario reduction using the Fast Forward technique \citep{heitsch2003ScenarioReductionAlgorithms}, as implemented in \citep{gioia2023ScenarioReducer}.\\
+
+    % system parameters
+    \begin{table}[h!]
+        \centering
+        \renewcommand{\arraystretch}{1.25}
+        \renewcommand\cellset{\renewcommand\arraystretch{0.5}%
+            \setlength\extrarowheight{0pt}}
+        \begin{tabularx}{\linewidth}{lccX} \toprule \toprule
+            \multicolumn{1}{>{\centering\arraybackslash}c}{Parameter} & Units & Value & \multicolumn{1}{>{\centering\arraybackslash}c}{Note/Refs} \\
+            \midrule \midrule
+            Simulation duration, $T$ & Hours & 8760 & \\
+            Simulation time step, $\Delta t$ & Hours & 1 & \\
+            Initial state-of-charge, $\text{SoC}^0$ & -- & 0.75 & \\
+
+            Offshore wind CAPEX & \euro/kWp & 5000 & \citep{stehly20232022CostWind}, used to derive annualized capacity cost, $p^\text{w}$ \\
+            Offshore wind OPEX & \euro/kWp/yr & 100 & \texttt{"} \\
+            Offshore wind lifetime & Years & 20 & \texttt{"} \\
+            Solar PV CAPEX & \euro/kWp & 5000 & \citep{ramasamy2023SolarPhotovoltaicSystem}, used to derive annualized capacity cost, $p^\text{pv}$ \\
+            Solar PV OPEX & \euro/kWp/yr & 100 & \texttt{"} \\
+            Solar PV lifetime & Years & 20 & \texttt{"} \\
+
+            Carbon cost, $p^c$ & \euro/kgCO$_2$ & 1 & \makecell[tl]{Chosen to be significantly larger than\\current carbon trading prices,\\c. \euro0.1/kgCO$_2$ \citep{desnz2022UKETSCarbon},\\\citep{bloomberg2024EUETSMarket}, to reflect incentive\\to produce green hydrogen.} \\
+            Grid capacity, $C^{\text{grid}}$ & MW & 500 & \\
+            Solar capacity limit, $C^{\text{pv}}_{\max}$ & MW & 500 & \\
+            Capital budget & {\euro}m/yr & 200 & Corresponds to {\euro}4bn over a 20 year lifetime \citep{auchincloss20242023YearDelivery} \\
+            \midrule
+            \multicolumn{4}{>{\centering\arraybackslash}l}{\small\it Storage parameters} \\[0.5ex]
+            Depth-of-discharge, $\nu_i$ & \% & 90 & \glsxtrshort{li-ion}, taken from \citep{irena2017ElectricityStorageRenewables} \\
+            & & 100 & \glsxtrshort{nas}, \texttt{"} \\
+            & & 100 & \glsxtrshort{vrfb}, \texttt{"} \\
+            & & 40 & \glsxtrshort{caes}, \texttt{"} \\
+            Discharge ratio, $\delta_i$ & kWp/kWh & 2 & \glsxtrshort{li-ion}, taken from \citep{kebede2022ComprehensiveReviewStationary} \\
+            & & 1 & \glsxtrshort{nas}, \texttt{"} \\
+            & & 0.5 & \glsxtrshort{vrfb}, \texttt{"} \\
+            & & 0.1 & \glsxtrshort{caes}, \texttt{"} \\
+            \bottomrule \bottomrule
+        \end{tabularx}
+        \smallskip
+        \caption{Parameter values for energy system model used in experiments.}
+        \label{tab:parks-system-params}
+    \end{table}
+
+    \hfill \\
+
+    % sampling parameters
+    \begin{table}[h]
+        \centering
+        \renewcommand{\arraystretch}{1}
+        \begin{tabular}{lc} \toprule \toprule
+            \multicolumn{1}{>{\centering\arraybackslash}c}{Parameter} & Value \\
+            \midrule \midrule
+            No. samples from prior distribution & 250 \\
+            No. samples from each posterior distribution & 250 \\
+            MCMC sampling burn-in period & 250 \\
+            MCMC sampling thinning factor & 10 \\
+            No. of reduced scenarios used in Stochastic Program & 25 \\
+            \bottomrule \bottomrule
+        \end{tabular}
+        \smallskip
+        \caption{Settings for sampling from probabilistic models used in experiments.}
+        \label{tab:parks-sampling-params}
+    \end{table}
+
+\end{subappendices}
