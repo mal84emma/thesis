@@ -1012,9 +1012,26 @@ wish to left align your text}
 {
 \cleardoublepage
 \setsinglecolumn
+\onehalfspacing
 \vspace*{0.2\textheight}
 \thispagestyle{empty}
 \centering
+\large
+}{
+\vfill
+{
+\centering
+\color{gray}
+\small\it
+This may not seem\\
+
+Very important, I know.\\
+
+But it \textbf{\textit{is}}. So I'm bothering\\
+
+Telling you so.\\
+
+}
 }
 
 
@@ -1036,7 +1053,9 @@ wish to left align your text}
 \flushleft
 \section*{\large Use of Generative AI}
 \parbox{\linewidth - 5.5cm}{
-This thesis and much of the code for the experiments was written in \href{https://code.visualstudio.com/}{\color{linkcolor}VScode} with \href{https://github.com/features/copilot}{\color{linkcolor}Copilot} as an inline AI assisstant, using \href{https://platform.openai.com/docs/models/gpt-4o}{\color{linkcolor}GPT-4o}. It was also proofread by \href{https://deepmind.google/models/gemini/pro/}{\color{linkcolor}Gemini 2.5 Pro}. These models have been used responsibly. All the ideas in this thesis are my own, but the work has been AI accelerated.
+This thesis and much of the code for the experiments was written in \href{https://code.visualstudio.com/}{\color{linkcolor}VScode} with \href{https://github.com/features/copilot}{\color{linkcolor}Copilot} as an inline AI assisstant, using \href{https://platform.openai.com/docs/models/gpt-4o}{\color{linkcolor}GPT-4o}. It was also proofread by \href{https://deepmind.google/models/gemini/pro/}{\color{linkcolor}Gemini 2.5 Pro}, and the \hyperref[chap:abstract]{\color{linkcolor}Abstract} and \hyperref[chap:introduction]{\color{linkcolor}Introduction} were narrated by \href{https://elevenlabs.io/docs/overview}{\color{linkcolor}ElevenLabs}.
+
+\noindent These models have been used responsibly. All the ideas in this thesis are my own, but the work has been AI accelerated.
 }\
 
 \hfill\href{https://brainmade.org/}{\includegraphics[width=4.5cm]{Figs/brain_made.png}}

@@ -60,12 +60,19 @@
         \draw[ultra thick, green!50!black!50, arrows = {Stealth[inset=0pt, angle=60:6pt]-Stealth[inset=0pt, angle=60:6pt]}, shorten >= .5mm, shorten <= .5mm] (axis cs:\xopt,0.75-\xopt/15) -- (axis cs:\xopt,\yopt);
         %\draw[ultra thick, red!50] (axis cs:\xint,0) -- (axis cs:\xint,\ymax);
 
-        \node[draw=none] at (axis cs:\xopt-0.8,0.475) {\scriptsize Best measurement};
+        \node[draw=none] at (axis cs:\xopt-1.2,0.835) {\scriptsize\color{green!50!black!50} \makecell{Best\\measurement}};
         \node[draw=none] at (axis cs:7.75,0.75) {\footnotesize Not economical};
 
         \end{axis}
     \end{tikzpicture}
     }
     \vspace*{-0.25cm}
-    \caption{Illustrative EVII vs. measurement cost curve} \label{fig:methodology-EVII-precision-cost-curve}
+    \caption{Illustrative \glsxtrshort{evii} vs. measurement cost curve} \label{fig:methodology-EVII-precision-cost-curve}
+    \vspace*{0.15cm}
+    \begin{singlespace}
+      \raggedright
+      \footnotesize{\it This figure shows a stylised relationship between the expected value of information (\glsxtrshort{evii}, black line) and the cost of measurement (grey line) as measurement precision varies (given by the variance of the likelihood fn along the x-axis).
+
+      The `best measurement' (indicated is green) is the one which gives the highest net benefit (\glsxtrshort{evii} minus cost).}
+    \end{singlespace}
 \end{figure}

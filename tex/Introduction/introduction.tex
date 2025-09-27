@@ -16,7 +16,7 @@ Few things have changed the world more than the harnessing of electricity to imp
 
 \hfill \\[-1em]
 
-\customfootnotetext{}{{\normalsize\faVolumeUp} {\small\, This introduction is quite long and wordy. You can listen to it instead at \url{...}}}
+\customfootnotetext{}{{\normalsize\faVolumeUp} {\small\, This introduction is quite long and wordy. You can listen to it \href{https://mal84emma.github.io/thesis/introduction.mp3}{here} instead.}}
 
 \noindent
 Decarbonisation is a truly enormous challenge \citer{mackay2016SustainableEnergyHot}. The UK and EU have committed to getting to net zero carbon emissions by 2050 \citer{committeeonclimatechange2020SixthCarbonBudget,europeanunion2021RegulationEU2021}.
@@ -95,7 +95,7 @@ To make effective decisions about the use of data collection to manage the uncer
 % Discuss uncertainties in energy systems across scales (but focus on districts, system level) - be really clear that demand is treated as exogenous as there's lots of uncertainties contributing to demand that we don't study, e.g. component level (define scope of thesis)
 
 Uncertainties are everywhere in energy systems. They affect almost every aspect of an energy system, and appear in a diverse range of forms across the different system scales. The planning horizon being considered also influences the way in which uncertainties affect the energy system. For example, when controlling a domestic solar-battery system, uncertainty in temperature over the next few days leads to uncertainty in the heat demand of the building, and so the operating cost of the system over that short planning horizon. But, when sizing that same system, uncertainty in the minimum and maximum temperatures over the year becomes important, as the system should be designed to be able to meet the peak heating and cooling demands of the building.
-\textbf{List common uncertainties with references somewhere? maybe a table?}
+% \textbf{List common uncertainties with references somewhere? maybe a table?}
 
 Properly modelling the uncertainties affecting an energy system is crucial to being able to correctly determine the impacts they have on the system. However, as the appropriate model of uncertainty depends highly on the subtleties of the energy system being modelled (such as the scale of the system studied, the scope of the research question, or the specifics of the energy model used), it is very difficult to provide firm guidelines for the form that probabilistic models of uncertainties should take, or even the broader methodology of modelling uncertainties \citer{janefennell2019ReviewStatusUncertainty,tian2013ReviewSensitivityAnalysis,chong2015UncertaintyAnalysisBuilding}. As such, in the literature uncertainty modelling is done on a case-by-case basis \citer{chong2015UncertaintyAnalysisBuilding,prataviera2022EvaluationImpactInput}, often with limited information provided about how the uncertainties are modelled and the choices made during modelling \citer{wang2016RobustSchedulingBuilding}.\\
 % uncertainty analysis built on potentially shaky foundations
@@ -363,13 +363,14 @@ The literature review in the previous section demonstrated the following researc
     \item Study how uncertainty reduction from practical data collection affects the design of real-world energy systems, and so what data should be collected and how the decision making process should be adapted to make best use of that data.
 \end{enumerate}
 
+\newcommand{\aimlabel}[2]{\small \raisebox{.25ex}{\parbox{1.5cm}{\raggedleft \textit{Chap.\! \ref{chap:#1}}\\{\color{gray!75!black}Aim \textbf{#2}}}}\hspace{.75ex}}
 \noindent These aims are achieved by:
-\begin{enumerate}[label=\it\arabic*\hspace{.5ex}]
-    \item Extending the \glsxtrlong{voi} framework to allow the study of decision making via policies, and the benefit of retaining optionality as uncertainty reduces;
-    \item Illustrating how \glsxtrshort{voi} can be used to quantify the benefit of data collection for supporting decision making across a range of example energy system decision problems;
-    \item Investigating the effects of training data on the accuracy of building load and grid condition forecasts, and the resulting performance of \glsxtrshort{mpc};
-    \item Quantifying the value of hourly building load monitoring data for improving the design of solar-battery systems in a district energy system; and
-    \item Quantifying the value of building small-scale demonstrators, and retaining optionality in energy storage technology selection, for improving the design of an energy park.
+\begin{enumerate}[] % label=\it\arabic*\hspace{.5ex}
+    \item[\aimlabel{methodology}{1}] \parbox{\linewidth}{Extending the \glsxtrlong{voi} framework to allow the study of decision making via policies, and the benefit of retaining optionality as uncertainty reduces;}
+    \item[\aimlabel{demonstrations}{1}] \parbox{\linewidth}{Illustrating how \glsxtrshort{voi} can be used to quantify the benefit of data collection for supporting decision making across a range of example energy system decision problems;}
+    \item[\aimlabel{forecasting}{2}] \parbox{\linewidth}{Investigating the effects of training data on the accuracy of building load and grid condition forecasts, and the resulting performance of \glsxtrshort{mpc};}
+    \item[\aimlabel{districts}{3}] \parbox{\linewidth}{Quantifying the value of hourly building load monitoring data for improving the design of solar-battery systems in a district energy system; and}
+    \item[\aimlabel{parks}{3}] \parbox{\linewidth}{Quantifying the value of building small-scale demonstrators, and retaining optionality in energy storage technology selection, for improving the design of an energy park.}
 \end{enumerate}
 
 
@@ -409,7 +410,7 @@ Additionally, as part of this PhD project, a dataset of energy usage data from b
 \begin{cbox}[colback=Cerulean!10!white]{}
     \setlength{\parindent}{0pt}%
 
-    \printpublication{langtry2024CambridgeUniversityEstates} \textit{(\ref{app:data})}
+    \printpublication{langtry2024CambridgeUniversityEstates} \textit{(App. \ref{app:data})}
 
 \end{cbox}
 
@@ -435,16 +436,16 @@ The work in this thesis has been published in the following articles:
     \printpublication{langtry2025QuantifyingBenefitLoad}\\
 
     {\small\it \Cref{chap:parks}} \newline
-    \printpublication{langtry2025ValueHedgingEnergya} \\
+    \printpublication{langtry2025ValueHedgingEnergya}
 
-    \printpublication{langtry2025TheConversation} \\ % The Conversation article
+    %\printpublication{langtry2025TheConversation} \\ % The Conversation article
 
-    {\small\it \Cref{chap:methodology}} \newline
-    \printpublication{langtry2025VoItutorial} ? % VoI tutorial paper
+    %{\small\it \Cref{chap:methodology}} \newline
+    %\printpublication{langtry2025VoItutorial} ? % VoI tutorial paper
 
 \end{cbox}
 
-\hfill \\
+\hfill \\[-1ex]
 
 \noindent
 However, there is much more to a PhD than just a thesis. Alongside the work in this thesis, contributions\footnote{Starred items indicate a supervisory role in the project.} were made to the following publications and projects:
@@ -454,7 +455,7 @@ However, there is much more to a PhD than just a thesis. Alongside the work in t
 
     \printpublication{difrancesco2023SystemEffectsIdentifying}\\
 
-    \printpublication{nagy2023CityLearnChallenge2023}\\
+    \printpublication{nagy2023CityLearnChallenge2023}
 
     \printpublication{choi2025RepresentationVectorBasedTime}\\
 

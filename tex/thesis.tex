@@ -100,12 +100,12 @@
 % ***************************** Chapter Mode ***********************************
 % The chapter mode allows user to only print particular chapters with references
 % Title, Contents, Frontmatter are disabled by default
-% Useful option to review a particular chapter or to send it to supervisior.
+% Useful option to review a particular chapter or to send it to supervisor.
 % To use choose `chapter' option in the document class
 
 \ifdefineChapter
- \includeonly{Introduction/introduction}
- %\includeonly{Methodology/methodology}
+ %\includeonly{Introduction/introduction}
+ \includeonly{Methodology/methodology}
  %\includeonly{Demonstrations/demonstrations}
  %\includeonly{Forecasting/forecasting}
  %\includeonly{Data/data}
@@ -126,6 +126,7 @@
  \renewcommand{\footnote}[1]{}
  \renewcommand{\footnotemark}{}
  \renewcommand{\footnotetext}[1]{}
+ \renewcommand{\customfootnotetext}[2]{}
  \RenewDocumentEnvironment{cbox}{+b}{}{} % make cbox do nothing
 \else
  \newcommand{\citer}{\citep}

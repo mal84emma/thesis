@@ -28,19 +28,26 @@
 
 \chapter{\glsxtrlong{voi} analysis} \label{chap:methodology}
 
-\begin{cbox}{}
-    This chapter ...\\
+% \begin{cbox}{}
+%     This chapter ...\\
 
-    \printpublication{langtry2025todo}
+%     \printpublication{langtry2025todo}
 
+% \end{cbox}
+
+% \newpage
+
+\begin{cbox}[colback=black!5!white]{}
+\input{Methodology/Figs/VOI-summary}
 \end{cbox}
 
-\newpage
+\vfill
 
 % Brief intro to chapter explaining contents and flow.
 \noindent
 \glsxtrlong{voi} analysis (\glsxtrshort{voi}) is the main methodology used in this thesis to investigate the benefit of data collection for improving decision making. This chapter explains the \glsxtrlong{voi} framework. It begins with a brief introduction to \glsxtrshort{voi} and its history in \Cref{sec:methodology-intro}. The theory of the framework is then progressively built up through Sections \ref{sec:methodology-statistical-decision-theory} to \ref{sec:methodology-framework-extensions}. Alongside this theory, the interpretation of what the calculations are doing and their meaning is discussed, and a worked example of a simple building energy system is developed to illustrate how the results can inform decision making. Finally, the limitations of the framework are explored in Section \ref{sec:methodology-limitations}. % and practical considerations for computing \glsxtrshort{voi} values ... and \ref{sec:methodology-considerations}.
 
+\newpage
 %********************************** VoI intro section **************************************
 \section{Introduction} \label{sec:methodology-intro}
 
@@ -51,7 +58,8 @@
 
 \begin{cbox}[colback=Aquamarine!10!white]{}
 How much better on average would a decision maker do at a given problem by taking a measurement to reduce uncertainty before making their decision?
-\end{cbox}\
+\end{cbox}
+\vfill
 
 \noindent
 This question has been and remains extremely important in lots of disciplines, and \glsxtrshort{voi} has been used to study it in a wide variety of contexts. Early applications in the 1970s included \citep{conrad1980QuasiOptionValueExpected}, operations management \citep{bedford1966MeasuringValueInformation}, agriculture \citep{perrin1976ValueInformationValue}, accountancy \citep{mock1971ConceptsInformationValue}, wargaming \citep{oldham1996ValueInformation}, and hydrology \citep{klemes1977ValueInformationReservoir}. Due to the limited computational power available at the time, these studies used simple decision tree models of uncertainties and decision making. However, due to the interest in linear \glsxtrlong{sp} in Operations Research and Management Science at the time \citep{williams1965StochasticLinearProgramming,dantzig1955LinearProgrammingUncertainty,wilson1966ProgrammingUncertainty} following the success of \glsxtrlong{lp} in supply chain management \citep{dantzig1956RecentAdvancesLinear}, a few studies applied \glsxtrshort{voi} to decision making using small, early Linear Programs \citep{avriel1970ValueInformationStochastic}.
@@ -89,7 +97,9 @@ While we don't know the value of the uncertainties, and so the outcome that we'l
 As the utility now depends on both the action and the value of the uncertainties, $u(a,\theta)$, there is now also uncertainty or risk associated with the utility we'll get, which we must manage during decision making. There are many ways of handling this risk, such as taking the action with the `best worst-case' utility, or the one with the best robustness guarantees. But the most common way is to take the action with the highest average (or expected) utility\footnote{The framework can be easily adapted to use whichever uncertainty management method is most appropriate for the decision making context. This is done by simply changing the objective. For example in \Cref{chap:parks}, a \glsxtrlong{cvar} term is added to the objective to incorporate risk aversion into the decision making. In fact, many risk management methods just adjust the utility function, adding a risk term, and still optimise the expectation.}. So the `objective' we now want to optimise to determine our action choice is the expected value of the utility over the uncertainties in the system,
 \begin{equation} \label{eq:methodology-prior-optimisation}
     \mathlarger{\max_{a \in \mathcal{A}} \: \mathbb{E}_{\theta}\lbrace u(a,\theta) \rbrace}
-\end{equation}\\
+\end{equation}
+
+\newpage
 
 \noindent
 However, for real engineering problems we typically cannot calculate this expectation exactly\footnote{The expectation can only be calculated exactly if the probabilistic model of the uncertainties used is discrete, or if the utility function is very simple.}. Instead, we use a \glsxtrlong{mc} (\glsxtrshort{mc}) estimate to approximate it\footnote{In this thesis, whenever there is an expectation, we will use an \glsxtrshort{mc} estimate of it in our numerical calculations.}. To do so, we draw a number of samples from the distributions of the uncertainties, $\theta^{(n)} \sim \pi(\theta)$, and compute the average utility over those samples,
@@ -104,18 +114,23 @@ So to solve our decision making problem under uncertainty, we optimise the avera
 \end{equation}
 Doing so tells us the best action to take, $a^*$, and how `good' we expect it to be at solving our problem, i.e. the average utility it achieves. We can also use the distribution of its utility over the uncertainty samples to understand the risk associated with our decision making.\\
 
-More generally, this type of optimisation is referred to as a `stochastic decision problem'. It is fully specified by the set of possible actions, $\mathcal{A}$, the probabilistic model of uncertainties, $\pi(\theta)$, and the utility function\footnote{Strictly, it's the optimisation objective which is a function of the utility that defines the problem, but these are often used interchangeably.}, $u(a,\theta)$. Solving the stochastic optimisation in Eq. \ref{eq:methodology-prior-optimisation} gives us the best solution to this problem. But solving it can be very computationally expensive, as the utility function needs to be evaluated $N$ times due to the sampling\footnote{In fact for a Stochastic Program, the computational cost of using this average utility scales as $\mathcal{O}(N^3)$.}. Instead, we could try to solve the problem using some heuristic \citep{pickering2016ComparisonMetaheuristicLinear}. A common approach is to use the expected (average) values of the uncertainties in a deterministic optimisation, which is called the \glsxtrlong{evp} (\glsxtrshort{evp}). This is a much cheaper problem to solve, but may not correctly identify the best action to take. The difference in expected utilities achieved by the stochastic optimisation (Eq. \ref{eq:methodology-prior-optimisation}) and the solution to the \glsxtrshort{evp} tells us how much better we can do at solving the decision problem by accounting for the uncertainties in the system in our optimisation, and is referred to as the \glsxtrlong{vss} (\glsxtrshort{vss}) \citep{bistline2015ElectricSectorCapacity}. Actually, we could use whatever policy we like to try to solve the decision problem. This more general setting is discussed in \Cref{sec:methodology-on-policy-voi}.\\
+More generally, this type of optimisation is referred to as a `stochastic decision problem'. It is fully specified by the set of possible actions, $\mathcal{A}$, the probabilistic model of uncertainties, $\pi(\theta)$, and the utility function\footnote{Strictly, it's the optimisation objective which is a function of the utility that defines the problem, but these are often used interchangeably.}, $u(a,\theta)$. Solving the stochastic optimisation in Eq. \ref{eq:methodology-prior-optimisation} gives us the best solution to this problem. But solving it can be very computationally expensive, as the utility function needs to be evaluated $N$ times due to the sampling\footnote{In fact for a Stochastic Program, the computational cost of using this average utility scales as $\mathcal{O}(N^3)$.}. Instead, we could try to solve the problem using some heuristic \citep{pickering2016ComparisonMetaheuristicLinear}. A common approach is to use the expected (average) values of the uncertainties in a deterministic optimisation, which is called the \glsxtrlong{evp} (\glsxtrshort{evp}). This is a much cheaper problem to solve, but may not correctly identify the best action to take. The difference in expected utilities achieved by the stochastic optimisation (Eq. \ref{eq:methodology-prior-optimisation}) and the solution to the \glsxtrshort{evp} tells us how much better we can do at solving the decision problem by accounting for the uncertainties in the system in our optimisation, and is referred to as the \glsxtrlong{vss} (\glsxtrshort{vss}) \citep{bistline2015ElectricSectorCapacity}. Actually, we could use whatever policy\footnote{The term `policy' is used to refer to any structured way of making decisions. E.g. a flow chart defines a policy.} we like to try to solve the decision problem. This more general setting is discussed in \Cref{sec:methodology-on-policy-voi}.
+
+\newpage
 
 \begin{ebox}[label=ebox:opt]{Introducing an example problem}
     To help clarify this discussion of mathematics and understand why it's useful to us, let's apply it to something concrete and introduce an example problem. We'll developed this example problem throughout the chapter, and demonstrate how we can use each step of the mathematical framework as we introduce it. Code for all the calculations in this example is available for you to try out and explore at \url{https://github.com/mal84emma/VoI-Tutorial}.
 
     \subsubsection*{Designing a solar-battery system for a commercial building}
+    \vspace*{-1ex}
     Let's imagine we want to decarbonise the energy use of a hypothetical commercial building. To do this we plan to install solar panels and battery storage in the building. This equipment is expensive, but by generating our own energy and doing some energy trading with the grid we can reduce the electricity bill. So our goal is to design the solar-battery system for the building, that is choose the sizing of solar panels and battery storage, to minimise the total cost of meeting the building's energy demands.
 
     To help make this design decision we'll use a simple model of the building energy system to calculate the overall cost of constructing and operating the system, which is described in Appendix \ref{app:example-problem-formulation}.\\
 
-    Initially, we'll optimise the system design by looking at 5 design options selected using our experience of building energy systems, and run the energy model to identify the design with the lowest cost. These design options are chosen to generate between 67\% and 100\% of the building's annual energy demand with the solar panels, and to use between a 4hr and 8hr battery to capture and shift the solar peak. The cost of each design is determined by running the model simulation using data from a single design year, in this case 2017.\\
+    Initially, we'll optimise the system design by looking at 5 design options selected using our experience of building energy systems, and run the energy model to identify the design with the lowest cost. These design options are chosen to generate between 66\% and 100\% of the building's annual energy demand with the solar panels, and to use between a 4hr and 8hr battery to capture and shift the solar peak. The cost of each design is determined by running the model simulation using data from a single design year, in this case 2017. We can compare these costs in \Cref{tab:example-det-optimisation-results}.\\
     % \footnote{The solar capacity factor in Cambridge is roughly 0.13, meaning generating the energy demand over the year (which is 100kW on average) requires roughly 750kW of solar panels.}
+
+    The results show us that there is a trade-off between the capital and operating costs, and that the design with 750kW of solar panels and 600kWh of battery storage gives us the best balance. With this design, it costs us £152.3k/yr in total to supply the building load, equivalent to £0.174/kWh. If the solar-battery system wasn't installed, buying all the electricity from the grid would cost £219.2k/yr (or £0.250/kWh), so we save £66.9k/yr (a 31\% cost reduction) by installing the system, as well as significantly reducing our carbon emissions.
 
     {\centering
     \renewcommand{\arraystretch}{0.8}
@@ -123,29 +138,26 @@ More generally, this type of optimisation is referred to as a `stochastic decisi
         \toprule \toprule
         \makecell{Solar capacity\\(kWp)} & \makecell{Battery capacity\\(kWh)} & \makecell{Capital cost\\(£k/yr)} & \makecell{Operating cost\\(£k/yr)} & \makecell{Annualised\\cost (£k/yr)} \\
         \midrule \midrule
-        \multicolumn{5}{>{\centering\arraybackslash}l}{\small\it Discrete design options} \\
+        \multicolumn{5}{>{\centering\arraybackslash}l}{\small \textit{Discrete design options} \hspace{6.9cm} (Discrete optimisation)} \\[0.5ex]
         500 & 400 & 65.5 & 100.6 & 166.1 \\
         500 & 600 & 79.5 & 91.4 & 170.9 \\
         600 & 600 & 87.0 & 76.1 & 163.1 \\
         \textbf{750} & \textbf{600} & 98.2 & 54.1 & \textbf{152.3} \\
         750 & 800 & 112.2 & 46.3 & 158.6 \\
         \midrule
-        \multicolumn{5}{>{\centering\arraybackslash}l}{\small\it Linear Program solution} \\
-        889 & 501 & 101.7 & 39.3 & 141.0 \\
+        \multicolumn{5}{>{\centering\arraybackslash}l}{\small \textit{Linear Program solution} \hspace{6.25cm} (Continuous optimisation)} \\[0.5ex]
+        889 & 501 & 101.7 & 39.3 & \textbf{141.0} \\
         \bottomrule \bottomrule
     \end{tabularx}
     \bigskip
     \captionof{table}{Deterministic design optimisation results.} \label{tab:example-det-optimisation-results}
     }\
 
-    The results show us that there is a trade-off between the capital and operating costs, and that the design with 750kW of solar panels and 600kWh of battery storage gives us the best balance. With this design, it costs us £152.3k/yr to supply the building load, equivalent to £0.174/kWh. If the solar-battery system wasn't installed, buying all the electricity from the grid would cost £219.2k/yr (or £0.250/kWh), so we save £66.9k/yr (a 31\% cost reduction) by installing the system, as well as significantly reducing our carbon emissions.
+    We have in some sense optimised this system design, but we've only looked through a very small number of options. We could search through lots more options, but this would be very computationally expensive. However, our building energy system model actually uses a Linear Program (\glsxtrshort{lp}) to optimise the operation of the system and find lowest cost of running it. So, we can include the solar and battery capacities as decision variables in our \glsxtrshort{lp} optimisation, and use the nice mathematics of our model to find the best capacities out of all possible options, and so the `optimal' design. This solution is also shown in \Cref{tab:example-det-optimisation-results}. Using the  \glsxtrshort{lp} leads us to a design we might not have chosen to explore. It generates more solar energy than the building can use, and is more cautious with the batteries than we were. And importantly, it reduces the cost by 7.4\% compared to our best design guess.\\
 
-    We have in some sense optimised this system design, but we've only looked through a very small number of options. We search through lots more options, but this would be very computationally expensive. However, our building energy system model actually uses a Linear Program to optimise the operation of the system and find lowest cost of running it. So, we can include the solar and battery capacities in our \glsxtrshort{lp} optimisation, and use the nice mathematics of our model to find the actual best capacities and optimal design. This solution is also shown in \Cref{tab:example-det-optimisation-results}. Using the  \glsxtrshort{lp} leads us to a design we might not have chosen to explore. It generates more solar energy than the building can use, and is more cautious with the batteries than we were. And importantly, it reduces the cost by 7.4\% compared to our best design guess.\\
-
-    \newpage
     This design optimisation is all well and good, but we've completely neglected the fact that there are many factors that will affect the operation, and so cost of running of our energy system, that we don't know at the time we design it. So let's introduce some uncertainties into our model, and see how they affect our design decisions. We'll account for uncertainties in the building load, solar generation, and the cost and efficiency of the battery storage. The probabilistic models we'll use are described in Appendix \ref{app:example-problem-uncertainties}.
 
-    We can repeat the optimisations from before, but now we will draw 50 samples\footnote{This isn't that many samples, and so our estimate of the expected cost might have some noisy/inaccurate, but this is the largest number we can use within an achievable computational cost.} from the distributions of the uncertainties, and our design objective will be the average cost from the energy model over these samples. We call a set of values sampled from the uncertainties a `scenario'.\\
+    We can repeat the optimisations from before, but now we will draw 50 samples\footnote{This isn't that many samples, and so our estimate of the expected cost might have some noisy/inaccurate, but this is the largest number we can use within an achievable computational cost.} from the distributions of the uncertainties, and our design objective will be the average cost from the energy model over these samples. We call a set of values sampled from the uncertainties a `scenario'.
 
     {\centering
     \renewcommand{\arraystretch}{0.8}
@@ -153,24 +165,30 @@ More generally, this type of optimisation is referred to as a `stochastic decisi
         \toprule \toprule
         \makecell{Solar capacity\\(kWp)} & \makecell{Battery capacity\\(kWh)} & \makecell{Av. capital\\cost (£k/yr)} & \makecell{Av. operating\\cost (£k/yr)} & \makecell{Av. annualised\\cost (£k/yr)} \\
         \midrule \midrule
-        \multicolumn{5}{>{\centering\arraybackslash}l}{\small\it Discrete design options} \\
+        \multicolumn{5}{>{\centering\arraybackslash}l}{\small \textit{Discrete design options} \hspace{6.9cm} (Discrete optimisation)} \\[0.5ex]
         500 & 400 & 65.5 & 95.7 & 161.2 \\
         500 & 600 & 79.6 & 86.4 & 166.0 \\
         600 & 600 & 87.1 & 71.1 & 158.1 \\
         \textbf{750} & \textbf{600} & 98.3 & 49.1 & \textbf{147.4} \\
         750 & 800 & 112.3 & 41.2 & 153.6 \\
         \midrule
-        \multicolumn{5}{>{\centering\arraybackslash}l}{\small\it Stochastic Program solution} \\
-        807 & 429 & 90.5 & 49.4 & 139.9 \\
+        \multicolumn{5}{>{\centering\arraybackslash}l}{\small \textit{Stochastic Program solution} \hspace{5.6cm} (Continuous optimisation)} \\[0.5ex]
+        807 & 429 & 90.5 & 49.4 & \textbf{139.9} \\
         \bottomrule \bottomrule
     \end{tabularx}
     \bigskip
     \captionof{table}{Stochastic design optimisation results.} \label{tab:example-stoch-optimisation-results}
     }\
 
-    Comparing to the results from \Cref{tab:example-det-optimisation-results}, we can see that the same design option is selected as before, but that there is a about a 3\% difference in the estimated cost of the system.
-    Designing using the \glsxtrshort{lp}, which is now a Stochastic Program (linear scenario program), leads to a design which uses around 10\% smaller capacities than the deterministic case, but doesn't cause a significant change in total cost between the designs\footnote{Unfortunately we cannot actually compute the \glsxtrshort{vss} as the deterministic LP solution is infeasible, which is a problem, but we can approximate it. This issue is discussed further in Appendix \ref{app:methodology-constraints-tirade}.}.
+    Comparing to the results from \Cref{tab:example-det-optimisation-results} for the discrete optimisation, we can see that the same design option is selected as before, but that there is a about a 3\% difference in the estimated cost of the system. I.e. using the single design year causes us to overestimate the cost of the system compared to the actual average.
+
+    Designing using the \glsxtrshort{lp}, which is now a Stochastic Program\footnote{Specifically, it's a linear scenario program, where the (linear) operating constraints of each scenario are all included in the model, and the objective is the average total cost over the scenarios. See Eq. \ref{eq:example-problem-formulation}.} (\glsxtrshort{sp}), leads to a design which uses around 10\% smaller capacities than the deterministic case, but doesn't cause a significant change in total cost between the designs\footnote{Unfortunately we cannot actually compute the \glsxtrshort{vss} as the deterministic LP solution is infeasible, which is a problem, but we can approximate it. This issue is discussed further in Appendix \ref{app:methodology-constraints-tirade}.}.
+
     So in this case, accounting for these pretty significant uncertainties in our optimisation model doesn't have a substantial impact on the design decision\footnote{Though this might depend on the design year we chose. We may have just got lucky.}, but it does provide us with a better estimate of how much the system might cost\footnote{Not only is the average cost value more accurate, but the statistical information about the possible costs is also useful for planning.}.
+
+    Another advantage of accounting for uncertainties in our design model is that we also get information about the resulting uncertainty in the cost, which can be useful for planning and managing risk.
+    Over the 50 scenarios, the total cost of the 750kWp--600kWh system varied from £110.4k/yr to £175.5k/yr, with a standard deviation of £16.6k/yr.
+    Knowing that the cost could get this high would be important if we had a strict budget constraint, and might cause us to choose a different design\footnote{If we were very risk averse, we might want to optimise for the maximum cost, rather than the average.}. Or ask for a bigger budget.
 \end{ebox}
 
 \newpage
@@ -178,7 +196,7 @@ More generally, this type of optimisation is referred to as a `stochastic decisi
 
 % Explain what the inclusion of measurements does, how Bayes is applied, and how the framework operates - we now give the decision maker the option to collect data before taking a decision action, which will inform them about the uncertainties and improve their decision making ability
 
-While we are able to manage uncertainties during our decision making, their presence is problematic for decision making. This is because when we are hedging our decision to perform well on average, we're missing out on making the decision that is best for the state of the system (values of the uncertainties) that we actually get. Though of course at the time we are making our decision we don't know what that will be. But, if we were able to reduce the uncertainty in our problem\footnote{Not all uncertainties can be reduced. There are two types of uncertainty. Aleatoric uncertainty, which is inherent variability which cannot be explained away, and epistemic uncertainty, which is uncertainty associated with a lack of knowledge of the system, which can be reduced through data collection. Often in engineering systems uncertain parameters have a mix of aleatoric and epistemic, meaning their uncertainty can be reduced but never fully removed.\label{fn:aleatoric}}, and get better information about the true state of the system, we would need to hedge less and so do a better job of making our decision.
+While we are able to manage uncertainties during our decision making, their presence is problematic for decision making. This is because when we are hedging our decision to perform well on average, we're missing out on making the best decision for the state of the system that we'll actually get (the true values of the uncertainties). Though of course at the time we are making our decision we don't know what that will be. But, if we were able to reduce the uncertainty in our problem\footnote{Not all uncertainties can be reduced. There are two types of uncertainty. Aleatoric uncertainty, which is inherent variability which cannot be explained away, and epistemic uncertainty, which is uncertainty associated with a lack of knowledge of the system, which can be reduced through data collection. Often in engineering systems uncertain parameters have a mix of aleatoric and epistemic, meaning their uncertainty can be reduced but never fully removed.\label{fn:aleatoric}}, and get better information about the true state of the system, we would need to hedge less, and so could do a better job of making our decision.
 
 Let's consider how our decision making will change if we are able to take a measurement/collect data that reduces the uncertainties before we have to make our decision.\\
 
@@ -190,7 +208,7 @@ Bayes' theorem tells us the following,
 \end{equation}
 where $p(\theta)$ is the prior distribution of the uncertainties, $p(z \mid \theta)$ is the likelihood function of the measurement, and $p(\theta \mid z)$ is the posterior distribution of the uncertainties for a given measurement value/data $z$.
 
-The prior distribution describes our initial knowledge of the uncertainties. The likelihood function describes the knowledge/information we gain from the data. And the posterior distribution combines these two pieces of information, and tells us about the remaining uncertainty given what we've observed. \ph{improve this?}\\
+The prior distribution describes our initial knowledge of the uncertainties. The likelihood function describes the knowledge/information we gain from the data. And the posterior distribution combines these two pieces of information, and tells us about the remaining uncertainty given what we've observed.\\
 
 Though the framework is typically described in terms of physical measurements, we can apply these ideas to any source of information that reduces the uncertainty in our problem, such as research, improved forecasting methods, or getting expert advice. The only requirement is that we can model the uncertainty reduction that information provides\footnote{Though if modelling this uncertainty reduction is tricky, we can make a best guess and use sensitivity analysis to see if that guess affects our conclusions.}, i.e. come up with a likelihood function.
 
@@ -345,8 +363,8 @@ We find the \glsxtrshort{voi} by comparing the average utility achieved by these
 \end{equation}
 The \glsxtrshort{evpi} provides an upper bound on all the other \glsxtrshort{voi} values. It is also much cheaper to compute as the posterior optimisations are deterministic. However \glsxtrshort{evpi} values can be misleading, as it's not practically possible to completely remove uncertainty, and so we cannot know how much of that value can actually be obtained.
 
-\begin{ebox}{Value of removing uncertainty}
-    Let's imagine what would happen if we were able to perfectly know everything about our building and the solar-battery system we'll put into it, to see how much better we would do if we could achieve the theoretically best possible design. Of course this is unrealistic, some of the uncertainties in the system couldn't be reduced, such as the pattern of solar generation during operation, and for the others we could never completely remove the uncertainty, for example the operational building load couldn't be exactly known. But this thought experiment will give us some insight into how much these uncertainties are affecting our ability to make our design decision.\\
+\begin{ebox}[label=ebox:evpi]{Value of removing uncertainty}
+    Let's imagine what would happen if we were able to perfectly know everything about our building and the solar-battery system we'll put into it, to see how much better we would do if we could achieve the theoretically best possible design. Of course this is unrealistic. Some of the uncertainties in the system couldn't be reduced, such as the pattern of solar generation during operation, and for the others, the uncertainty could never be completely removed. For example, we can't know the exact amount of energy the building will use during operation when we design it. But this thought experiment will give us some insight into how much these uncertainties are affecting our ability to make our design decision.\\
 
     To do this, we perform a similar process to \ref{ebox:bayes}, but we now sample scenarios from the prior distributions of all the uncertainties, and then use the \glsxtrshort{sp} to find the best design for each scenario, assuming that in each hypothesised case we knew the true values of the uncertainties.
 
@@ -361,15 +379,16 @@ The \glsxtrshort{evpi} provides an upper bound on all the other \glsxtrshort{voi
     }
     \bigskip
 
-    The average cost of the designs made with perfect information is £136.4k/yr. Comparing to the £139.9k/yr average cost of the initial design, the \glsxtrshort{evpi} is £3.5k/yr, or 2.5\% of the prior cost.
+    The average cost of the designs made with perfect information is £136.4k/yr. Comparing to the £139.9k/yr average cost of the initial design from \Cref{tab:example-stoch-optimisation-results}, the \glsxtrshort{evpi} is £3.5k/yr, or 2.5\% of the prior cost.
 
-    In the context of improving energy system designs to reduce energy costs this is a pretty significant saving. However the \glsxtrshort{evpi} is only an upper bound. So we can't know how much of this cost saving we could actually achieve by collecting data in practice. All we can conclude from this is that reducing the uncertainties in our problem could save us \textit{up to} £3.5k/yr. So it might be worth doing something about the uncertainties to improve our design decision.
+    In the context of improving energy system designs to reduce energy costs this is a pretty significant saving. However the \glsxtrshort{evpi} is only an upper bound. So we can't know how much of this cost saving we could actually achieve by collecting data in practice. All we can conclude from this is that reducing the uncertainties in our problem could save us \textit{up to} £3.5k/yr. So it \textit{might} be worth doing something about the uncertainties to improve our design decision. Or it might not.
 \end{ebox}
-\vspace{0.1cm}
+\vspace{-0.25cm}
 
 \subsection{Partial Perfect Information}
 
 Often not all of the uncertainties in a system are, or even can be, reduced (see footnote \ref{fn:aleatoric}). So a more realistic case is one where some uncertainties are removed, but some others remain. This means in the Posterior decision problems, as not all uncertainties are removed, we need to optimise the average utility over the remaining uncertainties. Let's call the uncertainties that are removed by the data collection $\theta$, and the ones that remain unchanged $\phi$. In this case the \glsxtrshort{voi} is referred to as the \glsxtrlong{evppi} (\glsxtrshort{evppi}), and is given by,
+\vspace*{-0.1cm}
 \begin{equation} \label{eq:evppi}
     \mathlarger{
         \text{EVPPI} =
@@ -377,18 +396,18 @@ Often not all of the uncertainties in a system are, or even can be, reduced (see
         - \max_{a \in \mathcal{A}} \: \mathbb{E}_{\theta,\phi} \left\lbrace u(a,\theta,\phi) \right\rbrace
     }
 \end{equation}
-\vspace{-0.4cm}
+\vspace{-0.6cm}
 
 \begin{ebox}[label=ebox:evppi]{Designing with known load}
-    If we now only removed the uncertainty in the annual energy usage of the building (or mean load), and so assumed that we knew perfectly at the time of design the aggregate energy demand we'd need to meet, the average cost of our designs made with perfection mean load information would be £139.4k/yr, meaning the \glsxtrshort{evppi} is only £0.5k/yr, or 0.4\% of the prior cost.
+    Now, let's assume that we only removed the uncertainty in the annual energy usage of the building (or mean load), meaning that we knew perfectly at the time of design the aggregate energy demand we'd need to meet. In this case, the average cost of our designs made with perfect mean load information would be £139.4k/yr. So the \glsxtrshort{evppi} is just £0.5k/yr, or 0.4\% of the prior cost.
 
-    This is a much smaller value than the \glsxtrshort{evpi} we calculated before, which tells us that some of the other uncertainties we're no longer removing have quite a big impact on our design decision. So removing this pretty significant uncertainty ($\pm$20\%) in the mean building load doesn't provide that much of a cost saving for our design. We may decide that it's not worth chasing this saving, and so the upper bound provided by this simplified case can tells us that this information is not worthwhile collecting.
+    This is a much smaller value than the \glsxtrshort{evpi} we calculated before, which tells us that the other uncertainties we're no longer removing\footnote{Which are in the cost and efficiency of the batteries, and the amount and pattern of solar generation.} have quite a big impact on our design decision. So removing this pretty significant uncertainty ($\pm$20\%) in the mean building load doesn't provide us that much of a cost saving for our design. We may decide that it's not worth chasing this saving, and so the upper bound we get from this simplified case can tells us that this information isn't worthwhile collecting.
 \end{ebox}
 
 
 \subsection{Imperfect Information}
 
-In the general case, collecting data reduces but does not remove uncertainties\footnote{The previous two perfect information cases are just special cases of this, and provide an upper bound on this general value, \begin{equation*} \mathbb{E}_{\theta,z} \big\lbrace \max_{a \in \mathcal{A}} \: \mathbb{E}_{\vartheta|z}\lbrace u(a,\vartheta) \rbrace \big\rbrace \leq \mathbb{E}_{\theta} \big\lbrace \max_{a \in \mathcal{A}} \: u(a,\theta) \big\rbrace \end{equation*}\vspace*{-0.3cm}}.
+In the general case, collecting data reduces but does not remove uncertainties\footnote{The previous perfect info. cases are just special cases of this, and provide an upper bound on this general value, \vspace*{-0.3cm}\begin{equation*} \mathbb{E}_{\theta,z} \big\lbrace \max_{a \in \mathcal{A}} \: \mathbb{E}_{\vartheta|z}\lbrace u(a,\vartheta) \rbrace \big\rbrace \leq \mathbb{E}_{\theta} \big\lbrace \max_{a \in \mathcal{A}} \: u(a,\theta) \big\rbrace \end{equation*}\vspace*{-0.55cm}}.
 We refer to this as gathering `imperfect information'. How we model uncertainty reduction from data and understand its effect on decision making is discussed in \Cref{sec:methodology-bayesian-decision-analysis}. If we have some measurement option $e$ available, which has likelihood function $f_e(z|\theta)$, the value of the information provided by that measurement is referred to as the \glsxtrlong{evii}\footnote{The \glsxtrshort{evii} is also commonly referred to as the \glsxtrlong{evsi} (\glsxtrshort{evsi}) \citep{keisler2014ValueInformationAnalysis}.} (\glsxtrshort{evii}), and is given by,
 \begin{equation} \label{eq:evii}
     \mathlarger{
@@ -401,11 +420,14 @@ which is just the difference between the prior decision utility (Eq. \ref{eq:met
 
 The greater the uncertainty reduction provided by the measurement, the larger the \glsxtrshort{evii}. So when there are multiple measurement options available, we can compare the improvements in decision making performance they provide to their costs, and determine which measurement (if any) is most economical for supporting our decision making. Fig. \ref{fig:methodology-EVII-precision-cost-curve} illustrates this trade-off between the usefulness and cost of more precise measurement.
 
+\vspace*{-2ex}
 \input{Methodology/Figs/EVII-cost-graph}
 
-However we don't just need to compare different levels of reduction of the same uncertainty. As long as we can come up with a probabilistic model for the measurements, we can compare the benefit of reducing different uncertainties or combinations of them. When we're thinking about reducing multiple uncertainties in our problem we have to be careful, as the combination of uncertainty reductions can have a significant effect on the \glsxtrshort{voi}. This is referred to as `system effects' \citep{difrancesco2023SystemEffectsIdentifying}. \glsxtrshort{voi} values don't add. If two measurements provide complementary information then the \glsxtrshort{voi} of the combination can be substantially greater. For example, knowing the cost of a heat pump may only be useful if we also precisely know the building load, as then we have choice over the heat pump sizing and don't just need to over-size it to ensure it can meet the heating demand. On the other hand, two measurements can contain redundant information meaning the second provides little extra value. For example, the building occupancy and internal temperatures might provide similar information about the heating load.\\
+However we don't just need to compare different levels of reduction of the same uncertainty. As long as we can come up with a probabilistic model for the measurements, we can compare the benefit of reducing different uncertainties or combinations of them. When we're thinking about reducing multiple uncertainties in our problem we have to be careful, as the combination of uncertainty reductions can have a significant effect on the \glsxtrshort{voi}. This is referred to as `system effects' \citep{difrancesco2023SystemEffectsIdentifying}. \glsxtrshort{voi} values don't add.
+If two measurements provide complementary information then the \glsxtrshort{voi} of the combination can be substantially greater. For example, when `smart charging' an electric vehicle in a car park, knowing the state-of-charge of the vehicle may only be useful if we also know how long it'll be parked for, as only then can we know whether there's enough time to adjust the charging schedule.
+On the other hand, two measurements can contain redundant information, meaning the second provides little extra value. For example, supply/return water temperatures and heat meters provide similar information about a building's heating load.\\
 
-\begin{ebox}{Designing with energy usage data}
+\begin{ebox}[label=ebox:evii]{Designing with energy usage data}
     Returning to the building electricity meter data we used in \ref{ebox:bayes} to reduce uncertainty in the annual energy usage, let's now look at the value of that information for supporting our design decision. Fig. \ref{fig:methodology-example-post-designs-comparison} compares the designs we would make with reduced load uncertainty to the initial design we would make with only the prior information, as well as the average cost of each design over the remaining uncertainty.
 
     {
@@ -417,14 +439,41 @@ However we don't just need to compare different levels of reduction of the same 
     }
     \bigskip
 
-    As we commented last time, getting this information and reducing the load uncertainty leads us to significantly change our design choice, and we can end up making a design decision quite different from the initial choice we'd make (the prior design). Also, the expected cost of system varies substantially ($\pm$25\%) over the possible load measurements we could receive. This seems to suggest that the load uncertainty is having a significant impact on our decision making, as reducing it leads to large changes in both decision and cost.\\
+    As we commented last time, getting this information and reducing the load uncertainty leads us to significantly change our design choice, and we can end up making a design decision quite different from the initial choice we'd make (the prior design). Also, the expected cost of the system varies substantially ($\pm$25\%) over the possible load measurements we could receive. This seems to suggest that the load uncertainty is having a significant impact on our decision making, as reducing it leads to large changes in both decision and cost.\\
 
-    But ultimately we're not actually interested in the choice we end up making, but how good a job we can do at solving our problem. The average cost of the designs made with reduced load uncertainty is £139.7k/yr. Meaning the \glsxtrshort{evii} is just £0.2k/yr, or 0.2\% of the prior cost. This is around half the \glsxtrshort{evppi} value from \ref{ebox:evppi}. This means even though the practical measurement removes around 75\% of the uncertainty, it's only providing us 50\% of the benefit for decision making.
+    But ultimately we're not actually interested in the choice we end up making. Instead, what we care about is how good a job we can do at solving our problem. The average cost of the designs made with reduced load uncertainty is £139.7k/yr. Meaning the \glsxtrshort{evii} is just £0.2k/yr, or 0.2\% of the prior cost. This is around half the \glsxtrshort{evppi} value from \ref{ebox:evppi} (\Cref{tab:example-voi-summary} below gives the comparison). This means that, even though the practical measurement removes around 75\% of the uncertainty, it's only providing us with 50\% of the benefit for decision making.
 
     From this perspective, reducing load uncertainty in fact isn't particularly important to our decision making. It wouldn't be worth spending much money collecting this data, as the improvement it provides to our design decision is very small.
 
-    However, it does significantly reduce our uncertainty in how much our energy system will cost, which may be beneficial for financial planning and risk management. This is explored in more detail in \Cref{chap:districts}.
-\end{ebox}\
+    However, it does significantly reduce our uncertainty in how much our energy system will cost, which may be beneficial for financial planning and risk management. This is explored in more detail in \Cref{chap:districts}.\\
+
+    {\centering
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabularx}{0.8\linewidth}{cccr@{\hskip .75ex}l}
+        \toprule \toprule
+        \makecell{Case} & \makecell{From} & \makecell{Av. total cost of\\[-.5ex]design(s) (£k/yr)} & \multicolumn{2}{>{\centering\arraybackslash}c}{\makecell{VoI (£k/yr)}} \\
+        \midrule \midrule
+        %\multicolumn{5}{>{\centering\arraybackslash}l}{\small\it Discrete design options} \\
+        \makecell{No uncertainty\\[-.5ex]reduction (prior)} & \makecell{\Cref{tab:example-stoch-optimisation-results}\\[-.5ex]{\small(\glsxtrshort{sp} soln.)}} & 139.9 & \multicolumn{2}{>{\centering\arraybackslash}c}{--} \\
+        Imperfect information & \ref{ebox:evii} & 139.7 & 0.2 & (\glsxtrshort{evii}) \\
+        \makecell{Partial perfect\\[-.5ex]information} & \ref{ebox:evppi} & 139.4 & 0.5 & (\glsxtrshort{evppi}) \\
+        Perfect information & \ref{ebox:evpi} & 136.4 & 3.5 & (\glsxtrshort{evpi}) \\
+        \bottomrule \bottomrule
+    \end{tabularx}
+    \bigskip
+    \vspace*{-0.5ex}
+    \begin{singlespace}
+    \parbox[]{0.8\linewidth}{
+    \captionof{table}{Summary of designs made with different levels of uncertainty reduction and associated \glsxtrshort{voi} values.} \label{tab:example-voi-summary}
+    }
+
+    \vspace*{-0.5ex}
+    \raggedright
+    \footnotesize{\it Remember that for the partial and imperfect information cases, only uncertainty in the building load was being reduced. We could potentially get somewhat closer to the \glsxtrshort{evpi} value by also reducing the uncertainty in the battery cost and efficiency, for example, by negotiating with a manufacturer and doing our own tests on the batteries. But we could never reduce our uncertainty in the amount and pattern of solar generation.}
+    \end{singlespace}
+    }
+
+\end{ebox}
 
 
 \subsection{Information theoretic \glsxtrshort{voi}}
@@ -444,10 +493,13 @@ And so the \glsxtrshort{voi} is the mutual information between the uncertainties
 \noindent
 As this view of \glsxtrshort{voi} is purely statistical, it doesn't require a decision making model. This is both an advantage and a flaw. It means that we can calculate \glsxtrshort{voi} values for measurements/uncertainty reduction without having to develop a potentially complicated model of how that uncertainty will be used to information decision making. But as a result, we lose a lot of the interpretability of \glsxtrshort{voi}. The units of \glsxtrshort{voi} are now information `bits', and we cannot know how useful that information will be for supporting our decision making, which is ultimately what we care about. This approach is most useful for comparing the uncertainty reduction provided by different measurements in complex systems\footnote{If the system is too simple the likelihood functions of the measurements already tell us what we need to know.}, and looking at the trade-off between the number of measurements made and total uncertainty reduction.\\
 
+\vspace*{0.5cm}
 
 \section{Framework extensions} \label{sec:methodology-framework-extensions}
 
 The decisions that need to be made in real-world engineering problems have complexities that cannot be handled by the standard \glsxtrshort{voi} framework that we've seen so far. This section presents two extensions to the framework that allow us to investigate the value of uncertainty reduction to improve decision making in more complex settings.
+
+Firstly, `On-Policy' \glsxtrshort{voi}, which is a novel framework extension and contribution of this thesis, that allows the \glsxtrshort{voi} to be studied in complex systems where direct optimisation is not possible. And secondly, the \glsxtrlong{voo} (\glsxtrshort{voo}) framework, which allows the benefit of retaining decision optionality as uncertainty reduces to be studied.
 
 \subsection{On-Policy \glsxtrlong{voi}} \label{sec:methodology-on-policy-voi}
 
@@ -460,7 +512,9 @@ A decision policy is defined as a mapping from a utility function describing a s
     \mathlarger{\mathcal{P} \left( u(a,\theta),\pi(\theta) \right) \rightarrow \alpha \in \mathcal{A}}
 \end{equation}
 
-As the utility function and set of possible actions are constant when we're looking at a given decision problem, we'll simplify the notation and refer to a policy applied to a given decision problem as $\mathcal{P}_u(\pi(\theta))$. The action selected by the policy therefore depends on the uncertainties in the system\footnote{However we don't impose any conditions on how the policy uses the statistical information about the uncertainties, $\pi(\theta)$. The policy could be deterministic. For example it could use only the expected (or maximum likelihood) values of the uncertainties from the distribution. In fact, this is what the \glsxtrlong{evp} does, and so it is a heuristic policy.}.\\
+As the utility function and set of possible actions are constant when we're looking at a given decision problem, we'll simplify the notation and refer to a policy applied to a given decision problem as $\mathcal{P}_u(\pi(\theta))$. The action selected by the policy therefore depends on the uncertainties in the system\footnote{However we don't impose any conditions on how the policy uses the statistical information about the uncertainties, $\pi(\theta)$. The policy could be deterministic. For example, it could use only the expected (or maximum likelihood) values of the uncertainties from the distribution. In fact, this is what the \glsxtrlong{evp} does, and so it is a heuristic policy.\\[-1.5em]
+
+\noindent \textit{When policies don't make use of information about uncertainty, understanding how uncertainty reduction affects their ability to make decisions is, if anything, more important. The \glsxtrshort{evp}, for example, cannot hedge its decisions, and so may be more reliant on good data.}}.\\
 
 The \glsxtrshort{voi} calculations proceed in the same way as before (compare to Eq. \ref{eq:evii}), but instead of selecting actions using a stochastic optimisation, they are now selected by applying the policy to the relevant distribution of uncertainties, and the expected utility those actions achieve needs to be evaluated using the utility function/model.
 \begin{equation} \label{eq:OP-voi}
@@ -474,14 +528,14 @@ where the $\mathcal{P}$ subscript indicates that this is the value of uncertaint
 
 This framework extension is called `On-Policy \glsxtrlong{voi}', as the decisions are made using a specific policy, and so the benefit of data collection/uncertainty reduction calculated is now dependent on the policy used. This broadens one of the main criticisms of the \glsxtrshort{voi} framework, namely that \glsxtrshort{voi} values do not generalise. This criticism is discussed further in \Cref{sec:methodology-limitations}. However, this does also open up the opportunity to study how different policies benefit from uncertainty reduction, and which are best able to exploit improved statistical information.
 
-The key advantage of On-Policy \glsxtrshort{voi} is that is allows us to study the value of information for complex, practical engineering problems where decision policies have to be used. For instance, problems with high-dimensional actions (i.e. where a large number of decisions must be made simultaneously), or those with tight computational limitations.
+The key advantage of On-Policy \glsxtrshort{voi} is that is allows us to study the value of information for complex, practical engineering problems where decision policies have to be used. For instance, problems with high-dimensional actions (i.e. where a large number of decisions must be made simultaneously), or those with tight computational limitations.\\
 
 \begin{ebox}{Using a decision policy}
     Throughout our example problem we've been using a Stochastic Program, specifically a linear scenario program, to perform our design optimisation and make decisions for us. This \glsxtrshort{sp} uses a simplified model of the energy system, it is linearised and assumes perfect foresight. Also, to keep the computation time manageable, when we solve the posterior decision problems we've only been using 10 samples from the posterior distributions of the uncertainties, leading to quite a noisy estimate of the expected utility.
 
     So we are actually already using a policy to make our decisions. And there's potentially quite a bit of error in our estimate of the expected utility from both the model and statistical simplification. We could create a more accurate simulator of our building energy system, and apply it to more samples from the posterior distributions to get a more accurate estimate of the expected utilities, and use this to do an On-Policy \glsxtrshort{voi} calculation. However this is a bit too complicated for our simple example.
     You can see On-Policy \glsxtrshort{voi} calculations for a more complex building energy system in \Cref{chap:districts}.
-\end{ebox}\
+\end{ebox}
 
 
 \subsection{\glsxtrlong{voo}} \label{sec:methodology-optionality}
@@ -536,7 +590,13 @@ The second main limitation is the computational cost of calculating the \glsxtrs
 
 To be able to perform the decision optimisations, we also need to be able to develop a decision-making model of the engineering system, be that a system model that can be optimised or a suitable decision policy. For complex, real-world engineering systems this modelling can be extremely challenging and require significant domain expertise. The \glsxtrshort{voi} framework also requires that we describe outcomes with a single utility value. This means it is not compatible with multi-objective decision making and cannot account for subjective factors of decision making that often occur in engineering design. The framework is most suited to automated or model-based decision making.\\
 
-We collect data for many reasons, and data has many uses. However, \glsxtrshort{voi} calculations only quantify the value of data collection to support the specific decision studied. So if that same data is useful for other purposes not captured by the model, this extra value will be missed by the calculated \glsxtrshort{voi}. It's difficult, for example, to describe how useful having a historic record of some measurement of a system might be to inform future decision making, such as maintenance. However, having the \glsxtrshort{voi} value helps us make these finer judgements about whether data is worthwhile collecting. With knowledge of the value of that data for supporting the known and modellable decisions, and the cost of collecting the data, we only need to judge whether we think the extra value we might get from the data justifies that difference between the known benefit and the cost. And it may turn out that the data is already worth collecting on the basis of the known decisions.
+\glsxtrshort{voi} calculations investigate the impact that data has on the decision model being tested. So, when interpreting the \glsxtrshort{voi} values that we receive from the analysis and making judgements about whether data should be collected, we are assuming that the decision model provides a sufficiently good representation of the physical engineering system we care about. Specifically, we assume that the usefulness of data in the model is the same as in the real system. While the \glsxtrshort{voi} framework studies the quality of data in detail, it does not have any mechanism for accounting for the quality of the model. The On-Policy \glsxtrshort{voi} methodology presented in \Cref{sec:methodology-on-policy-voi} provides some route to addressing this limitation, as the decision model (policy) and evaluation model (utility) are separated, allowing a more computationally expensive, and hopefully more accurate model to be used to evaluate the effect of the decisions on the system. But it still requires the assumption that this more accurate model is a good enough representation of the real system.
+
+This limitation of model quality is inherent to analyses concerned with design, as the system does not yet exist, and so cannot be measured to validate the model. Expert judgement and experience of other systems is needed to assess whether a particular model is good enough to provide trustworthy \glsxtrshort{voi} values. However, in some cases we can justify that the model used for \glsxtrshort{voi} is, in a certain sense, exact. This is because \glsxtrshort{voi} is concerned with how uncertainty affects decision making. If we have access to the decision model that real-world practitioners use to make their decisions, then using that model in the calculations tells us exactly how uncertainty affects those decisions. For example, many energy systems are designed using linear stochastic program models. The analysis in \Cref{chap:districts} tells us exactly how a designer using such a model is affected by building load uncertainty, and how useful load data is to them. So in an industry setting, \glsxtrshort{voi} analyses can use the actual decision making models. This is, provided they are computationally feasible. Using a simplified model would lead to the same quality limitations.
+
+The model quality includes not only the accuracy of the physics of the system, but also the statistical models of the uncertainties and data. \glsxtrshort{voi} calculations can be sensitive to these statistical models, but must assume that they are correct\footnote{However, precisely defining what it is for a predictive statistical model to be inaccurate, and identifying how this inaccuracy affects the \glsxtrshort{voi}, is not an easy task. After all, a prior distribution represents our best knowledge about an unknown quantity. Considering whether this knowledge is wrong can lead to pathological and unhelpful analyses.}. This includes aspects such as the resolution of the data in the model, and correlations between uncertain variables.\\
+
+We collect data for many reasons, and data has many uses. However, \glsxtrshort{voi} calculations only quantify the value of data collection to support the specific decision studied. So if that same data is useful for other purposes not captured by the model, this extra value will be missed by the calculated \glsxtrshort{voi}. It's difficult, for example, to describe how useful having a historic record of some measurement of a system might be to inform future decision making, such as maintenance. However, having the \glsxtrshort{voi} value helps us make these finer judgements about whether data is worthwhile collecting. With knowledge of the value of that data for supporting the known and modellable decisions, and the cost of collecting the data, we only need to judge whether we think the extra value we might get from the data justifies that difference between the known benefit and the cost. And it may turn out that the data is already worth collecting on the basis of the known decisions.\\
 
 Finally, the standard \glsxtrshort{voi} framework assumes that decisions are made in a risk-neutral way. This comes from the optimisation objective being the expected/average utility. However many real-world decision makers are risk averse, particularly those making large financial investments to decarbonise energy. The framework can easily be adapted to account for risk aversion in decision making by including it the decision objective. This allows us to study how uncertainty reduction affects decision risk, as is done in \Cref{chap:parks}.\\
 
@@ -749,6 +809,6 @@ The problem comes when we try to model uncertainties in our system that interact
 
 For instance, in our example problem the deterministic \glsxtrshort{lp} chooses a system design that is infeasible when we start accounting for uncertainty in the solar generation. This is because the design puts in a large solar generation capacity, and in years where the sun is more intense, the solar power ends up exceeding the grid connection capacity. From a mathematical perspective it's difficult to know what to do in this case. Our optimisation simply fails. In reality, there is likely to just be some cost associated with exceeding the grid connection capacity, either a charge from the grid operator \citep{frontiereconomics2022NetworkTariffsEnergy} or a cost associated with having to disconnect the solar panels and causing some damage to the system.
 
-Because we have no clear way of dealing with infeasibility and failed optimisations, we instead need to model our energy systems in such a way that our uncertainties cannot lead to violation of the constraints. Where we have soft constraints, we should instead model the costs associated with violating them and include these in the objective, as is done for grid connection capacity in \Cref{chap:districts}. Ultimately we need to consider how our system will actually behave when things go wrong, and account for the associated costs in our decision making. A classic example of this in the energy systems literature is constraining energy systems to have some specified loss-of-load probability. This constraint is quite arbitrary, and is very hard to guarantee. Instead we should be concerned with the cost of not satisfying the load, as we can then account for this cost trade-off when we design the energy system.
+Because we have no clear way of dealing with infeasibility and failed optimisations, we instead need to model our energy systems in such a way that our uncertainties cannot lead to violation of the constraints. Where we have soft constraints, we should instead model the costs associated with violating them and include these in the objective, as is done for grid connection capacity in \Cref{chap:districts}. Ultimately we need to consider how our system will actually behave when things go wrong, and account for the associated costs in our decision making. A classic example of this in the energy systems literature is constraining energy systems to have some specified loss-of-load probability. This constraint is rather arbitrary, and is very hard to guarantee. Instead we should be concerned with the cost of not satisfying the load, as we can then account for this cost trade-off when we design the energy system.
 
 \end{subappendices}
