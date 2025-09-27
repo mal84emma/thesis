@@ -866,7 +866,7 @@ wish to left align your text}
 \newcommand{\supervisor}[1]{\renewcommand{\@supervisor}{#1}\PHD@supervisortrue}
 
 % Supervisor Title (Supervisor - Default, can be changed)
-\newcommand{\@supervisorrole}{Supervisor: }
+\newcommand{\@supervisorrole}{Supervised by}
 \newcommand{\supervisorrole}[1]{\renewcommand{\@supervisorrole}{#1}}
 
 % Supervisor width to align
@@ -1241,8 +1241,8 @@ This thesis and much of the code for the experiments was written in \href{https:
 \newsavebox{\PHD@author}
 \begin{lrbox}{\PHD@author}
   \begin{minipage}[c]{\textwidth}
-    \centering \Large \bfseries{\@author}
-      \vspace{0.5em}   
+    \centering \LARGE \bfseries{\@author}
+      \vspace{1.5em}
   \end{minipage}
 \end{lrbox}
 
@@ -1254,12 +1254,10 @@ This thesis and much of the code for the experiments was written in \href{https:
       % supervisor is not defined
     }{
       \begin{center}
-        \makebox[\widthof{supervisorrole} + \@supervisorlinewidth][c]{
-          \Large
-          \@supervisorrole \parbox[t]{\@supervisorlinewidth}{\@supervisor}
-        }
+        \large \@supervisorrole \par
+        \large \textit {\@supervisor} \par
       \end{center}
-      \vspace{0.5em}
+      \vspace{0.75em}
     } % supervisor is defined
   \end{minipage}
 \end{lrbox}
